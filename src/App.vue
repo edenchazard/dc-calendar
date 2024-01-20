@@ -1,16 +1,20 @@
 <template>
   <header>
-    <div id="time">
-      <span>Your time: {{ localIntlTime.format() }} </span>
-      <span>DC time: {{ dcIntlTime.format() }}</span>
+    <div class="max-content">
+      <div id="time">
+        <span>Your time: {{ localIntlTime.format() }} </span>
+        <span>DC time: {{ dcIntlTime.format() }}</span>
+      </div>
     </div>
   </header>
 
-  <main>
+  <main class="max-content">
     <div>
       <form @submit.prevent="" id="period">
-        <input type="checkbox" v-model="formatLocal" />
-        <label>Format dates local to me</label>
+        <select v-model="timezone">
+          <option v-for="timezone in timezones" :value="timezone">{{ timezone }}</option>
+        </select>
+
         <fieldset>
           <legend>Range</legend>
           <div class="range">
@@ -26,122 +30,161 @@
     <section id="forecast">
       <h2>Forecast</h2>
       <p>
-        Between {{ dcTime.begin.toLocal().toFormat('MMM d') }} and
-        {{ dcTime.end.toLocal().toFormat('MMM d') }} your time, the following breeds will be
-        available.
+        Between {{ localDateTime.begin.toFormat('MMM d HH:mm:ss') }} and
+        {{ localDateTime.end.toFormat('MMM d HH:mm:ss') }}, the following breeds will be available.
+        <span class="italic">These times are local to you.</span>
       </p>
-      <p>The first date is in DC's timezone, the second is the time it will be for you.</p>
-      <table id="forecast-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Available breeds</th>
-          </tr>
-          <tr v-for="date in forecast">
-            <td>
-              {{ date.date.toFormat('MMM d') }}
-              <span class="local"
-                >({{ date.local.toLocaleString({ dateStyle: 'medium', timeStyle: 'long' }) }})</span
+
+      <p class="italic">
+        (This period corresponds to {{ dcDateTime.begin.toFormat('MMM d HH:mm:ss') }} to
+        {{ dcDateTime.end.toFormat('MMM d HH:mm:ss') }} on DragCave)
+      </p>
+
+      <div id="forecast-table">
+        <div v-for="date in forecast" class="forecast-cell">
+          <b class="day">{{ date.date.toFormat('d') }}</b>
+          <b class="month">{{ date.date.toFormat('MMM') }}</b>
+          <div class="breeds-available">
+            <template v-for="(breed, index) in date.available">
+              <div
+                class="breed"
+                :style="{
+                  '--background-colour': `rgb(${breed.backgroundColour})`,
+                  '--accent-colour': `rgb(${breed.accentColour})`,
+                  left: -(index * 7.5) + '%'
+                }"
               >
-            </td>
-            <td>
-              <div class="breeds-available">
-                <template v-for="breed in date.results">
-                  <div
-                    class="breed-tile"
-                    v-if="breed.availability"
-                    :style="{
-                      backgroundColor: `rgb(${breed.backgroundColour})`,
-                      borderColor: `rgb(${breed.accentColour})`,
-                      color: `rgb(${breed.accentColour})`
-                    }"
-                  >
-                    <img :src="breed.image" />
-                    <b class="name">{{ breed.name }}</b>
-                    <b class="biome">{{
-                      Array.isArray(breed.biome) ? breed.biome.join(', ') : breed.biome
-                    }}</b>
+                <div class="egg-container">
+                  <div class="egg-wrapper">
+                    <div class="tooltip">
+                      <b class="name">{{ breed.name }}</b>
+                      <b class="biome">
+                        {{ Array.isArray(breed.biome) ? breed.biome.join(', ') : breed.biome }}
+                      </b>
+                    </div>
+                    <img :alt="breed.name" :src="breed.image" class="egg" />
                   </div>
-                </template>
+                </div>
               </div>
-            </td>
-          </tr>
-        </thead>
-      </table>
+            </template>
+          </div>
+
+          <div v-if="date.appearing.length > 0" class="incoming-outgoing">
+            <span class="block">Appearing</span>
+            <ul v-for="(breed, index) in date.appearing">
+              <li>
+                <img :alt="breed.name" :src="breed.image" />
+                {{ breed?.begin?.toFormat('HH:mm:ss') }}
+              </li>
+            </ul>
+          </div>
+
+          <div v-if="date.leaving.length > 0" class="incoming-outgoing">
+            <span class="block">Leaving</span>
+            <ul v-for="(breed, index) in date.leaving">
+              <li>
+                <img :alt="breed.name" :src="breed.image" />
+                {{ breed?.end?.toFormat('HH:mm:ss') }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { solstice, julian } from 'astronomia'
-import { getSolsticesAndEquinoxes } from './utils/utils'
+import { computed, ref, watchEffect } from 'vue'
+import { getSeasonalCycle } from './utils/utils'
 import { DateTime } from 'luxon'
 
 const breeds = [
-  {
+  /*   {
     callback(d: DateTime) {
       const seasons = getSeasonalCycle(d.toJSDate())
 
+      const now = d.toSeconds()
       return {
         name: 'Harvest',
-        biome: isBetween(d.toJSDate(), seasons.decemberSolstice, seasons.marchEquinox)
-          ? 'Alpine'
-          : 'Forest',
+        biome:
+          now >= seasons.decemberSolstice.toSeconds() && now <= seasons.marchEquinox.toSeconds()
+            ? 'Alpine'
+            : 'Forest',
         availability: true,
         image: new URL('./assets/eggs/harvest.gif', import.meta.url).pathname,
         backgroundColour: '99, 83, 52',
         accentColour: '237, 202, 135'
       }
     }
-  },
+  }, */
 
   {
     callback(d: DateTime) {
-      const seasons = getSeasonalCycle(d.toJSDate())
-      const availability = isBetween(d.toJSDate(), seasons.decemberSolstice, seasons.marchEquinox)
+      const seasons = getSeasonalCycle(d)
+      const now = d.toSeconds()
 
+      const begin = seasons.decemberSolstice
+      const end = seasons.marchEquinox
+
+      console.log(begin.toISO())
+      console.log(d.toISO())
+      console.log(end.toISO())
       return {
         name: 'Seasonal (Winter)',
         biome: 'Alpine',
-        availability,
         image: new URL('./assets/eggs/winter.gif', import.meta.url).pathname,
         backgroundColour: '106, 162, 171',
-        accentColour: '4, 63, 181'
+        accentColour: '4, 63, 181',
+        availability: now >= begin.toSeconds() && now <= end.toSeconds(),
+        begin,
+        end
       }
     }
   },
 
   {
     callback(d: DateTime) {
-      const start = DateTime.fromISO(`${d.year}-02-08`, { zone: 'America/New_York' })
-      const end = DateTime.fromISO(`${d.year}-02-14`, { zone: 'America/New_York' })
-      const availability = isBetween(d.toJSDate(), start.toJSDate(), end.toJSDate())
+      const now = d.toSeconds()
+      const begin = DateTime.fromISO(`${d.year}-02-08T00:00:00`, {
+        zone: 'America/New_York'
+      }).setZone(timezone.value)
+      const end = DateTime.fromISO(`${d.year}-02-14T23:59:59`, {
+        zone: 'America/New_York'
+      }).setZone(timezone.value)
 
       return {
         name: 'Previous Valentines',
         biome: 'Holiday',
-        availability,
-        image: new URL('./assets/eggs/winter.gif', import.meta.url).pathname,
+        image: new URL('./assets/eggs/amarignis_egg.webp', import.meta.url).pathname,
         backgroundColour: '204, 188, 209',
-        accentColour: '181, 0, 6'
+        accentColour: '181, 0, 6',
+        availability: now >= begin.toSeconds() && now <= end.toSeconds(),
+        begin,
+        end
       }
     }
   },
 
   {
     callback(d: DateTime) {
-      const start = DateTime.fromISO(`${d.year}-02-14`, { zone: 'America/New_York' })
-      const end = DateTime.fromISO(`${d.year}-02-17`, { zone: 'America/New_York' })
-      const availability = isBetween(d.toJSDate(), start.toJSDate(), end.toJSDate())
+      const now = d.toSeconds()
+      const begin = DateTime.fromISO(`${d.year}-02-14T00:00:00`, {
+        zone: 'America/New_York'
+      }).setZone(timezone.value)
+      const end = DateTime.fromISO(`${d.year}-02-16T23:59:59`, {
+        zone: 'America/New_York'
+      }).setZone(timezone.value)
 
       return {
         name: `${d.year} Valentine`,
         biome: 'All',
-        availability,
         image: new URL('./assets/eggs/mystery.gif', import.meta.url).pathname,
         backgroundColour: '176, 141, 141',
-        accentColour: '255, 0, 0'
+        accentColour: '255, 0, 0',
+        availability: now >= begin.toSeconds() && now <= end.toSeconds(),
+        begin,
+        end
       }
     }
   },
@@ -149,12 +192,16 @@ const breeds = [
   {
     callback(d: DateTime) {
       const ts = d.toSeconds()
-      const availability = (ts - 1683565200) % (128 * 86400) <= 6 * 86400
-
+      /*   console.log({
+        dcTime: d.toISO(),
+        local: d.toLocal().toISO(),
+        dctime2: DateTime.fromSeconds(1705712400).setZone('America/New_York').toLocal().toISO()
+      })
+ */
       return {
         name: `Sonata (Silver)`,
         biome: 'All',
-        availability,
+        availability: false,
         image: new URL('./assets/eggs/mystery.gif', import.meta.url).pathname,
         backgroundColour: '122, 122, 122',
         accentColour: '255, 255, 255'
@@ -162,6 +209,8 @@ const breeds = [
     }
   }
 ]
+
+const timezones = Intl.supportedValuesOf('timeZone')
 
 const localIntlTime = new Intl.DateTimeFormat(undefined, {
   timeStyle: 'long',
@@ -176,65 +225,60 @@ const dcIntlTime = new Intl.DateTimeFormat(undefined, {
   timeZone: 'America/New_York'
 })
 
-const [a, b] = getDefaultDateRange()
-const from = ref(a)
-const end = ref(b)
-const formatLocal = ref(false)
+const from = ref(DateTime.now().toISODate())
+const end = ref(DateTime.now().plus({ days: 7 }).toISODate())
+const timezone = ref(Intl.DateTimeFormat().resolvedOptions().timeZone)
 
 const forecast = computed(() => {
-  const dateBegin = DateTime.fromISO(from.value, { zone: 'America/New_York' })
-  const dateEnd = DateTime.fromISO(end.value, { zone: 'America/New_York' })
+  const dateBegin = DateTime.fromISO(from.value).setZone(timezone.value)
+  const dateEnd = DateTime.fromISO(end.value).setZone(timezone.value)
   let curDate = dateBegin
-  const results = []
+  const dayForecast = []
 
   while (curDate.toSeconds() < dateEnd.toSeconds()) {
-    results.push({
+    const results = breeds.map((breed) => {
+      const result = breed.callback(curDate)
+      return {
+        ...result,
+        appearing: isAppearing(result, curDate),
+        leaving: isLeaving(result, curDate)
+      }
+    })
+
+    dayForecast.push({
       date: curDate,
-      local: curDate.toLocal(),
-      results: breeds.map((breed) => breed.callback(curDate))
+      dc: curDate.setZone('America/New_York'),
+      available: results.filter(
+        (breed) => !breed.appearing && !breed.leaving && breed.availability
+      ),
+      leaving: results.filter((breed) => breed.leaving),
+      appearing: results.filter((breed) => breed.appearing)
     })
 
     curDate = curDate.plus({ day: 1 })
   }
-  return results
+  return dayForecast
 })
 
-const dcTime = computed(() => ({
-  begin: DateTime.fromISO(from.value, { zone: 'America/New_York' }),
-  end: DateTime.fromISO(end.value, { zone: 'America/New_York' })
+const localDateTime = computed(() => ({
+  begin: DateTime.fromISO(from.value).setZone(timezone.value),
+  end: DateTime.fromISO(end.value).setZone(timezone.value)
 }))
 
-function getSeasonalCycle(theDate: Date) {
-  const offset = theDate.getMonth() + 1
-  const cycle = getSolsticesAndEquinoxes(theDate.getFullYear())
+const dcDateTime = computed(() => ({
+  begin: localDateTime.value.begin.setZone('America/New_York'),
+  end: localDateTime.value.end.setZone('America/New_York')
+}))
 
-  if (offset <= 3) {
-    cycle.decemberSolstice = julian.JDToDate(solstice.december(theDate.getFullYear() - 1))
-  } else if (offset <= 6) {
-    cycle.marchEquinox = julian.JDToDate(solstice.march(theDate.getFullYear() - 1))
-  } else if (offset <= 9) {
-    cycle.juneSolstice = julian.JDToDate(solstice.june(theDate.getFullYear() - 1))
-  } else if (offset <= 12) {
-    cycle.septemberEquinox = julian.JDToDate(solstice.september(theDate.getFullYear() - 1))
-  }
-
-  return cycle
+function isAppearing(breed, d) {
+  return breed.begin?.toISODate() === d.toISODate()
 }
 
-function isBetween(d: Date, start: Date, end: Date) {
-  return d.getTime() >= start.getTime() && d.getTime() <= end.getTime()
+function isLeaving(breed, d) {
+  return breed.end?.toISODate() === d.toISODate()
 }
 
-function getDefaultDateRange() {
-  const fmt = (d: Date) =>
-    `${current.getFullYear()}-${String(current.getMonth() + 1).padStart(2, '0')}-${String(current.getDate()).padStart(2, '0')}`
-
-  const current = new Date()
-  const start = fmt(current)
-  current.setDate(current.getDate() + 7)
-  const end = fmt(current)
-  return [start, end]
-}
+watchEffect(() => console.log(forecast.value))
 </script>
 
 <style scoped>
@@ -270,34 +314,84 @@ header {
 }
 
 #forecast-table {
+  margin: auto;
+  display: inline-grid;
+  justify-items: center;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fill, 10rem);
+  gap: 1rem;
   width: 100%;
-  margin: 0 auto;
+  max-width: 70rem;
+  margin-top: 1rem;
 }
-#forecast-table td {
-  padding: 0.25rem;
+.forecast-cell {
+  width: 100%;
+}
+.forecast-cell .day {
+  display: block;
+  font-size: 3rem;
+  background: #7f466f;
+  text-align: center;
+}
+
+.forecast-cell .month {
+  font-size: 1.5rem;
+  display: block;
+  text-transform: uppercase;
+  text-align: center;
 }
 
 .breeds-available {
+  position: relative;
+  height: 35px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.breed-tile {
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
-  border: 1px solid;
-  width: 7rem;
-  padding: 0.5rem;
+  padding-left: 6%;
+}
+.breeds-available .breed:nth-child(1n + 1) {
+  position: relative;
+}
+.breeds-available .breed {
+}
+
+.breeds-available .egg-container {
+  height: 30px;
+  position: relative;
+  width: 2rem;
+}
+.breeds-available .egg-container .egg-wrapper {
+  transition: transform 0.2s;
+  position: absolute;
+}
+.breeds-available .egg-container:hover .egg-wrapper {
+  transform: translateY(-100%);
+}
+
+.breeds-available .egg-container:hover .tooltip {
+  display: block;
+}
+.breeds-available .egg-container .tooltip {
+  background: var(--background-colour);
+  color: var(--accent-colour);
+  display: none;
+  padding: 0.25rem;
+  border-radius: 0.25rem 0.25rem 0 0;
+  width: 6rem;
+  left: -2rem;
+  bottom: 130%;
+  position: absolute;
+}
+
+.breeds-available .breed .tooltip .biome {
+  display: block;
 }
 
 .breed-tile .name {
   font-weight: bold;
   flex: 1;
 }
+
 .breed-tile .biome {
   font-size: 0.8rem;
 }
@@ -305,5 +399,31 @@ header {
 .local {
   font-size: 0.5rem;
   display: block;
+}
+
+.incoming-outgoing .block {
+  display: block;
+  font-size: 0.8rem;
+  background: #5f214d;
+}
+
+.incoming-outgoing ul {
+  margin: 0;
+  padding: 0;
+}
+
+.incoming-outgoing li {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+.incoming-outgoing {
+  margin-top: 1rem;
+}
+
+.italic {
+  font-style: italic;
 }
 </style>
