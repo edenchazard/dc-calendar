@@ -81,3 +81,27 @@ body {
   background: black;
   color: white;
 }
+
+.bold {
+  font-weight: bold;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.section {
+  margin-top: 3rem;
+}
+.subsection {
+  margin-top: 1.5rem;
+}
+
+.center {
+  text-align: center;
+}
+
+select,
+input {
+  padding: 0.4rem;
+}

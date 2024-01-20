@@ -1,28 +1,32 @@
 import { solstice, julian } from 'astronomia'
-import { DateTime } from 'luxon'
+import { DateTime, Zone } from 'luxon'
 
-export function getDCTime() {
-  return new Intl.DateTimeFormat('en-us', {
-    timeStyle: 'long',
-    dateStyle: 'long',
-    hour12: false,
-    timeZone: 'America/New_York'
-  })
+interface Seasons {
+  decemberSolstice: DateTime
+  marchEquinox: DateTime
+  juneSolstice: DateTime
+  septemberEquinox: DateTime
 }
 
-export function getSolsticesAndEquinoxes(year: number) {
-  return mapJDSeasonsToDateTime({
+interface JDSeasonalCycle {
+  decemberSolstice: number
+  marchEquinox: number
+  juneSolstice: number
+  septemberEquinox: number
+}
+
+export function getJDSolsticesAndEquinoxes(year: number): JDSeasonalCycle {
+  return {
     marchEquinox: solstice.march(year),
     juneSolstice: solstice.june(year),
     septemberEquinox: solstice.september(year),
     decemberSolstice: solstice.december(year)
-  })
+  }
 }
 
-export function getSeasonalCycle(theDate: DateTime) {
+export function getSeasonalCycle(theDate: DateTime): Seasons {
   const offset = theDate.plus({ month: 1 }).month
-  console.log(offset)
-  const cycle = getSolsticesAndEquinoxes(theDate.year)
+  const cycle = getJDSolsticesAndEquinoxes(theDate.year)
 
   if (offset <= 3) {
     cycle.decemberSolstice = solstice.december(theDate.year - 1)
@@ -37,11 +41,11 @@ export function getSeasonalCycle(theDate: DateTime) {
   return mapJDSeasonsToDateTime(cycle)
 }
 
-function mapJDSeasonsToDateTime(jDSeasons) {
+function mapJDSeasonsToDateTime(jDSeasons: JDSeasonalCycle, zone?: Zone): Seasons {
   return Object.fromEntries(
     Object.entries(jDSeasons).map(([season, date]) => [
       season,
-      date instanceof DateTime ? date : DateTime.fromJSDate(julian.JDToDate(date))
+      date instanceof DateTime ? date : DateTime.fromJSDate(julian.JDToDate(date), { zone: zone })
     ])
   )
 }
