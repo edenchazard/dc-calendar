@@ -80,6 +80,7 @@
 
         <div id="forecast-table">
           <div v-for="date in forecast" class="forecast-cell">
+            <b class="year">{{ date.date.toFormat('y') }}</b>
             <b class="day">{{ date.date.toFormat('d') }}</b>
             <b class="month">{{ date.date.toFormat('MMM') }}</b>
             <div class="breeds-available">
@@ -106,7 +107,6 @@
                 </div>
               </template>
             </div>
-
             <div v-if="date.appearing.length > 0" class="incoming-outgoing">
               <span class="block">Appearing</span>
               <ul v-for="(breed, index) in date.appearing">
@@ -134,8 +134,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue'
-import { getSeasonalCycle } from './utils/utils'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { determineSeason } from './utils/utils'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -161,22 +161,17 @@ const breeds = [
 
   {
     callback(d: DateTime) {
-      const seasons = getSeasonalCycle(d)
-      const now = d.toSeconds()
+      const season = determineSeason(d)
 
-      const begin = seasons.decemberSolstice
-      const end = seasons.marchEquinox
-      console.log('beginning', begin.toISO())
-      console.log('ending', end.toISO())
       return {
         name: 'Seasonal (Winter)',
         biome: 'Alpine',
         image: new URL('./assets/eggs/winter.gif', import.meta.url).pathname,
         backgroundColour: '106, 162, 171',
         accentColour: '4, 63, 181',
-        availability: now >= begin.toSeconds() && now <= end.toSeconds(),
-        begin,
-        end
+        availability: season?.name === 'winter',
+        begin: season?.begin,
+        end: season?.end
       }
     }
   },
@@ -270,6 +265,16 @@ const forecast = computed(() => {
   while (curDate.toSeconds() < dateEnd.toSeconds()) {
     const results = breeds.map((breed) => {
       const result = breed.callback(curDate)
+      if (result.name === 'Seasonal (Winter)') {
+        if (isLeaving(result, curDate)) {
+          console.log('LEAVING      ', curDate.toISO(), '    ', result.begin.toISO())
+          console.log(curDate.toISO(), {
+            ...result,
+            appearing: isAppearing(result, curDate),
+            leaving: isLeaving(result, curDate)
+          })
+        }
+      }
       return {
         ...result,
         appearing: isAppearing(result, curDate),
@@ -303,25 +308,7 @@ const dcDateTime = computed(() => ({
 }))
 
 const extended = computed(() => ({
-  season: (() => {
-    const seasons = getSeasonalCycle(dcIntlTime.value)
-    const now = dcIntlTime.value.toSeconds()
-
-    let season: string = ''
-    if (now >= seasons.decemberSolstice.toSeconds()) {
-      season = 'Winter'
-    }
-    if (now >= seasons.marchEquinox.toSeconds()) {
-      season = 'Spring'
-    }
-    if (now >= seasons.juneSolstice.toSeconds()) {
-      season = 'Summer'
-    }
-    if (now >= seasons.septemberEquinox.toSeconds()) {
-      season = 'Autumn'
-    }
-    return season
-  })(),
+  season: determineSeason(dcIntlTime.value).name,
   seasonIcon: 'snowflake',
   timezone: dcIntlTime.value.toFormat('ZZZZ'),
   offset: dcIntlTime.value.offset,
@@ -345,24 +332,44 @@ const extended = computed(() => ({
   })()
 }))
 
-onMounted(
+/* onMounted(
   () => (interval = setInterval(() => (intervalKey.value = DateTime.local().toSeconds()), 1000))
-)
+) */
 onUnmounted(() => clearInterval(interval))
 
 function isAppearing(breed, d) {
-  /*   if (breed.name === 'Seasonal (Winter)') {
-    console.log(breed.name, breed.begin?.toISODate(), d.toISODate())
-  } */
-  return breed.begin?.toISODate() >= d.toISODate()
+  return breed.begin?.toISODate() === d.toISODate()
 }
 
 function isLeaving(breed, d) {
-  if (breed.name === 'Seasonal (Winter)') {
-    console.log(breed.name, breed.end?.toISODate(), d.toISODate())
+  const r = breed.end?.toISODate() === d.toISODate()
+  if (r) {
+    console.log('tgjfdgjfdiog', breed.end?.toISO(), d.toISO())
   }
-  return breed.end?.toISODate() === d.toISODate()
+  return r
 }
+
+const d = DateTime.fromISO('2023-12-22T00:00:00.000+00:00')
+const season = determineSeason(d)
+
+/*   console.log(
+        season?.begin.toISODate(),
+        '         ',
+        d.toISODate(),
+        '         ',
+        season?.end.toISODate()
+      ) */
+
+console.log({
+  name: 'Seasonal (Winter)',
+  biome: 'Alpine',
+  image: new URL('./assets/eggs/winter.gif', import.meta.url).pathname,
+  backgroundColour: '106, 162, 171',
+  accentColour: '4, 63, 181',
+  availability: season?.name === 'winter',
+  begin: season?.begin?.toISO(),
+  end: season?.end?.toISO()
+})
 </script>
 
 <style scoped>
@@ -474,6 +481,9 @@ function isLeaving(breed, d) {
 }
 .forecast-cell {
   width: 100%;
+}
+.forecast-cell .year {
+  font-size: 0.7rem;
 }
 .forecast-cell .day {
   display: block;
