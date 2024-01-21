@@ -18,7 +18,7 @@
         <div id="extended-info">
           <div class="cell">
             <FontAwesomeIcon :icon="`fa-solid fa-${extended.seasonIcon}`" />
-            <span>{{ extended.season }}</span>
+            <span>{{ extended.season.name }} {{ extended.season.begin.toLocaleString() }}</span>
           </div>
 
           <div class="cell">
@@ -139,117 +139,142 @@ import { determineSeason } from './utils/utils'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-const breeds = [
-  /*   {
-    callback(d: DateTime) {
-      const seasons = getSeasonalCycle(d.toJSDate())
-
-      const now = d.toSeconds()
-      return {
-        name: 'Harvest',
-        biome:
-          now >= seasons.decemberSolstice.toSeconds() && now <= seasons.marchEquinox.toSeconds()
-            ? 'Alpine'
-            : 'Forest',
-        availability: true,
-        image: new URL('./assets/eggs/harvest.gif', import.meta.url).pathname,
-        backgroundColour: '99, 83, 52',
-        accentColour: '237, 202, 135'
-      }
-    }
-  }, */
-
-  {
-    callback(d: DateTime) {
-      const season = determineSeason(d)
-
-      return {
-        name: 'Seasonal (Winter)',
-        biome: 'Alpine',
-        image: new URL('./assets/eggs/winter.gif', import.meta.url).pathname,
-        backgroundColour: '106, 162, 171',
-        accentColour: '4, 63, 181',
-        availability: season?.name === 'winter',
-        begin: season?.begin,
-        end: season?.end
-      }
+const breeds: Array<
+  (d: DateTime) => {
+    name: string
+    biome: string
+    image: string
+    backgroundColour: string
+    accentColour: string
+    availability: boolean
+    begin: DateTime
+    end: DateTime
+  }
+> = [
+  (d) => {
+    const season = determineSeason(d)
+    return {
+      name: 'Seasonal (Winter)',
+      biome: 'Alpine',
+      image: new URL('./assets/eggs/seasonal_winter.gif', import.meta.url).pathname,
+      backgroundColour: '106, 162, 171',
+      accentColour: '4, 63, 181',
+      availability: season.name === 'winter',
+      begin: season.begin,
+      end: season.end
     }
   },
 
-  {
-    callback(d: DateTime) {
-      const now = d.toSeconds()
-      const begin = DateTime.fromISO(`${d.year}-02-08T00:00:00`, {
-        zone: 'America/New_York'
-      }).setZone(timezone.value)
-      const end = DateTime.fromISO(`${d.year}-02-14T23:59:59`, {
-        zone: 'America/New_York'
-      }).setZone(timezone.value)
-
-      return {
-        name: 'Previous Valentines',
-        biome: 'Holiday',
-        image: new URL('./assets/eggs/amarignis_egg.webp', import.meta.url).pathname,
-        backgroundColour: '204, 188, 209',
-        accentColour: '181, 0, 6',
-        availability: now >= begin.toSeconds() && now <= end.toSeconds(),
-        begin,
-        end
-      }
+  (d) => {
+    const season = determineSeason(d)
+    return {
+      name: 'Seasonal (Spring)',
+      biome: 'Alpine',
+      image: new URL('./assets/eggs/seasonal_spring.webp', import.meta.url).pathname,
+      backgroundColour: '106, 162, 171',
+      accentColour: '4, 63, 181',
+      availability: season.name === 'spring',
+      begin: season.begin,
+      end: season.end
     }
   },
 
-  {
-    callback(d: DateTime) {
-      const now = d.toSeconds()
-      const begin = DateTime.fromISO(`${d.year}-02-14T00:00:00`, {
-        zone: 'America/New_York'
-      }).setZone(timezone.value)
-      const end = DateTime.fromISO(`${d.year}-02-16T23:59:59`, {
-        zone: 'America/New_York'
-      }).setZone(timezone.value)
-
-      return {
-        name: `${d.year} Valentine`,
-        biome: 'All',
-        image: new URL('./assets/eggs/mystery.gif', import.meta.url).pathname,
-        backgroundColour: '176, 141, 141',
-        accentColour: '255, 0, 0',
-        availability: now >= begin.toSeconds() && now <= end.toSeconds(),
-        begin,
-        end
-      }
+  (d) => {
+    const season = determineSeason(d)
+    return {
+      name: 'Seasonal (Summer)',
+      biome: 'Alpine',
+      image: new URL('./assets/eggs/seasonal_summer.webp', import.meta.url).pathname,
+      backgroundColour: '106, 162, 171',
+      accentColour: '4, 63, 181',
+      availability: season.name === 'summer',
+      begin: season.begin,
+      end: season.end
     }
   },
 
-  {
-    callback(d: DateTime) {
-      const ts = d.toSeconds()
-      /*   console.log({
+  (d) => {
+    const season = determineSeason(d)
+    return {
+      name: 'Seasonal (Autumn)',
+      biome: 'Alpine',
+      image: new URL('./assets/eggs/seasonal_autumn.webp', import.meta.url).pathname,
+      backgroundColour: '106, 162, 171',
+      accentColour: '4, 63, 181',
+      availability: season.name === 'autumn',
+      begin: season.begin,
+      end: season.end
+    }
+  },
+
+  (d) => {
+    const now = d.toSeconds()
+    const begin = DateTime.fromISO(`${d.year}-02-08T00:00:00`, {
+      zone: 'America/New_York'
+    }).setZone(timezone.value)
+    const end = DateTime.fromISO(`${d.year}-02-14T23:59:59`, {
+      zone: 'America/New_York'
+    }).setZone(timezone.value)
+
+    return {
+      name: 'Previous Valentines',
+      biome: 'Holiday',
+      image: new URL('./assets/eggs/amarignis_egg.webp', import.meta.url).pathname,
+      backgroundColour: '204, 188, 209',
+      accentColour: '181, 0, 6',
+      availability: now >= begin.toSeconds() && now <= end.toSeconds(),
+      begin,
+      end
+    }
+  },
+
+  (d) => {
+    const now = d.toSeconds()
+    const begin = DateTime.fromISO(`${d.year}-02-14T00:00:00`, {
+      zone: 'America/New_York'
+    }).setZone(timezone.value)
+    const end = DateTime.fromISO(`${d.year}-02-16T23:59:59`, {
+      zone: 'America/New_York'
+    }).setZone(timezone.value)
+
+    return {
+      name: `${d.year} Valentine`,
+      biome: 'All',
+      image: new URL('./assets/eggs/mystery.gif', import.meta.url).pathname,
+      backgroundColour: '176, 141, 141',
+      accentColour: '255, 0, 0',
+      availability: now >= begin.toSeconds() && now <= end.toSeconds(),
+      begin,
+      end
+    }
+  }
+  /* (d) => {
+    const ts = d.toSeconds()
+       console.log({
         dcTime: d.toISO(),
         local: d.toLocal().toISO(),
         dctime2: DateTime.fromSeconds(1705712400).setZone('America/New_York').toLocal().toISO()
       })
- */
-      return {
-        name: `Sonata (Silver)`,
-        biome: 'All',
-        availability: false,
-        image: new URL('./assets/eggs/mystery.gif', import.meta.url).pathname,
-        backgroundColour: '122, 122, 122',
-        accentColour: '255, 255, 255'
-      }
+
+    return {
+      name: `Sonata (Silver)`,
+      biome: 'All',
+      availability: false,
+      image: new URL('./assets/eggs/mystery.gif', import.meta.url).pathname,
+      backgroundColour: '122, 122, 122',
+      accentColour: '255, 255, 255'
     }
-  }
+  }*/
 ]
 
 const timezones = Intl.supportedValuesOf('timeZone')
+
 let interval: number = 0
+const intervalKey = ref(DateTime.local().toSeconds())
 
 const from = ref(DateTime.now().toISODate())
 const end = ref(DateTime.now().plus({ days: 7 }).toISODate())
 const timezone = ref(Intl.DateTimeFormat().resolvedOptions().timeZone)
-const intervalKey = ref(DateTime.local().toSeconds())
 
 const localIntlTime = computed(() => DateTime.fromSeconds(intervalKey.value))
 const dcIntlTime = computed(() =>
@@ -264,21 +289,18 @@ const forecast = computed(() => {
 
   while (curDate.toSeconds() < dateEnd.toSeconds()) {
     const results = breeds.map((breed) => {
-      const result = breed.callback(curDate)
-      if (result.name === 'Seasonal (Winter)') {
-        if (isLeaving(result, curDate)) {
-          console.log('LEAVING      ', curDate.toISO(), '    ', result.begin.toISO())
-          console.log(curDate.toISO(), {
-            ...result,
-            appearing: isAppearing(result, curDate),
-            leaving: isLeaving(result, curDate)
-          })
-        }
-      }
+      const result = breed(curDate)
+      // console.log(result.begin.diff(curDate, 'days').days, curDate.toISO())
+      const begin = result.begin.setZone(timezone.value)
+      const end = result.end.setZone(timezone.value)
+      const startDiff = begin.diff(curDate, 'days').days
+      const endDiff = end.diff(curDate, 'days').days
       return {
         ...result,
-        appearing: isAppearing(result, curDate),
-        leaving: isLeaving(result, curDate)
+        begin,
+        end,
+        appearing: result.availability && startDiff > -1,
+        leaving: result.availability && endDiff < 1
       }
     })
 
@@ -308,7 +330,7 @@ const dcDateTime = computed(() => ({
 }))
 
 const extended = computed(() => ({
-  season: determineSeason(dcIntlTime.value).name,
+  season: determineSeason(dcIntlTime.value),
   seasonIcon: 'snowflake',
   timezone: dcIntlTime.value.toFormat('ZZZZ'),
   offset: dcIntlTime.value.offset,
@@ -332,44 +354,11 @@ const extended = computed(() => ({
   })()
 }))
 
-/* onMounted(
+onMounted(
   () => (interval = setInterval(() => (intervalKey.value = DateTime.local().toSeconds()), 1000))
-) */
+)
+
 onUnmounted(() => clearInterval(interval))
-
-function isAppearing(breed, d) {
-  return breed.begin?.toISODate() === d.toISODate()
-}
-
-function isLeaving(breed, d) {
-  const r = breed.end?.toISODate() === d.toISODate()
-  if (r) {
-    console.log('tgjfdgjfdiog', breed.end?.toISO(), d.toISO())
-  }
-  return r
-}
-
-const d = DateTime.fromISO('2023-12-22T00:00:00.000+00:00')
-const season = determineSeason(d)
-
-/*   console.log(
-        season?.begin.toISODate(),
-        '         ',
-        d.toISODate(),
-        '         ',
-        season?.end.toISODate()
-      ) */
-
-console.log({
-  name: 'Seasonal (Winter)',
-  biome: 'Alpine',
-  image: new URL('./assets/eggs/winter.gif', import.meta.url).pathname,
-  backgroundColour: '106, 162, 171',
-  accentColour: '4, 63, 181',
-  availability: season?.name === 'winter',
-  begin: season?.begin?.toISO(),
-  end: season?.end?.toISO()
-})
 </script>
 
 <style scoped>
