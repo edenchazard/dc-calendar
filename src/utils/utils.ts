@@ -15,6 +15,16 @@ interface JDSeasonalCycle {
   septemberEquinox: number
 }
 
+const theCache: { [x: string]: any } = {}
+
+function cache(key: string, callback: () => any) {
+  if (key in theCache) {
+    return theCache[key]
+  }
+
+  return (theCache[key] = callback())
+}
+
 export function getJDSolsticesAndEquinoxes(year: number): JDSeasonalCycle {
   return {
     marchEquinox: solstice.march(year),
@@ -29,9 +39,10 @@ export function determineSeason(date: DateTime): {
   begin: DateTime
   end: DateTime
 } {
-  const previousYear = mapJDSeasonsToDateTime(getJDSolsticesAndEquinoxes(date.year - 1))
-  const currentYear = mapJDSeasonsToDateTime(getJDSolsticesAndEquinoxes(date.year))
-  const nextYear = mapJDSeasonsToDateTime(getJDSolsticesAndEquinoxes(date.year + 1))
+  const tricycle = [date.year - 1, date.year, date.year + 1]
+  const [previousYear, currentYear, nextYear] = tricycle.map((year) =>
+    cache(`eqsol-${year}`, () => mapJDSeasonsToDateTime(getJDSolsticesAndEquinoxes(year)))
+  )
 
   if (date >= currentYear.decemberSolstice) {
     return {
