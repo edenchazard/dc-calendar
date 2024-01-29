@@ -135,7 +135,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { determineSeason } from './utils/utils'
+import { determineSeason, seasonsOfCurrentYear } from './utils/utils'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
@@ -160,8 +160,8 @@ const breeds: Array<
       backgroundColour: '106, 162, 171',
       accentColour: '4, 63, 181',
       availability: season.name === 'winter',
-      begin: season.begin,
-      end: season.end
+      begin: seasonsOfCurrentYear(d)['winter'].start,
+      end: seasonsOfCurrentYear(d)['winter'].end
     }
   },
 
@@ -174,8 +174,8 @@ const breeds: Array<
       backgroundColour: '106, 162, 171',
       accentColour: '4, 63, 181',
       availability: season.name === 'spring',
-      begin: season.begin,
-      end: season.end
+      begin: seasonsOfCurrentYear(d)['spring'].start,
+      end: seasonsOfCurrentYear(d)['spring'].end
     }
   },
 
@@ -188,8 +188,8 @@ const breeds: Array<
       backgroundColour: '106, 162, 171',
       accentColour: '4, 63, 181',
       availability: season.name === 'summer',
-      begin: season.begin,
-      end: season.end
+      begin: seasonsOfCurrentYear(d)['summer'].start,
+      end: seasonsOfCurrentYear(d)['summer'].end
     }
   },
 
@@ -202,8 +202,8 @@ const breeds: Array<
       backgroundColour: '106, 162, 171',
       accentColour: '4, 63, 181',
       availability: season.name === 'autumn',
-      begin: season.begin,
-      end: season.end
+      begin: seasonsOfCurrentYear(d)['autumn'].start,
+      end: seasonsOfCurrentYear(d)['autumn'].end
     }
   },
 
@@ -299,8 +299,8 @@ const forecast = computed(() => {
         ...result,
         begin,
         end,
-        appearing: result.availability && startDiff > -1,
-        leaving: result.availability && endDiff < 1
+        appearing: startDiff > 0 && startDiff < 1,
+        leaving: endDiff < 1 && endDiff > 0
       }
     })
 

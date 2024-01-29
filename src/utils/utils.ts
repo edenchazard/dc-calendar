@@ -84,6 +84,33 @@ export function determineSeason(date: DateTime): {
   throw new Error('unable to deduce season')
 }
 
+export function seasonsOfCurrentYear(date: DateTime) {
+  const previousYear = mapJDSeasonsToDateTime(getJDSolsticesAndEquinoxes(date.year - 1))
+  const currentYear = mapJDSeasonsToDateTime(getJDSolsticesAndEquinoxes(date.year))
+  const nextYear = mapJDSeasonsToDateTime(getJDSolsticesAndEquinoxes(date.year + 1))
+
+  const seasons = {
+    winter: {
+      start: date < currentYear.marchEquinox ? previousYear.decemberSolstice : currentYear.decemberSolstice,
+      end: date < currentYear.marchEquinox ? currentYear.marchEquinox : nextYear.marchEquinox,
+    },
+    spring: {
+      start: currentYear.marchEquinox,
+      end: currentYear.juneSolstice
+    },
+    summer: {
+      start: currentYear.juneSolstice,
+      end: currentYear.septemberEquinox
+    },
+    autumn: {
+      start: currentYear.septemberEquinox,
+      end: currentYear.decemberSolstice
+    }
+  }
+
+  return seasons;
+}
+
 export function jdToDateTime(jD: number, zone?: Zone) {
   return DateTime.fromJSDate(julian.JDToDate(jD), { zone })
 }
