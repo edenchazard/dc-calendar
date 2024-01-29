@@ -84,7 +84,7 @@
             <b class="day">{{ date.date.toFormat('d') }}</b>
             <b class="month">{{ date.date.toFormat('MMM') }}</b>
             <div class="breeds-available">
-              <template v-for="(breed, index) in date.available">
+              <template v-for="(breed, index) in date.continuing">
                 <div
                   class="breed"
                   :style="{
@@ -135,137 +135,10 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { determineSeason, seasonsOfCurrentYear } from './utils/utils'
+import { determineSeason } from './utils/utils'
 import { DateTime } from 'luxon'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-
-const breeds: Array<
-  (d: DateTime) => {
-    name: string
-    biome: string
-    image: string
-    backgroundColour: string
-    accentColour: string
-    availability: boolean
-    begin: DateTime
-    end: DateTime
-  }
-> = [
-  (d) => {
-    const season = determineSeason(d)
-    return {
-      name: 'Seasonal (Winter)',
-      biome: 'Alpine',
-      image: new URL('./assets/eggs/seasonal_winter.gif', import.meta.url).pathname,
-      backgroundColour: '106, 162, 171',
-      accentColour: '4, 63, 181',
-      availability: season.name === 'winter',
-      begin: seasonsOfCurrentYear(d)['winter'].start,
-      end: seasonsOfCurrentYear(d)['winter'].end
-    }
-  },
-
-  (d) => {
-    const season = determineSeason(d)
-    return {
-      name: 'Seasonal (Spring)',
-      biome: 'Alpine',
-      image: new URL('./assets/eggs/seasonal_spring.webp', import.meta.url).pathname,
-      backgroundColour: '106, 162, 171',
-      accentColour: '4, 63, 181',
-      availability: season.name === 'spring',
-      begin: seasonsOfCurrentYear(d)['spring'].start,
-      end: seasonsOfCurrentYear(d)['spring'].end
-    }
-  },
-
-  (d) => {
-    const season = determineSeason(d)
-    return {
-      name: 'Seasonal (Summer)',
-      biome: 'Alpine',
-      image: new URL('./assets/eggs/seasonal_summer.webp', import.meta.url).pathname,
-      backgroundColour: '106, 162, 171',
-      accentColour: '4, 63, 181',
-      availability: season.name === 'summer',
-      begin: seasonsOfCurrentYear(d)['summer'].start,
-      end: seasonsOfCurrentYear(d)['summer'].end
-    }
-  },
-
-  (d) => {
-    const season = determineSeason(d)
-    return {
-      name: 'Seasonal (Autumn)',
-      biome: 'Alpine',
-      image: new URL('./assets/eggs/seasonal_autumn.webp', import.meta.url).pathname,
-      backgroundColour: '106, 162, 171',
-      accentColour: '4, 63, 181',
-      availability: season.name === 'autumn',
-      begin: seasonsOfCurrentYear(d)['autumn'].start,
-      end: seasonsOfCurrentYear(d)['autumn'].end
-    }
-  },
-
-  (d) => {
-    const now = d.toSeconds()
-    const begin = DateTime.fromISO(`${d.year}-02-08T00:00:00`, {
-      zone: 'America/New_York'
-    }).setZone(timezone.value)
-    const end = DateTime.fromISO(`${d.year}-02-14T23:59:59`, {
-      zone: 'America/New_York'
-    }).setZone(timezone.value)
-
-    return {
-      name: 'Previous Valentines',
-      biome: 'Holiday',
-      image: new URL('./assets/eggs/amarignis_egg.webp', import.meta.url).pathname,
-      backgroundColour: '204, 188, 209',
-      accentColour: '181, 0, 6',
-      availability: now >= begin.toSeconds() && now <= end.toSeconds(),
-      begin,
-      end
-    }
-  },
-
-  (d) => {
-    const now = d.toSeconds()
-    const begin = DateTime.fromISO(`${d.year}-02-14T00:00:00`, {
-      zone: 'America/New_York'
-    }).setZone(timezone.value)
-    const end = DateTime.fromISO(`${d.year}-02-16T23:59:59`, {
-      zone: 'America/New_York'
-    }).setZone(timezone.value)
-
-    return {
-      name: `${d.year} Valentine`,
-      biome: 'All',
-      image: new URL('./assets/eggs/mystery.gif', import.meta.url).pathname,
-      backgroundColour: '176, 141, 141',
-      accentColour: '255, 0, 0',
-      availability: now >= begin.toSeconds() && now <= end.toSeconds(),
-      begin,
-      end
-    }
-  }
-  /* (d) => {
-    const ts = d.toSeconds()
-       console.log({
-        dcTime: d.toISO(),
-        local: d.toLocal().toISO(),
-        dctime2: DateTime.fromSeconds(1705712400).setZone('America/New_York').toLocal().toISO()
-      })
-
-    return {
-      name: `Sonata (Silver)`,
-      biome: 'All',
-      availability: false,
-      image: new URL('./assets/eggs/mystery.gif', import.meta.url).pathname,
-      backgroundColour: '122, 122, 122',
-      accentColour: '255, 255, 255'
-    }
-  }*/
-]
+import { getBreedsLocal } from './utils/breeds'
 
 const timezones = Intl.supportedValuesOf('timeZone')
 
@@ -282,19 +155,20 @@ const dcIntlTime = computed(() =>
 )
 
 const forecast = computed(() => {
+  const breeds = getBreedsLocal(timezone.value)
   const dateBegin = DateTime.fromISO(from.value).setZone(timezone.value)
   const dateEnd = DateTime.fromISO(end.value).setZone(timezone.value)
-  let curDate = dateBegin
   const dayForecast = []
+  let curDate = dateBegin
 
   while (curDate.toSeconds() < dateEnd.toSeconds()) {
     const results = breeds.map((breed) => {
       const result = breed(curDate)
-      // console.log(result.begin.diff(curDate, 'days').days, curDate.toISO())
       const begin = result.begin.setZone(timezone.value)
       const end = result.end.setZone(timezone.value)
       const startDiff = begin.diff(curDate, 'days').days
       const endDiff = end.diff(curDate, 'days').days
+
       return {
         ...result,
         begin,
@@ -307,7 +181,7 @@ const forecast = computed(() => {
     dayForecast.push({
       date: curDate,
       dragCaveTime: curDate.setZone('America/New_York'),
-      available: results.filter(
+      continuing: results.filter(
         (breed) => !breed.appearing && !breed.leaving && breed.availability
       ),
       leaving: results.filter((breed) => breed.leaving),
