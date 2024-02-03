@@ -1,5 +1,6 @@
 import { solstice, julian } from 'astronomia'
 import { DateTime, Zone } from 'luxon'
+import { cache } from './cache'
 
 interface Seasons {
   decemberSolstice: DateTime
@@ -13,16 +14,6 @@ interface JDSeasonalCycle {
   marchEquinox: number
   juneSolstice: number
   septemberEquinox: number
-}
-
-const theCache: { [x: string]: any } = {}
-
-function cache(key: string, callback: () => any) {
-  if (key in theCache) {
-    return theCache[key]
-  }
-
-  return (theCache[key] = callback())
 }
 
 export function getJDSolsticesAndEquinoxes(year: number): JDSeasonalCycle {
@@ -91,8 +82,11 @@ export function seasonsOfCurrentYear(date: DateTime) {
 
   const seasons = {
     winter: {
-      start: date < currentYear.marchEquinox ? previousYear.decemberSolstice : currentYear.decemberSolstice,
-      end: date < currentYear.marchEquinox ? currentYear.marchEquinox : nextYear.marchEquinox,
+      start:
+        date < currentYear.marchEquinox
+          ? previousYear.decemberSolstice
+          : currentYear.decemberSolstice,
+      end: date < currentYear.marchEquinox ? currentYear.marchEquinox : nextYear.marchEquinox
     },
     spring: {
       start: currentYear.marchEquinox,
@@ -108,7 +102,7 @@ export function seasonsOfCurrentYear(date: DateTime) {
     }
   }
 
-  return seasons;
+  return seasons
 }
 
 export function jdToDateTime(jD: number, zone?: Zone) {
