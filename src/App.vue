@@ -246,7 +246,7 @@ const forecast = computed(() => {
   const dayForecast = [];
   let curDate = dateBegin;
 
-  while (curDate.toSeconds() < dateEnd.toSeconds()) {
+  while (curDate < dateEnd) {
     const results = breeds.map((breed) => {
       const result = breed(curDate);
       const begin = result.begin.setZone(timezone.value);
