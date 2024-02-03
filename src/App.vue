@@ -4,36 +4,57 @@
   </header>
 
   <main class="max-content">
-    <section id="currently" class="section">
+    <section
+      id="currently"
+      class="section"
+    >
       <h2 class="center">At a glance</h2>
       <div id="info">
-        <div id="now" :key="intervalKey">
+        <div
+          id="now"
+          :key="intervalKey"
+        >
           <span class="time">Local time</span>
           <span>
-            {{ localIntlTime.toLocaleString({ dateStyle: 'medium', timeStyle: 'medium' }) }}
+            {{
+              localIntlTime.toLocaleString({
+                dateStyle: 'medium',
+                timeStyle: 'medium',
+              })
+            }}
           </span>
           <span class="time">DC time</span>
-          <span>{{ dcIntlTime.toLocaleString({ dateStyle: 'medium', timeStyle: 'medium' }) }}</span>
+          <span>{{
+            dcIntlTime.toLocaleString({
+              dateStyle: 'medium',
+              timeStyle: 'medium',
+            })
+          }}</span>
         </div>
         <div id="extended-info">
           <div class="cell">
             <FontAwesomeIcon :icon="`fa-solid fa-${extended.seasonIcon}`" />
-            <span>{{ extended.season.name }} {{ extended.season.begin.toLocaleString() }}</span>
+            <span
+              >{{ extended.season.name }}
+              {{ extended.season.begin.toLocaleString() }}</span
+            >
           </div>
 
           <div class="cell">
             <FontAwesomeIcon icon="fa-solid fa-clock" />
             <span>
               Dragcave is in
-              <abbr :title="dcIntlTime.offsetNameLong">{{
+              <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
                 dcIntlTime.toFormat('ZZZZ')
-              }}</abbr></span
-            >
+              }}</abbr>
+            </span>
           </div>
 
           <div class="cell">
             <span class="offset">{{ Math.abs(dcIntlTime.offset / 60) }} </span>
-            <span>hours {{ dcIntlTime.offset > 0 ? 'ahead' : 'behind' }} you</span>
+            <span
+              >hours {{ dcIntlTime.offset > 0 ? 'ahead' : 'behind' }} you</span
+            >
           </div>
 
           <div class="cell">
@@ -46,51 +67,85 @@
 
     <div class="section center">
       <h2>Forecast</h2>
-      <form @submit.prevent id="period" class="subsection">
+      <form
+        @submit.prevent
+        id="period"
+        class="subsection"
+      >
         <div id="period-wrapper">
           <span>
             <label for="from">From</label>
           </span>
-          <input type="date" id="from" name="from" v-model="from" />
+          <input
+            type="date"
+            id="from"
+            name="from"
+            v-model="from"
+          />
           <span>
             <label for="to">To</label>
           </span>
-          <input type="date" id="to" name="to" v-model="end" />
+          <input
+            type="date"
+            id="to"
+            name="to"
+            v-model="end"
+          />
           <span>
             <label for="timezone">Timezone</label>
           </span>
-          <select v-model="timezone" id="timezone">
-            <option v-for="timezone in timezones" :value="timezone">{{ timezone }}</option>
+          <select
+            v-model="timezone"
+            id="timezone"
+          >
+            <option
+              v-for="timezone in timezones"
+              :key="timezone.toString()"
+              :value="timezone"
+            >
+              {{ timezone }}
+            </option>
           </select>
         </div>
       </form>
 
-      <section id="forecast" class="subsection">
+      <section
+        id="forecast"
+        class="subsection"
+      >
         <p>
           Between {{ localDateTime.begin.toFormat('MMM d HH:mm:ss') }} and
-          {{ localDateTime.end.toFormat('MMM d HH:mm:ss') }}, the following breeds will be
-          available.
+          {{ localDateTime.end.toFormat('MMM d HH:mm:ss') }}, the following
+          breeds will be available.
           <strong class="bold">These times are local to you.</strong>
         </p>
 
         <p class="italic">
-          (This period corresponds to {{ dcDateTime.begin.toFormat('MMM d HH:mm:ss') }} to
+          (This period corresponds to
+          {{ dcDateTime.begin.toFormat('MMM d HH:mm:ss') }} to
           {{ dcDateTime.end.toFormat('MMM d HH:mm:ss') }} on DragCave)
         </p>
 
         <div id="forecast-table">
-          <div v-for="date in forecast" class="forecast-cell">
+          <div
+            v-for="date in forecast"
+            class="forecast-cell"
+            :key="date.date.toSeconds()"
+          >
             <b class="year">{{ date.date.toFormat('y') }}</b>
             <b class="day">{{ date.date.toFormat('d') }}</b>
             <b class="month">{{ date.date.toFormat('MMM') }}</b>
             <div class="breeds-available">
-              <template v-for="(breed, index) in date.continuing">
+              <template
+                v-for="(breed, index) in date.continuing"
+                :key="`${date.date.toSeconds()}-${breed.name}`"
+              >
                 <div
                   class="breed"
                   :style="{
                     '--background-colour': `rgb(${breed.backgroundColour})`,
                     '--accent-colour': `rgb(${breed.accentColour})`,
-                    left: -(index * 7.5) + '%'
+                    left: -(index * 7.5) + '%',
                   }"
                 >
                   <div class="egg-container">
@@ -98,30 +153,56 @@
                       <div class="tooltip">
                         <b class="name">{{ breed.name }}</b>
                         <b class="biome">
-                          {{ Array.isArray(breed.biome) ? breed.biome.join(', ') : breed.biome }}
+                          {{
+                            Array.isArray(breed.biome)
+                              ? breed.biome.join(', ')
+                              : breed.biome
+                          }}
                         </b>
                       </div>
-                      <img :alt="breed.name" :src="breed.image" class="egg" />
+                      <img
+                        :alt="breed.name"
+                        :src="breed.image"
+                        class="egg"
+                      />
                     </div>
                   </div>
                 </div>
               </template>
             </div>
-            <div v-if="date.appearing.length > 0" class="incoming-outgoing">
+            <div
+              v-if="date.appearing.length > 0"
+              class="incoming-outgoing"
+            >
               <span class="block">Appearing</span>
-              <ul v-for="(breed, index) in date.appearing">
+              <ul
+                v-for="breed in date.appearing"
+                :key="`${date.date.toSeconds()}-${breed.name}`"
+              >
                 <li>
-                  <img :alt="breed.name" :src="breed.image" />
+                  <img
+                    :alt="breed.name"
+                    :src="breed.image"
+                  />
                   {{ breed?.begin?.toFormat('HH:mm:ss') }}
                 </li>
               </ul>
             </div>
 
-            <div v-if="date.leaving.length > 0" class="incoming-outgoing">
+            <div
+              v-if="date.leaving.length > 0"
+              class="incoming-outgoing"
+            >
               <span class="block">Leaving</span>
-              <ul v-for="(breed, index) in date.leaving">
+              <ul
+                v-for="breed in date.leaving"
+                :key="`${date.date.toSeconds()}-${breed.name}`"
+              >
                 <li>
-                  <img :alt="breed.name" :src="breed.image" />
+                  <img
+                    :alt="breed.name"
+                    :src="breed.image"
+                  />
                   {{ breed?.end?.toFormat('HH:mm:ss') }}
                 </li>
               </ul>
@@ -134,74 +215,74 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
-import { determineSeason } from './utils/utils'
-import { DateTime } from 'luxon'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { getBreedsLocal } from './utils/breeds'
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { determineSeason } from './utils/utils';
+import { DateTime } from 'luxon';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { getBreedsLocal } from './utils/breeds';
 
-const timezones = Intl.supportedValuesOf('timeZone')
+const timezones = Intl.supportedValuesOf('timeZone');
 
-let interval: number = 0
-const intervalKey = ref(DateTime.local().toSeconds())
+let interval: ReturnType<typeof setInterval>;
+const intervalKey = ref(DateTime.local().toSeconds());
 
-const from = ref(DateTime.now().toISODate())
-const end = ref(DateTime.now().plus({ days: 7 }).toISODate())
-const timezone = ref(Intl.DateTimeFormat().resolvedOptions().timeZone)
+const from = ref(DateTime.now().toISODate());
+const end = ref(DateTime.now().plus({ days: 7 }).toISODate());
+const timezone = ref(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
-const localIntlTime = computed(() => DateTime.fromSeconds(intervalKey.value))
+const localIntlTime = computed(() => DateTime.fromSeconds(intervalKey.value));
 const dcIntlTime = computed(() =>
-  DateTime.fromSeconds(intervalKey.value).setZone('America/New_York')
-)
+  DateTime.fromSeconds(intervalKey.value).setZone('America/New_York'),
+);
 
 const forecast = computed(() => {
-  const breeds = getBreedsLocal(timezone.value)
-  const dateBegin = DateTime.fromISO(from.value).setZone(timezone.value)
-  const dateEnd = DateTime.fromISO(end.value).setZone(timezone.value)
-  const dayForecast = []
-  let curDate = dateBegin
+  const breeds = getBreedsLocal(timezone.value);
+  const dateBegin = DateTime.fromISO(from.value).setZone(timezone.value);
+  const dateEnd = DateTime.fromISO(end.value).setZone(timezone.value);
+  const dayForecast = [];
+  let curDate = dateBegin;
 
   while (curDate.toSeconds() < dateEnd.toSeconds()) {
     const results = breeds.map((breed) => {
-      const result = breed(curDate)
-      const begin = result.begin.setZone(timezone.value)
-      const end = result.end.setZone(timezone.value)
-      const startDiff = begin.diff(curDate, 'days').days
-      const endDiff = end.diff(curDate, 'days').days
+      const result = breed(curDate);
+      const begin = result.begin.setZone(timezone.value);
+      const end = result.end.setZone(timezone.value);
+      const startDiff = begin.diff(curDate, 'days').days;
+      const endDiff = end.diff(curDate, 'days').days;
 
       return {
         ...result,
         begin,
         end,
         appearing: startDiff > 0 && startDiff < 1,
-        leaving: endDiff < 1 && endDiff > 0
-      }
-    })
+        leaving: endDiff < 1 && endDiff > 0,
+      };
+    });
 
     dayForecast.push({
       date: curDate,
       dragCaveTime: curDate.setZone('America/New_York'),
       continuing: results.filter(
-        (breed) => !breed.appearing && !breed.leaving && breed.availability
+        (breed) => !breed.appearing && !breed.leaving && breed.availability,
       ),
       leaving: results.filter((breed) => breed.leaving),
-      appearing: results.filter((breed) => breed.appearing)
-    })
+      appearing: results.filter((breed) => breed.appearing),
+    });
 
-    curDate = curDate.plus({ day: 1 })
+    curDate = curDate.plus({ day: 1 });
   }
-  return dayForecast
-})
+  return dayForecast;
+});
 
 const localDateTime = computed(() => ({
   begin: DateTime.fromISO(from.value).setZone(timezone.value),
-  end: DateTime.fromISO(end.value).setZone(timezone.value)
-}))
+  end: DateTime.fromISO(end.value).setZone(timezone.value),
+}));
 
 const dcDateTime = computed(() => ({
   begin: localDateTime.value.begin.setZone('America/New_York'),
-  end: localDateTime.value.end.setZone('America/New_York')
-}))
+  end: localDateTime.value.end.setZone('America/New_York'),
+}));
 
 const extended = computed(() => ({
   season: determineSeason(dcIntlTime.value),
@@ -212,27 +293,34 @@ const extended = computed(() => ({
     if ([0, 3, 6, 9, 12, 15, 18, 21].includes(dcIntlTime.value.hour)) {
       return {
         name: 'Blue',
-        image: new URL('./assets/eggs/fire_gem_blue.webp', import.meta.url).pathname
-      }
+        image: new URL('./assets/eggs/fire_gem_blue.webp', import.meta.url)
+          .pathname,
+      };
     } else if ([1, 4, 7, 10, 13, 16, 19, 22].includes(dcIntlTime.value.hour)) {
       return {
         name: 'Red',
-        image: new URL('./assets/eggs/fire_gem_red.webp', import.meta.url).pathname
-      }
+        image: new URL('./assets/eggs/fire_gem_red.webp', import.meta.url)
+          .pathname,
+      };
     }
 
     return {
       name: 'Green',
-      image: new URL('./assets/eggs/fire_gem_green.webp', import.meta.url).pathname
-    }
-  })()
-}))
+      image: new URL('./assets/eggs/fire_gem_green.webp', import.meta.url)
+        .pathname,
+    };
+  })(),
+}));
 
 onMounted(
-  () => (interval = setInterval(() => (intervalKey.value = DateTime.local().toSeconds()), 1000))
-)
+  () =>
+    (interval = setInterval(
+      () => (intervalKey.value = DateTime.local().toSeconds()),
+      1000,
+    )),
+);
 
-onUnmounted(() => clearInterval(interval))
+onUnmounted(() => clearInterval(interval));
 </script>
 
 <style scoped>

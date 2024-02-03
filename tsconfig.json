@@ -1,5 +1,23 @@
 {
   "files": [],
+  "compilerOptions": {
+    "noEmitOnError": true,
+    "target": "ES2021",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "sourceMap": false,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strict": true,
+    "outDir": "/prod",
+    "verbatimModuleSyntax": true
+  },
+  "exclude": ["node_modules/**"],
   "references": [
     {
       "path": "./tsconfig.node.json"

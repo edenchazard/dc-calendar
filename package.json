@@ -10,9 +10,12 @@
     "test:unit": "vitest",
     "test:e2e": "playwright test",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build --force",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "lint": "eslint . --ext .vue,.ts",
+    "lint:fix": "npm run lint -- --fix",
+    "fmt:check": "prettier . --check",
+    "fmt": "prettier --write .",
+    "fix": "npm run lint:fix && npm run fmt",
+    "ts:check": "tsc --noEmit"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.5.1",
