@@ -223,7 +223,6 @@ import { getBreedsLocal } from './utils/breeds';
 import { useLocalStorage } from '@vueuse/core';
 
 const timezones = Intl.supportedValuesOf('timeZone');
-
 let interval: ReturnType<typeof setInterval>;
 const intervalKey = ref(DateTime.local().toSeconds());
 
@@ -251,21 +250,19 @@ const forecast = computed(() => {
       const result = breed(curDate);
       const begin = result.begin.setZone(timezone.value);
       const end = result.end.setZone(timezone.value);
-      const startDiff = begin.diff(curDate, 'days').days;
-      const endDiff = end.diff(curDate, 'days').days;
+      console.log(result.name, curDate.toISODate(), begin.toISODate());
 
       return {
         ...result,
         begin,
         end,
-        appearing: startDiff > 0 && startDiff < 1,
-        leaving: endDiff < 1 && endDiff > 0,
+        appearing: curDate.toISODate() === begin.toISODate(),
+        leaving: curDate.toISODate() === end.toISODate(),
       };
     });
 
     dayForecast.push({
       date: curDate,
-      dragCaveTime: curDate.setZone('America/New_York'),
       continuing: results.filter(
         (breed) => !breed.appearing && !breed.leaving && breed.availability,
       ),
