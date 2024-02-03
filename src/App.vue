@@ -220,6 +220,7 @@ import { determineSeason } from './utils/utils';
 import { DateTime } from 'luxon';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { getBreedsLocal } from './utils/breeds';
+import { useLocalStorage } from '@vueuse/core';
 
 const timezones = Intl.supportedValuesOf('timeZone');
 
@@ -228,7 +229,10 @@ const intervalKey = ref(DateTime.local().toSeconds());
 
 const from = ref(DateTime.now().toISODate());
 const end = ref(DateTime.now().plus({ days: 7 }).toISODate());
-const timezone = ref(Intl.DateTimeFormat().resolvedOptions().timeZone);
+const timezone = useLocalStorage(
+  'timezone',
+  Intl.DateTimeFormat().resolvedOptions().timeZone,
+);
 
 const localIntlTime = computed(() => DateTime.fromSeconds(intervalKey.value));
 const dcIntlTime = computed(() =>
