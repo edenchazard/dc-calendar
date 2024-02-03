@@ -1,9 +1,33 @@
 <template>
-  <header id="top">
-    <div class="max-content"><h1>DragCave Calendar</h1></div>
+  <header
+    id="top"
+    class="max-content"
+  >
+    <h1>DragCave Calendar</h1>
+    <label for="timezone">Timezone</label>
+    <select
+      v-model="timezone"
+      id="timezone"
+    >
+      <option
+        v-for="timezone in timezones"
+        :key="timezone.toString()"
+        :value="timezone"
+      >
+        {{ timezone }}
+      </option>
+    </select>
   </header>
 
   <main class="max-content">
+    <section class="section">
+      <p>
+        All times are
+        <strong class="bold">local to your selected timezone</strong>, unless
+        otherwise stated.
+      </p>
+      <p><strong class="bold">This tool is experimental.</strong></p>
+    </section>
     <section
       id="currently"
       class="section"
@@ -49,21 +73,39 @@
               <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
                 dcIntlTime.toFormat('ZZZZ')
               }}</abbr
-              >, {{ Math.abs(dcIntlTime.offset / 60) }} hours
-              {{ dcIntlTime.offset > 0 ? 'ahead' : 'behind' }} you
+              >,
+              {{ Math.abs((dcIntlTime.offset - localIntlTime.offset) / 60) }}
+              hours
+              {{
+                dcIntlTime.offset - localIntlTime.offset > 0
+                  ? 'ahead of you'
+                  : 'behind you'
+              }}
             </span>
-
-            <img :src="extended.fireGem.image" />
-            <span>{{ extended.fireGem.name }} Fire Gems are dropping</span>
 
             <FontAwesomeIcon icon="fa-solid fa-skull" />
             <span>
               {{
                 extended.zombies
-                  ? `Zombies are active (Inactive at ${dcIntlTime.plus({ days: 1 }).set({ hour: 5, minute: 59, second: 59 }).setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SHORT_OFFSET)})`
-                  : `Zombies are inactive (Returning at ${dcIntlTime.plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0 }).setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SHORT_OFFSET)})`
+                  ? `Zombies are active (Inactive at ${dcIntlTime.plus({ days: 1 }).set({ hour: 5, minute: 59, second: 59 }).setZone(timezone).toLocaleString(DateTime.TIME_24_SIMPLE)})`
+                  : `Zombies are inactive (Returning at ${dcIntlTime.plus({ days: 1 }).startOf('day').setZone(timezone).toLocaleString(DateTime.TIME_24_SIMPLE)})`
               }}
             </span>
+
+            <FontAwesomeIcon icon="fa-solid fa-gem" />
+            <span
+              >Gemshards switch at
+              {{
+                dcIntlTime
+                  .startOf('day')
+                  .plus({ days: 1 })
+                  .setZone(timezone)
+                  .toLocaleString(DateTime.TIME_24_SIMPLE)
+              }}</span
+            >
+
+            <img :src="extended.fireGem.image" />
+            <span>{{ extended.fireGem.name }} Fire Gems are dropping</span>
           </div>
         </div>
       </div>
@@ -95,21 +137,6 @@
             name="to"
             v-model="end"
           />
-          <span>
-            <label for="timezone">Timezone</label>
-          </span>
-          <select
-            v-model="timezone"
-            id="timezone"
-          >
-            <option
-              v-for="timezone in timezones"
-              :key="timezone.toString()"
-              :value="timezone"
-            >
-              {{ timezone }}
-            </option>
-          </select>
         </div>
       </form>
 
@@ -121,7 +148,6 @@
           Between {{ localDateTime.begin.toFormat('MMM d HH:mm:ss') }} and
           {{ localDateTime.end.toFormat('MMM d HH:mm:ss') }}, the following
           breeds will be available.
-          <strong class="bold">These times are local to you.</strong>
         </p>
 
         <p class="italic">
@@ -220,11 +246,11 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref } from 'vue';
-import { determineSeason } from './utils/utils';
-import { DateTime } from 'luxon';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { getBreedsLocal } from './utils/breeds';
 import { useLocalStorage } from '@vueuse/core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { DateTime } from 'luxon';
+import { determineSeason } from './utils/utils';
+import { getBreedsLocal } from './utils/breeds';
 
 const timezones = Intl.supportedValuesOf('timeZone');
 let interval: ReturnType<typeof setInterval>;
@@ -232,35 +258,54 @@ const intervalKey = ref(DateTime.local().toSeconds());
 
 const from = ref(DateTime.now().toISODate());
 const end = ref(DateTime.now().plus({ days: 7 }).toISODate());
+
 const timezone = useLocalStorage(
   'timezone',
   Intl.DateTimeFormat().resolvedOptions().timeZone,
 );
 
-const localIntlTime = computed(() => DateTime.fromSeconds(intervalKey.value));
-const dcIntlTime = computed(() =>
-  DateTime.fromSeconds(intervalKey.value).setZone('America/New_York'),
+const localIntlTime = computed(() =>
+  DateTime.fromSeconds(intervalKey.value).setZone(timezone.value),
 );
 
+const dcIntlTime = computed(() => DateTime.fromSeconds(intervalKey.value));
+
 const forecast = computed(() => {
-  const breeds = getBreedsLocal(timezone.value);
-  const dateBegin = DateTime.fromISO(from.value).setZone(timezone.value);
-  const dateEnd = DateTime.fromISO(end.value).setZone(timezone.value);
+  const breeds = getBreedsLocal();
+  const dateBegin = DateTime.fromISO(from.value);
+  const dateEnd = DateTime.fromISO(end.value);
   const dayForecast = [];
   let curDate = dateBegin;
 
   while (curDate < dateEnd) {
     const results = breeds.map((breed) => {
       const result = breed(curDate);
-      const begin = result.begin.setZone(timezone.value);
-      const end = result.end.setZone(timezone.value);
+      const range = {
+        appearing: null,
+        leaving: null,
+        begin: null,
+        end: null,
+      };
+
+      if (result.begin) {
+        Object.assign(range, {
+          appearing: curDate.toISODate() === result.begin.toISODate(),
+          begin: result.begin.setZone(timezone.value),
+        });
+      }
+
+      if (result.end) {
+        const end = result.end.setZone(timezone.value);
+
+        Object.assign(range, {
+          leaving: curDate.toISODate() === end.toISODate(),
+          end: result.end.setZone(timezone.value),
+        });
+      }
 
       return {
         ...result,
-        begin,
-        end,
-        appearing: curDate.toISODate() === begin.toISODate(),
-        leaving: curDate.toISODate() === end.toISODate(),
+        ...range,
       };
     });
 
@@ -324,9 +369,7 @@ const extended = computed(() => ({
         .pathname,
     };
   })(),
-  zombies: (() => {
-    return dcIntlTime.value.hour < 6;
-  })(),
+  zombies: dcIntlTime.value.hour < 6,
 }));
 
 onMounted(
@@ -342,13 +385,16 @@ onUnmounted(() => clearInterval(interval));
 
 <style scoped>
 #top {
-  padding-top: 1rem;
   color: white;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  background: navy;
+  padding: 0.2rem 1rem;
 }
 
-#top .max-content {
-  background: navy;
-  padding: 1rem;
+main {
 }
 
 #info {
@@ -413,6 +459,7 @@ onUnmounted(() => clearInterval(interval));
   display: grid;
   gap: 0.5rem;
   align-items: center;
+  justify-content: center;
 }
 
 #period-wrapper span {

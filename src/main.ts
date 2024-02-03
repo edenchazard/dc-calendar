@@ -12,10 +12,15 @@ import {
   faSun,
   faClock,
   faSkull,
+  faGem,
 } from '@fortawesome/free-solid-svg-icons';
 
+import { Settings } from 'luxon';
+
 /* add icons to the library */
-library.add(faSnowflake, faSun, faClock, faSkull);
+library.add(faSnowflake, faSun, faClock, faSkull, faGem);
+
+Settings.defaultZone = 'America/New_York';
 
 const app = createApp(App);
 

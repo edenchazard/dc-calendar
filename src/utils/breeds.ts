@@ -1,8 +1,7 @@
 import { DateTime } from 'luxon';
-import type { Zone } from 'luxon';
 import { determineSeason, seasonsOfCurrentYear } from './utils';
 
-export function getBreedsLocal(zone: string | Zone) {
+export function getBreedsLocal() {
   const breeds: Array<
     (d: DateTime) => {
       name: string;
@@ -76,14 +75,15 @@ export function getBreedsLocal(zone: string | Zone) {
     },
 
     (d) => {
-      const now = d.toSeconds();
-      const begin = DateTime.fromISO(`${d.year}-02-08T00:00:00`, {
-        zone: 'America/New_York',
-      }).setZone(zone);
-      const end = DateTime.fromISO(`${d.year}-02-14T23:59:59`, {
-        zone: 'America/New_York',
-      }).setZone(zone);
-
+      const begin = DateTime.fromObject({ day: 8, month: 2, year: d.year });
+      const end = DateTime.fromObject({
+        day: 14,
+        month: 2,
+        year: d.year,
+        hour: 23,
+        minute: 59,
+        second: 59,
+      });
       return {
         name: 'Previous Valentines',
         biome: 'Holiday',
@@ -91,20 +91,27 @@ export function getBreedsLocal(zone: string | Zone) {
           .pathname,
         backgroundColour: '204, 188, 209',
         accentColour: '181, 0, 6',
-        availability: now >= begin.toSeconds() && now <= end.toSeconds(),
+        availability: d >= begin && d <= end,
         begin,
         end,
       };
     },
 
     (d) => {
-      const now = d.toSeconds();
-      const begin = DateTime.fromISO(`${d.year}-02-14T00:00:00`, {
-        zone: 'America/New_York',
-      }).setZone(zone);
-      const end = DateTime.fromISO(`${d.year}-02-16T23:59:59`, {
-        zone: 'America/New_York',
-      }).setZone(zone);
+      const begin = DateTime.fromObject({
+        day: 14,
+        month: 2,
+        year: d.year,
+      });
+
+      const end = DateTime.fromObject({
+        day: 16,
+        month: 2,
+        year: d.year,
+        hour: 23,
+        minute: 59,
+        second: 59,
+      });
 
       return {
         name: `${d.year} Valentine`,
@@ -112,9 +119,99 @@ export function getBreedsLocal(zone: string | Zone) {
         image: new URL('../assets/eggs/mystery.gif', import.meta.url).pathname,
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
-        availability: now >= begin.toSeconds() && now <= end.toSeconds(),
+        availability: d >= begin && d <= end,
         begin,
         end,
+      };
+    },
+
+    (d) => {
+      const availability = d.weekday === 1;
+      return {
+        name: `Gemshard (Jade)`,
+        biome: 'Jungle',
+        image: new URL('../assets/eggs/gemshard_jade.webp', import.meta.url)
+          .pathname,
+        backgroundColour: '176, 141, 141',
+        accentColour: '255, 0, 0',
+        availability,
+        begin: availability ? d.startOf('day') : null,
+        end: null,
+      };
+    },
+
+    (d) => {
+      const availability = d.weekday === 2;
+      return {
+        name: `Gemshard (Ruby)`,
+        biome: 'Jungle',
+        image: new URL('../assets/eggs/gemshard_ruby.webp', import.meta.url)
+          .pathname,
+        backgroundColour: '176, 141, 141',
+        accentColour: '255, 0, 0',
+        availability,
+        begin: availability ? d.startOf('day') : null,
+        end: null,
+      };
+    },
+
+    (d) => {
+      const availability = d.weekday === 3;
+      return {
+        name: `Gemshard (Sapphire)`,
+        biome: 'Jungle',
+        image: new URL('../assets/eggs/gemshard_sapphire.webp', import.meta.url)
+          .pathname,
+        backgroundColour: '176, 141, 141',
+        accentColour: '255, 0, 0',
+        availability,
+        begin: availability ? d.startOf('day') : null,
+        end: null,
+      };
+    },
+
+    (d) => {
+      const availability = d.weekday === 4;
+      return {
+        name: `Gemshard (Amethyst)`,
+        biome: 'Jungle',
+        image: new URL('../assets/eggs/gemshard_amethyst.webp', import.meta.url)
+          .pathname,
+        backgroundColour: '176, 141, 141',
+        accentColour: '255, 0, 0',
+        availability,
+        begin: availability ? d.startOf('day') : null,
+        end: null,
+      };
+    },
+
+    (d) => {
+      const availability = d.weekday === 5;
+      return {
+        name: `Gemshard (Aqua)`,
+        biome: 'Jungle',
+        image: new URL('../assets/eggs/gemshard_aqua.webp', import.meta.url)
+          .pathname,
+        backgroundColour: '176, 141, 141',
+        accentColour: '255, 0, 0',
+        availability,
+        begin: availability ? d.startOf('day') : null,
+        end: null,
+      };
+    },
+
+    (d) => {
+      const availability = d.weekday === 6;
+      return {
+        name: `Gemshard (Citrine)`,
+        biome: 'Jungle',
+        image: new URL('../assets/eggs/gemshard_citrine.webp', import.meta.url)
+          .pathname,
+        backgroundColour: '176, 141, 141',
+        accentColour: '255, 0, 0',
+        availability,
+        begin: availability ? d.startOf('day') : null,
+        end: null,
       };
     },
     /* (d) => {

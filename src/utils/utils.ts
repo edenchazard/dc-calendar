@@ -33,7 +33,10 @@ export function determineSeason(date: DateTime): {
   const tricycle = [date.year - 1, date.year, date.year + 1];
   const [previousYear, currentYear, nextYear] = tricycle.map((year) =>
     cache(`eqsol-${year}`, () =>
-      mapJDSeasonsToDateTime(getJDSolsticesAndEquinoxes(year)),
+      mapJDSeasonsToDateTime(
+        getJDSolsticesAndEquinoxes(year),
+        'America/New_York',
+      ),
     ),
   );
 
