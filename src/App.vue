@@ -35,8 +35,12 @@
           <div class="cell">
             <FontAwesomeIcon :icon="`fa-solid fa-${extended.seasonIcon}`" />
             <span
-              >{{ extended.season.name }}
-              {{ extended.season.begin.toLocaleString() }}</span
+              >{{
+                extended.season.name.slice(0, 1).toUpperCase() +
+                extended.season.name.slice(1)
+              }}
+              {{ extended.season.begin.toLocaleString() }} -
+              {{ extended.season.end.toLocaleString() }}</span
             >
           </div>
 
@@ -250,7 +254,6 @@ const forecast = computed(() => {
       const result = breed(curDate);
       const begin = result.begin.setZone(timezone.value);
       const end = result.end.setZone(timezone.value);
-      console.log(result.name, curDate.toISODate(), begin.toISODate());
 
       return {
         ...result,
@@ -287,7 +290,17 @@ const dcDateTime = computed(() => ({
 
 const extended = computed(() => ({
   season: determineSeason(dcIntlTime.value),
-  seasonIcon: 'snowflake',
+  seasonIcon: (() => {
+    switch (determineSeason(dcIntlTime.value).name) {
+      case 'autumn':
+        return 'canadian-maple-leaf';
+      case 'spring':
+        return 'leaf';
+      case 'summer':
+        return 'sun';
+    }
+    return 'snowflake';
+  })(),
   timezone: dcIntlTime.value.toFormat('ZZZZ'),
   offset: dcIntlTime.value.offset,
   fireGem: (() => {
