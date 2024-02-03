@@ -8,7 +8,6 @@
       id="currently"
       class="section"
     >
-      <h2 class="center">At a glance</h2>
       <div id="info">
         <div
           id="now"
@@ -31,38 +30,41 @@
             })
           }}</span>
         </div>
-        <div id="extended-info">
-          <FontAwesomeIcon :icon="`fa-solid fa-${extended.seasonIcon}`" />
-          <span
-            >{{
-              extended.season.name.slice(0, 1).toUpperCase() +
-              extended.season.name.slice(1)
-            }}
-            {{ extended.season.begin.toLocaleString() }} -
-            {{ extended.season.end.toLocaleString() }}</span
-          >
+        <div id="extended-info-container">
+          <h2>Right now...</h2>
+          <div id="extended-info">
+            <FontAwesomeIcon :icon="`fa-solid fa-${extended.seasonIcon}`" />
+            <span
+              >{{
+                extended.season.name.slice(0, 1).toUpperCase() +
+                extended.season.name.slice(1)
+              }}
+              {{ extended.season.begin.toLocaleString() }} -
+              {{ extended.season.end.toLocaleString() }}</span
+            >
 
-          <FontAwesomeIcon icon="fa-solid fa-clock" />
-          <span>
-            Dragcave is in
-            <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
-              dcIntlTime.toFormat('ZZZZ')
-            }}</abbr
-            >, {{ Math.abs(dcIntlTime.offset / 60) }} hours
-            {{ dcIntlTime.offset > 0 ? 'ahead' : 'behind' }} you
-          </span>
+            <FontAwesomeIcon icon="fa-solid fa-clock" />
+            <span>
+              Dragcave is in
+              <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
+                dcIntlTime.toFormat('ZZZZ')
+              }}</abbr
+              >, {{ Math.abs(dcIntlTime.offset / 60) }} hours
+              {{ dcIntlTime.offset > 0 ? 'ahead' : 'behind' }} you
+            </span>
 
-          <img :src="extended.fireGem.image" />
-          <span>{{ extended.fireGem.name }} Fire Gems are dropping</span>
+            <img :src="extended.fireGem.image" />
+            <span>{{ extended.fireGem.name }} Fire Gems are dropping</span>
 
-          <FontAwesomeIcon icon="fa-solid fa-skull" />
-          <span>
-            {{
-              extended.zombies
-                ? `Zombies are active (Inactive at ${dcIntlTime.plus({ days: 1 }).set({ hour: 5, minute: 59, second: 59 }).setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SHORT_OFFSET)})`
-                : `Zombies are inactive (Returning at ${dcIntlTime.plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0 }).setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SHORT_OFFSET)})`
-            }}
-          </span>
+            <FontAwesomeIcon icon="fa-solid fa-skull" />
+            <span>
+              {{
+                extended.zombies
+                  ? `Zombies are active (Inactive at ${dcIntlTime.plus({ days: 1 }).set({ hour: 5, minute: 59, second: 59 }).setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SHORT_OFFSET)})`
+                  : `Zombies are inactive (Returning at ${dcIntlTime.plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0 }).setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SHORT_OFFSET)})`
+              }}
+            </span>
+          </div>
         </div>
       </div>
     </section>
@@ -371,8 +373,7 @@ onUnmounted(() => clearInterval(interval));
   padding: 0.2rem 0.5rem;
   border-radius: 0.5rem;
 }
-
-#extended-info {
+#extended-info-container {
   border: 1px dashed #fff;
   padding: 1rem;
 }
