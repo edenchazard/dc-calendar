@@ -39,7 +39,7 @@
                 extended.season.name.slice(0, 1).toUpperCase() +
                 extended.season.name.slice(1)
               }}
-              {{ extended.season.begin.toLocaleString() }} -
+              {{ extended.season.begin.toLocaleString() }} &mdash;
               {{ extended.season.end.toLocaleString() }}</span
             >
 
