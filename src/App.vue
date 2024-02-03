@@ -47,16 +47,22 @@
             Dragcave is in
             <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
               dcIntlTime.toFormat('ZZZZ')
-            }}</abbr>
-          </span>
-
-          <span class="offset">{{ Math.abs(dcIntlTime.offset / 60) }} </span>
-          <span>
-            hours {{ dcIntlTime.offset > 0 ? 'ahead' : 'behind' }} you
+            }}</abbr
+            >, {{ Math.abs(dcIntlTime.offset / 60) }} hours
+            {{ dcIntlTime.offset > 0 ? 'ahead' : 'behind' }} you
           </span>
 
           <img :src="extended.fireGem.image" />
           <span>{{ extended.fireGem.name }} Fire Gems are dropping</span>
+
+          <FontAwesomeIcon icon="fa-solid fa-skull" />
+          <span>
+            {{
+              extended.zombies
+                ? `Zombies are active (Inactive at ${dcIntlTime.plus({ days: 1 }).set({ hour: 5, minute: 59, second: 59 }).setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SHORT_OFFSET)})`
+                : `Zombies are inactive (Returning at ${dcIntlTime.plus({ days: 1 }).set({ hour: 0, minute: 0, second: 0 }).setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SHORT_OFFSET)})`
+            }}
+          </span>
         </div>
       </div>
     </section>
@@ -316,6 +322,9 @@ const extended = computed(() => ({
         .pathname,
     };
   })(),
+  zombies: (() => {
+    return dcIntlTime.value.hour < 6;
+  })(),
 }));
 
 onMounted(
@@ -368,17 +377,17 @@ onUnmounted(() => clearInterval(interval));
   padding: 1rem;
 }
 
-#extended-info:nth-child(odd) {
-  justify-self: center;
-  text-align: center;
-}
-
 #extended-info {
   gap: 1rem;
   justify-self: center;
   display: grid;
   align-items: center;
   grid-template-columns: auto 1fr;
+}
+
+#extended-info > *:nth-child(odd) {
+  justify-self: center;
+  text-align: center;
 }
 
 #extended-info .cell .svg-inline--fa {
