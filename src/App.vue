@@ -32,39 +32,31 @@
           }}</span>
         </div>
         <div id="extended-info">
-          <div class="cell">
-            <FontAwesomeIcon :icon="`fa-solid fa-${extended.seasonIcon}`" />
-            <span
-              >{{
-                extended.season.name.slice(0, 1).toUpperCase() +
-                extended.season.name.slice(1)
-              }}
-              {{ extended.season.begin.toLocaleString() }} -
-              {{ extended.season.end.toLocaleString() }}</span
-            >
-          </div>
+          <FontAwesomeIcon :icon="`fa-solid fa-${extended.seasonIcon}`" />
+          <span
+            >{{
+              extended.season.name.slice(0, 1).toUpperCase() +
+              extended.season.name.slice(1)
+            }}
+            {{ extended.season.begin.toLocaleString() }} -
+            {{ extended.season.end.toLocaleString() }}</span
+          >
 
-          <div class="cell">
-            <FontAwesomeIcon icon="fa-solid fa-clock" />
-            <span>
-              Dragcave is in
-              <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
-                dcIntlTime.toFormat('ZZZZ')
-              }}</abbr>
-            </span>
-          </div>
+          <FontAwesomeIcon icon="fa-solid fa-clock" />
+          <span>
+            Dragcave is in
+            <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
+              dcIntlTime.toFormat('ZZZZ')
+            }}</abbr>
+          </span>
 
-          <div class="cell">
-            <span class="offset">{{ Math.abs(dcIntlTime.offset / 60) }} </span>
-            <span
-              >hours {{ dcIntlTime.offset > 0 ? 'ahead' : 'behind' }} you</span
-            >
-          </div>
+          <span class="offset">{{ Math.abs(dcIntlTime.offset / 60) }} </span>
+          <span>
+            hours {{ dcIntlTime.offset > 0 ? 'ahead' : 'behind' }} you
+          </span>
 
-          <div class="cell">
-            <img :src="extended.fireGem.image" />
-            <span>{{ extended.fireGem.name }} Fire Gems are dropping</span>
-          </div>
+          <img :src="extended.fireGem.image" />
+          <span>{{ extended.fireGem.name }} Fire Gems are dropping</span>
         </div>
       </div>
     </section>
@@ -353,7 +345,7 @@ onUnmounted(() => clearInterval(interval));
   gap: 2rem;
   align-items: center;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 #now {
@@ -362,7 +354,6 @@ onUnmounted(() => clearInterval(interval));
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  flex: 1;
 }
 
 #now .time {
@@ -373,23 +364,21 @@ onUnmounted(() => clearInterval(interval));
 }
 
 #extended-info {
-  gap: 1rem;
-  justify-self: center;
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 auto;
-  justify-content: center;
-}
-
-#extended-info .cell {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
   border: 1px dashed #fff;
   padding: 1rem;
+}
+
+#extended-info:nth-child(odd) {
+  justify-self: center;
   text-align: center;
-  width: 10rem;
+}
+
+#extended-info {
+  gap: 1rem;
+  justify-self: center;
+  display: grid;
+  align-items: center;
+  grid-template-columns: auto 1fr;
 }
 
 #extended-info .cell .svg-inline--fa {
