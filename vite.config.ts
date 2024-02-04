@@ -10,6 +10,7 @@ export default defineConfig({
     outDir: './docs',
     emptyOutDir: true,
   },
+  base: '/dc-calendar/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
