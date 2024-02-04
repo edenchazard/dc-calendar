@@ -3,7 +3,7 @@
     id="top"
     class="max-content"
   >
-    <h1>DragCave Calendar</h1>
+    <h1>Dragcave Calendar</h1>
     <label for="timezone">Timezone</label>
     <select
       v-model="timezone"
