@@ -131,6 +131,53 @@
             </p>
 
             <img
+              :src="extended.setrise.image"
+              alt=""
+            />
+            <div>
+              <p>
+                <b>Sunrise dragons</b> will hatch between
+                {{
+                  extended.setrise.sunrise.begin.toLocaleString(
+                    DateTime.TIME_24_WITH_SECONDS,
+                  )
+                }}
+                and
+                {{
+                  extended.setrise.sunrise.end.toLocaleString(
+                    DateTime.TIME_24_WITH_SECONDS,
+                  )
+                }}
+                <ActiveBadge
+                  :condition="
+                    dcIntlTime >= extended.setrise.sunrise.begin &&
+                    dcIntlTime <= extended.setrise.sunrise.end
+                  "
+                />
+              </p>
+              <p>
+                <b>Sunset dragons</b> will hatch between
+                {{
+                  extended.setrise.sunset.begin.toLocaleString(
+                    DateTime.TIME_24_WITH_SECONDS,
+                  )
+                }}
+                and
+                {{
+                  extended.setrise.sunset.end.toLocaleString(
+                    DateTime.TIME_24_WITH_SECONDS,
+                  )
+                }}
+                <ActiveBadge
+                  :condition="
+                    dcIntlTime >= extended.setrise.sunset.begin &&
+                    dcIntlTime <= extended.setrise.sunset.end
+                  "
+                />
+              </p>
+            </div>
+
+            <img
               :src="extended.fireGem.image"
               alt=""
             />
@@ -285,6 +332,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { DateTime } from 'luxon';
 import { determineSeason } from './utils/utils';
 import { getBreedsLocal } from './utils/breeds';
+import ActiveBadge from './components/ActiveBadge.vue';
 
 const timezones = Intl.supportedValuesOf('timeZone');
 let interval: ReturnType<typeof setInterval>;
@@ -442,6 +490,60 @@ const extended = computed(() => ({
         .plus({ days: 1 })
         .set({ hour: 6 })
         .setZone(timezone.value),
+    };
+  })(),
+
+  setrise: (() => {
+    const sunrise = {
+      begin: dcIntlTime.value
+        .set({
+          hour: 6,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+        })
+        .setZone(timezone.value),
+      end: dcIntlTime.value
+        .set({
+          hour: 12,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+        })
+        .setZone(timezone.value),
+    };
+    const sunset = {
+      begin: dcIntlTime.value
+        .set({
+          hour: 18,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+        })
+        .setZone(timezone.value),
+      end: dcIntlTime.value
+        .startOf('day')
+        .plus({ days: 1 })
+        .setZone(timezone.value),
+    };
+
+    let image: string = new URL(
+      '/public/eggs/sunrise_sunset.webp',
+      import.meta.url,
+    ).pathname;
+    if (dcIntlTime.value >= sunset.begin && dcIntlTime.value <= sunset.end) {
+      image = new URL('/public/eggs/sunset.webp', import.meta.url).pathname;
+    } else if (
+      dcIntlTime.value >= sunrise.begin &&
+      dcIntlTime.value <= sunrise.end
+    ) {
+      image = new URL('/public/eggs/sunrise.webp', import.meta.url).pathname;
+    }
+
+    return {
+      image,
+      sunrise,
+      sunset,
     };
   })(),
 }));
