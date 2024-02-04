@@ -122,7 +122,7 @@
             />
             <div>
               <p>
-                <b>Sunbeam Drakes</b> will hatch between
+                <b>Sunbeam Drakes</b> can be caught or bred between
                 {{
                   extended.moonbeam.sunbeam.begin.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
@@ -142,7 +142,7 @@
                 />
               </p>
               <p>
-                <b>Moonglow Drakes</b> will hatch between
+                <b>Moonglow Drakes</b> can be caught or bred between
                 {{
                   extended.setrise.sunset.begin.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
