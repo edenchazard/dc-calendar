@@ -120,15 +120,48 @@
               :src="extended.moonbeam.image"
               alt=""
             />
-            <p>
-              <b>Sunbeam</b> and <b>Moonglow drakes</b> caught or bred now will
-              hatch into <b>{{ extended.moonbeam.type }} drakes</b> (until
-              {{
-                extended.moonbeam.until.toLocaleString(
-                  DateTime.TIME_24_WITH_SECONDS,
-                )
-              }})
-            </p>
+            <div>
+              <p>
+                <b>Sunbeam Drakes</b> will hatch between
+                {{
+                  extended.moonbeam.sunbeam.begin.toLocaleString(
+                    DateTime.TIME_24_WITH_SECONDS,
+                  )
+                }}
+                and
+                {{
+                  extended.moonbeam.sunbeam.end.toLocaleString(
+                    DateTime.TIME_24_WITH_SECONDS,
+                  )
+                }}
+                <ActiveBadge
+                  :condition="
+                    dcIntlTime >= extended.moonbeam.sunbeam.begin &&
+                    dcIntlTime <= extended.moonbeam.sunbeam.end
+                  "
+                />
+              </p>
+              <p>
+                <b>Moonglow Drakes</b> will hatch between
+                {{
+                  extended.setrise.sunset.begin.toLocaleString(
+                    DateTime.TIME_24_WITH_SECONDS,
+                  )
+                }}
+                and
+                {{
+                  extended.setrise.sunset.end.toLocaleString(
+                    DateTime.TIME_24_WITH_SECONDS,
+                  )
+                }}
+                <ActiveBadge
+                  :condition="
+                    dcIntlTime >= extended.setrise.sunset.begin &&
+                    dcIntlTime <= extended.setrise.sunset.end
+                  "
+                />
+              </p>
+            </div>
 
             <img
               :src="extended.setrise.image"
@@ -136,7 +169,7 @@
             />
             <div>
               <p>
-                <b>Sunrise dragons</b> will hatch between
+                <b>Sunrise Dragons</b> will hatch between
                 {{
                   extended.setrise.sunrise.begin.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
@@ -156,7 +189,7 @@
                 />
               </p>
               <p>
-                <b>Sunset dragons</b> will hatch between
+                <b>Sunset Dragons</b> will hatch between
                 {{
                   extended.setrise.sunset.begin.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
@@ -329,33 +362,58 @@ const extended = computed(() => ({
   })(),
   zombies: dcIntlTime.value.hour < 6,
   moonbeam: (() => {
-    const type =
-      dcIntlTime.value.hour >= 6 && dcIntlTime.value.hour < 18
-        ? 'Sunbeam'
-        : 'Moonglow';
+    const sunbeam = {
+      begin: dcIntlTime.value
+        .set({
+          hour: 6,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+        })
+        .setZone(timezone.value),
+      end: dcIntlTime.value
+        .set({
+          hour: 17,
+          minute: 59,
+          second: 59,
+          millisecond: 0,
+        })
+        .setZone(timezone.value),
+    };
+    const moonglow = {
+      begin: dcIntlTime.value
+        .set({
+          hour: 18,
+          minute: 0,
+          second: 0,
+          millisecond: 0,
+        })
+        .setZone(timezone.value),
+      end: dcIntlTime.value
+        .startOf('day')
+        .plus({ days: 1, hours: 5, minutes: 59, seconds: 59 })
+        .setZone(timezone.value),
+    };
 
-    if (type === 'Sunbeam') {
-      return {
-        type,
-        image: new URL('/public/eggs/sunbeam.webp', import.meta.url).pathname,
-        until: dcIntlTime.value
-          .startOf('day')
-          .set({ hour: 18 })
-          .setZone(timezone.value),
-      };
+    let image: string = new URL(
+      '/public/eggs/sunbeam_moonglow.webp',
+      import.meta.url,
+    ).pathname;
+    if (dcIntlTime.value >= sunbeam.begin && dcIntlTime.value <= sunbeam.end) {
+      image = new URL('/public/eggs/sunbeam.webp', import.meta.url).pathname;
+    } else if (
+      dcIntlTime.value >= moonglow.begin &&
+      dcIntlTime.value <= moonglow.end
+    ) {
+      image = new URL('/public/eggs/moonglow.webp', import.meta.url).pathname;
     }
 
     return {
-      type,
-      image: new URL('/public/eggs/moonglow.webp', import.meta.url).pathname,
-      until: dcIntlTime.value
-        .startOf('day')
-        .plus({ days: 1 })
-        .set({ hour: 6 })
-        .setZone(timezone.value),
+      image,
+      sunbeam,
+      moonglow,
     };
   })(),
-
   setrise: (() => {
     const sunrise = {
       begin: dcIntlTime.value
