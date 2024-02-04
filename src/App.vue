@@ -87,8 +87,8 @@
             <span>
               {{
                 extended.zombies
-                  ? `Zombies are active (Inactive at ${dcIntlTime.plus({ days: 1 }).set({ hour: 5, minute: 59, second: 59 }).setZone(timezone).toLocaleString(DateTime.TIME_24_SIMPLE)})`
-                  : `Zombies are inactive (Returning at ${dcIntlTime.plus({ days: 1 }).startOf('day').setZone(timezone).toLocaleString(DateTime.TIME_24_SIMPLE)})`
+                  ? `Zombies are active (Inactive at ${dcIntlTime.plus({ days: 1 }).set({ hour: 5, minute: 59, second: 59 }).setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)})`
+                  : `Zombies are inactive (Returning at ${dcIntlTime.plus({ days: 1 }).startOf('day').setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)})`
               }}
             </span>
 
@@ -100,7 +100,7 @@
                   .startOf('day')
                   .plus({ days: 1 })
                   .setZone(timezone)
-                  .toLocaleString(DateTime.TIME_24_SIMPLE)
+                  .toLocaleString(DateTime.TIME_24_WITH_SECONDS)
               }}</span
             >
 
