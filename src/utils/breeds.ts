@@ -24,7 +24,7 @@ export function getBreedsLocal() {
       return {
         name: 'Seasonal (Winter)',
         biome: 'Alpine',
-        image: new URL('../assets/eggs/seasonal_winter.gif', import.meta.url)
+        image: new URL('/public/eggs/seasonal_winter.gif', import.meta.url)
           .pathname,
         backgroundColour: '106, 162, 171',
         accentColour: '4, 63, 181',
@@ -39,7 +39,7 @@ export function getBreedsLocal() {
       return {
         name: 'Seasonal (Spring)',
         biome: 'Alpine',
-        image: new URL('../assets/eggs/seasonal_spring.webp', import.meta.url)
+        image: new URL('/public/eggs/seasonal_spring.webp', import.meta.url)
           .pathname,
         backgroundColour: '106, 162, 171',
         accentColour: '4, 63, 181',
@@ -54,7 +54,7 @@ export function getBreedsLocal() {
       return {
         name: 'Seasonal (Summer)',
         biome: 'Alpine',
-        image: new URL('../assets/eggs/seasonal_summer.webp', import.meta.url)
+        image: new URL('/public/eggs/seasonal_summer.webp', import.meta.url)
           .pathname,
         backgroundColour: '106, 162, 171',
         accentColour: '4, 63, 181',
@@ -69,7 +69,7 @@ export function getBreedsLocal() {
       return {
         name: 'Seasonal (Autumn)',
         biome: 'Alpine',
-        image: new URL('../assets/eggs/seasonal_autumn.webp', import.meta.url)
+        image: new URL('/public/eggs/seasonal_autumn.webp', import.meta.url)
           .pathname,
         backgroundColour: '106, 162, 171',
         accentColour: '4, 63, 181',
@@ -92,7 +92,7 @@ export function getBreedsLocal() {
       return {
         name: 'Previous Valentines',
         biome: 'Holiday',
-        image: new URL('../assets/eggs/amarignis_egg.webp', import.meta.url)
+        image: new URL('/public/eggs/amarignis_egg.webp', import.meta.url)
           .pathname,
         backgroundColour: '204, 188, 209',
         accentColour: '181, 0, 6',
@@ -121,7 +121,7 @@ export function getBreedsLocal() {
       return {
         name: `${d.year} Valentine`,
         biome: 'All',
-        image: new URL('../assets/eggs/mystery.gif', import.meta.url).pathname,
+        image: new URL('/public/eggs/mystery.gif', import.meta.url).pathname,
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
         availability: d >= begin && d <= end,
@@ -135,7 +135,7 @@ export function getBreedsLocal() {
       return {
         name: `Gemshard (Jade)`,
         biome: 'Jungle',
-        image: new URL('../assets/eggs/gemshard_jade.webp', import.meta.url)
+        image: new URL('/public/eggs/gemshard_jade.webp', import.meta.url)
           .pathname,
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
@@ -150,7 +150,7 @@ export function getBreedsLocal() {
       return {
         name: `Gemshard (Ruby)`,
         biome: 'Jungle',
-        image: new URL('../assets/eggs/gemshard_ruby.webp', import.meta.url)
+        image: new URL('/public/eggs/gemshard_ruby.webp', import.meta.url)
           .pathname,
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
@@ -165,7 +165,7 @@ export function getBreedsLocal() {
       return {
         name: `Gemshard (Sapphire)`,
         biome: 'Jungle',
-        image: new URL('../assets/eggs/gemshard_sapphire.webp', import.meta.url)
+        image: new URL('/public/eggs/gemshard_sapphire.webp', import.meta.url)
           .pathname,
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
@@ -180,7 +180,7 @@ export function getBreedsLocal() {
       return {
         name: `Gemshard (Amethyst)`,
         biome: 'Jungle',
-        image: new URL('../assets/eggs/gemshard_amethyst.webp', import.meta.url)
+        image: new URL('/public/eggs/gemshard_amethyst.webp', import.meta.url)
           .pathname,
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
@@ -195,7 +195,7 @@ export function getBreedsLocal() {
       return {
         name: `Gemshard (Aqua)`,
         biome: 'Jungle',
-        image: new URL('../assets/eggs/gemshard_aqua.webp', import.meta.url)
+        image: new URL('/public/eggs/gemshard_aqua.webp', import.meta.url)
           .pathname,
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
@@ -210,7 +210,7 @@ export function getBreedsLocal() {
       return {
         name: `Gemshard (Citrine)`,
         biome: 'Jungle',
-        image: new URL('../assets/eggs/gemshard_citrine.webp', import.meta.url)
+        image: new URL('/public/eggs/gemshard_citrine.webp', import.meta.url)
           .pathname,
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
@@ -225,7 +225,7 @@ export function getBreedsLocal() {
       return {
         name: `Sonata (Gold)`,
         biome: 'Jungle',
-        image: new URL('../assets/eggs/sonata_gold.webp', import.meta.url)
+        image: new URL('/public/eggs/sonata_gold.webp', import.meta.url)
           .pathname,
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
@@ -241,7 +241,7 @@ export function getBreedsLocal() {
       return {
         name: `Sonata (Blue)`,
         biome: 'Jungle',
-        image: new URL('../assets/eggs/sonata_blue.webp', import.meta.url)
+        image: new URL('/public/eggs/sonata_blue.webp', import.meta.url)
           .pathname,
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
@@ -257,7 +257,7 @@ export function getBreedsLocal() {
       return {
         name: `Sonata (Silver)`,
         biome: 'Jungle',
-        image: new URL('../assets/eggs/sonata_silver.webp', import.meta.url)
+        image: new URL('/public/eggs/sonata_silver.webp', import.meta.url)
           .pathname,
         backgroundColour: '122, 122, 122',
         accentColour: '255, 255, 255',
@@ -273,10 +273,8 @@ export function getBreedsLocal() {
       return {
         name: `Lunar Herald (Indigo)`,
         biome: 'Jungle',
-        image: new URL(
-          '../assets/eggs/lunar_herald_indigo.webp',
-          import.meta.url,
-        ).pathname,
+        image: new URL('/public/eggs/lunar_herald_indigo.webp', import.meta.url)
+          .pathname,
         backgroundColour: '122, 122, 122',
         accentColour: '255, 255, 255',
         availability: colour === 3,
@@ -290,10 +288,8 @@ export function getBreedsLocal() {
       return {
         name: `Lunar Herald (Bronze)`,
         biome: 'Jungle',
-        image: new URL(
-          '../assets/eggs/lunar_herald_bronze.webp',
-          import.meta.url,
-        ).pathname,
+        image: new URL('/public/eggs/lunar_herald_bronze.webp', import.meta.url)
+          .pathname,
         backgroundColour: '122, 122, 122',
         accentColour: '255, 255, 255',
         availability: colour === 2,
@@ -307,7 +303,7 @@ export function getBreedsLocal() {
       return {
         name: `Lunar Herald (Gold)`,
         biome: 'Jungle',
-        image: new URL('../assets/eggs/lunar_herald_gold.webp', import.meta.url)
+        image: new URL('/public/eggs/lunar_herald_gold.webp', import.meta.url)
           .pathname,
         backgroundColour: '122, 122, 122',
         accentColour: '255, 255, 255',
@@ -322,10 +318,8 @@ export function getBreedsLocal() {
       return {
         name: `Lunar Herald (Silver)`,
         biome: 'Jungle',
-        image: new URL(
-          '../assets/eggs/lunar_herald_silver.webp',
-          import.meta.url,
-        ).pathname,
+        image: new URL('/public/eggs/lunar_herald_silver.webp', import.meta.url)
+          .pathname,
         backgroundColour: '122, 122, 122',
         accentColour: '255, 255, 255',
         availability: colour === 0,

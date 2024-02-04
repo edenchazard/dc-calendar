@@ -371,20 +371,20 @@ const extended = computed(() => ({
     if ([0, 3, 6, 9, 12, 15, 18, 21].includes(dcIntlTime.value.hour)) {
       return {
         name: 'Blue',
-        image: new URL('./assets/eggs/fire_gem_blue.webp', import.meta.url)
+        image: new URL('/public/eggs/fire_gem_blue.webp', import.meta.url)
           .pathname,
       };
     } else if ([1, 4, 7, 10, 13, 16, 19, 22].includes(dcIntlTime.value.hour)) {
       return {
         name: 'Red',
-        image: new URL('./assets/eggs/fire_gem_red.webp', import.meta.url)
+        image: new URL('/public/eggs/fire_gem_red.webp', import.meta.url)
           .pathname,
       };
     }
 
     return {
       name: 'Green',
-      image: new URL('./assets/eggs/fire_gem_green.webp', import.meta.url)
+      image: new URL('/public/eggs/fire_gem_green.webp', import.meta.url)
         .pathname,
     };
   })(),
