@@ -10,8 +10,8 @@ export function getBreedsLocal() {
       backgroundColour: string;
       accentColour: string;
       availability: boolean;
-      begin: DateTime;
-      end: DateTime;
+      begin: DateTime | null;
+      end: DateTime | null;
     }
   > = [
     (d) => {

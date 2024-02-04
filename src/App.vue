@@ -214,7 +214,7 @@
                     :alt="breed.name"
                     :src="breed.image"
                   />
-                  {{ breed?.begin?.toFormat('HH:mm:ss') }}
+                  {{ breed.begin?.toFormat('HH:mm:ss') }}
                 </li>
               </ul>
             </div>

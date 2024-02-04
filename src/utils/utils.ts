@@ -1,20 +1,7 @@
 import { solstice, julian } from 'astronomia';
-import { DateTime, Zone } from 'luxon';
+import { DateTime } from 'luxon';
+import type { JDSeasonalCycle, SeasonName, Seasons } from './types';
 import { cache } from './cache';
-
-interface Seasons {
-  decemberSolstice: DateTime;
-  marchEquinox: DateTime;
-  juneSolstice: DateTime;
-  septemberEquinox: DateTime;
-}
-
-interface JDSeasonalCycle {
-  decemberSolstice: number;
-  marchEquinox: number;
-  juneSolstice: number;
-  septemberEquinox: number;
-}
 
 export function getJDSolsticesAndEquinoxes(year: number): JDSeasonalCycle {
   return {
@@ -26,17 +13,14 @@ export function getJDSolsticesAndEquinoxes(year: number): JDSeasonalCycle {
 }
 
 export function determineSeason(date: DateTime): {
-  name: 'winter' | 'autumn' | 'summer' | 'spring';
+  name: SeasonName;
   begin: DateTime;
   end: DateTime;
 } {
   const tricycle = [date.year - 1, date.year, date.year + 1];
   const [previousYear, currentYear, nextYear] = tricycle.map((year) =>
     cache(`eqsol-${year}`, () =>
-      mapJDSeasonsToDateTime(
-        getJDSolsticesAndEquinoxes(year),
-        'America/New_York',
-      ),
+      mapJDSeasonsToDateTime(getJDSolsticesAndEquinoxes(year)),
     ),
   );
 
@@ -61,7 +45,6 @@ export function determineSeason(date: DateTime): {
       end: currentYear.septemberEquinox,
     };
   }
-
   if (date >= currentYear.marchEquinox) {
     return {
       name: 'spring',
@@ -119,18 +102,17 @@ export function seasonsOfCurrentYear(date: DateTime) {
   return seasons;
 }
 
-export function jdToDateTime(jD: number, zone?: Zone) {
-  return DateTime.fromJSDate(julian.JDToDate(jD), { zone });
+export function jdToDateTime(jD: number) {
+  return DateTime.fromJSDate(julian.JDToDate(jD));
 }
 
-export function mapJDSeasonsToDateTime(
-  jDSeasons: JDSeasonalCycle,
-  zone?: Zone,
-): Seasons {
-  return Object.fromEntries(
-    Object.entries(jDSeasons).map(([season, date]) => [
-      season,
-      date instanceof DateTime ? date : jdToDateTime(date, zone),
-    ]),
-  );
+export function mapJDSeasonsToDateTime(jDSeasons: JDSeasonalCycle): Seasons {
+  const fmt = (date: DateTime | number) =>
+    date instanceof DateTime ? date : jdToDateTime(date);
+  return {
+    decemberSolstice: fmt(jDSeasons.decemberSolstice),
+    juneSolstice: fmt(jDSeasons.juneSolstice),
+    marchEquinox: fmt(jDSeasons.marchEquinox),
+    septemberEquinox: fmt(jDSeasons.septemberEquinox),
+  };
 }
