@@ -100,6 +100,24 @@
               }}</span
             >
 
+            <FontAwesomeIcon icon="fa-solid fa-moon" />
+            <div>
+              <p>
+                Moon phases will occur at
+                {{
+                  dcIntlTime
+                    .startOf('day')
+                    .set({ hour: 20 })
+                    .setZone(timezone)
+                    .toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                }}.
+              </p>
+              <p>
+                <b>Sonatas</b> and <b>Lunar Heralds</b> will change at this
+                time.
+              </p>
+            </div>
+
             <img :src="extended.fireGem.image" />
             <span>{{ extended.fireGem.name }} Fire Gems are dropping</span>
           </div>
@@ -163,7 +181,7 @@
             <b class="month">{{ date.date.toFormat('MMM') }}</b>
             <div class="breeds-available">
               <template
-                v-for="(breed, index) in date.continuing"
+                v-for="breed in date.continuing"
                 :key="`${date.date.toSeconds()}-${breed.name}`"
               >
                 <div
@@ -171,7 +189,6 @@
                   :style="{
                     '--background-colour': `rgb(${breed.backgroundColour})`,
                     '--accent-colour': `rgb(${breed.accentColour})`,
-                    left: -(index * 7.5) + '%',
                   }"
                 >
                   <div class="egg-container">
@@ -191,6 +208,12 @@
                         :src="breed.image"
                         class="egg"
                       />
+                      <span
+                        class="badge"
+                        v-if="breed.probability"
+                      >
+                        {{ breed.probability * 100 }}%
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -390,9 +413,6 @@ onUnmounted(() => clearInterval(interval));
   padding: 0.2rem 1rem;
 }
 
-main {
-}
-
 #info {
   display: flex;
   gap: 2rem;
@@ -415,6 +435,7 @@ main {
   padding: 0.2rem 0.5rem;
   border-radius: 0.5rem;
 }
+
 #extended-info-container {
   border: 1px dashed #fff;
   padding: 1rem;
@@ -424,7 +445,6 @@ main {
   gap: 1rem;
   justify-self: center;
   display: grid;
-  align-items: center;
   grid-template-columns: auto 1fr;
 }
 
@@ -440,6 +460,14 @@ main {
 
 #extended-info .cell .offset {
   font-size: 3rem;
+}
+
+#extended-info p:first-child {
+  margin-top: 0;
+}
+
+#extended-info p:last-child {
+  margin-bottom: 0;
 }
 
 #period {
@@ -508,7 +536,7 @@ main {
 
 .breeds-available {
   position: relative;
-  height: 35px;
+  height: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -520,13 +548,23 @@ main {
 }
 
 .breeds-available .egg-container {
-  height: 30px;
+  height: 3rem;
   position: relative;
   width: 2rem;
 }
 .breeds-available .egg-container .egg-wrapper {
   transition: transform 0.2s;
   position: absolute;
+}
+.breeds-available .egg-container .egg-wrapper .badge {
+  display: block;
+  z-index: 10;
+}
+.badge {
+  font-size: 0.7rem;
+  width: 2rem;
+  height: 1rem;
+  color: #fff;
 }
 .breeds-available .egg-container:hover .egg-wrapper {
   transform: translateY(-100%);

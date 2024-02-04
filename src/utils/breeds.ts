@@ -1,5 +1,10 @@
 import { DateTime } from 'luxon';
-import { determineSeason, seasonsOfCurrentYear } from './utils';
+import {
+  determineSeason,
+  heraldColour,
+  seasonsOfCurrentYear,
+  sonataProbability,
+} from './utils';
 
 export function getBreedsLocal() {
   const breeds: Array<
@@ -135,7 +140,7 @@ export function getBreedsLocal() {
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
         availability,
-        begin: availability ? d.startOf('day') : null,
+        begin: null,
         end: null,
       };
     },
@@ -150,7 +155,7 @@ export function getBreedsLocal() {
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
         availability,
-        begin: availability ? d.startOf('day') : null,
+        begin: null,
         end: null,
       };
     },
@@ -165,7 +170,7 @@ export function getBreedsLocal() {
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
         availability,
-        begin: availability ? d.startOf('day') : null,
+        begin: null,
         end: null,
       };
     },
@@ -180,7 +185,7 @@ export function getBreedsLocal() {
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
         availability,
-        begin: availability ? d.startOf('day') : null,
+        begin: null,
         end: null,
       };
     },
@@ -195,7 +200,7 @@ export function getBreedsLocal() {
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
         availability,
-        begin: availability ? d.startOf('day') : null,
+        begin: null,
         end: null,
       };
     },
@@ -210,27 +215,125 @@ export function getBreedsLocal() {
         backgroundColour: '176, 141, 141',
         accentColour: '255, 0, 0',
         availability,
-        begin: availability ? d.startOf('day') : null,
+        begin: null,
         end: null,
       };
     },
-    /* (d) => {
-    const ts = d.toSeconds()
-       console.log({
-        dcTime: d.toISO(),
-        local: d.toLocal().toISO(),
-        dctime2: DateTime.fromSeconds(1705712400).setZone('America/New_York').toLocal().toISO()
-      })
 
-    return {
-      name: `Sonata (Silver)`,
-      biome: 'All',
-      availability: false,
-      image: new URL('./assets/eggs/mystery.gif', import.meta.url).pathname,
-      backgroundColour: '122, 122, 122',
-      accentColour: '255, 255, 255'
-    }
-  }*/
+    (d) => {
+      const probability = sonataProbability(d, 0);
+      return {
+        name: `Sonata (Gold)`,
+        biome: 'Jungle',
+        image: new URL('../assets/eggs/sonata_gold.webp', import.meta.url)
+          .pathname,
+        backgroundColour: '176, 141, 141',
+        accentColour: '255, 0, 0',
+        availability: probability > 0,
+        probability,
+        begin: null,
+        end: null,
+      };
+    },
+
+    (d) => {
+      const probability = sonataProbability(d, 1);
+      return {
+        name: `Sonata (Blue)`,
+        biome: 'Jungle',
+        image: new URL('../assets/eggs/sonata_blue.webp', import.meta.url)
+          .pathname,
+        backgroundColour: '176, 141, 141',
+        accentColour: '255, 0, 0',
+        availability: probability > 0,
+        probability,
+        begin: null,
+        end: null,
+      };
+    },
+
+    (d) => {
+      const probability = sonataProbability(d, 2);
+      return {
+        name: `Sonata (Silver)`,
+        biome: 'Jungle',
+        image: new URL('../assets/eggs/sonata_silver.webp', import.meta.url)
+          .pathname,
+        backgroundColour: '122, 122, 122',
+        accentColour: '255, 255, 255',
+        availability: probability > 0,
+        probability,
+        begin: null,
+        end: null,
+      };
+    },
+
+    (d) => {
+      const colour = heraldColour(d);
+      return {
+        name: `Lunar Herald (Indigo)`,
+        biome: 'Jungle',
+        image: new URL(
+          '../assets/eggs/lunar_herald_indigo.webp',
+          import.meta.url,
+        ).pathname,
+        backgroundColour: '122, 122, 122',
+        accentColour: '255, 255, 255',
+        availability: colour === 3,
+        begin: null,
+        end: null,
+      };
+    },
+
+    (d) => {
+      const colour = heraldColour(d);
+      return {
+        name: `Lunar Herald (Bronze)`,
+        biome: 'Jungle',
+        image: new URL(
+          '../assets/eggs/lunar_herald_bronze.webp',
+          import.meta.url,
+        ).pathname,
+        backgroundColour: '122, 122, 122',
+        accentColour: '255, 255, 255',
+        availability: colour === 2,
+        begin: null,
+        end: null,
+      };
+    },
+
+    (d) => {
+      const colour = heraldColour(d);
+      return {
+        name: `Lunar Herald (Gold)`,
+        biome: 'Jungle',
+        image: new URL('../assets/eggs/lunar_herald_gold.webp', import.meta.url)
+          .pathname,
+        backgroundColour: '122, 122, 122',
+        accentColour: '255, 255, 255',
+        availability: colour === 1,
+        begin: null,
+        end: null,
+      };
+    },
+
+    (d) => {
+      const colour = heraldColour(d);
+      return {
+        name: `Lunar Herald (Silver)`,
+        biome: 'Jungle',
+        image: new URL(
+          '../assets/eggs/lunar_herald_silver.webp',
+          import.meta.url,
+        ).pathname,
+        backgroundColour: '122, 122, 122',
+        accentColour: '255, 255, 255',
+        availability: colour === 0,
+        begin: null,
+        end: null,
+      };
+    },
   ];
+
   return breeds;
 }
