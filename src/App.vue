@@ -74,13 +74,9 @@
                 dcIntlTime.toFormat('ZZZZ')
               }}</abbr
               >,
-              {{ Math.abs((dcIntlTime.offset - localIntlTime.offset) / 60) }}
+              {{ Math.abs(extended.offset) }}
               hours
-              {{
-                dcIntlTime.offset - localIntlTime.offset > 0
-                  ? 'ahead of you'
-                  : 'behind you'
-              }}
+              {{ extended.offset > 0 ? 'ahead of you' : 'behind you' }}
             </span>
 
             <FontAwesomeIcon icon="fa-solid fa-skull" />
@@ -347,7 +343,7 @@ const extended = computed(() => ({
     return 'snowflake';
   })(),
   timezone: dcIntlTime.value.toFormat('ZZZZ'),
-  offset: dcIntlTime.value.offset,
+  offset: (dcIntlTime.value.offset - localIntlTime.value.offset) / 60,
   fireGem: (() => {
     if ([0, 3, 6, 9, 12, 15, 18, 21].includes(dcIntlTime.value.hour)) {
       return {
