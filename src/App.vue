@@ -38,7 +38,7 @@
           :key="intervalKey"
         >
           <span class="time">Local time</span>
-          <span>
+          <span class="font-mono">
             {{
               localIntlTime.toLocaleString({
                 dateStyle: 'medium',
@@ -47,7 +47,7 @@
             }}
           </span>
           <span class="time">DC time</span>
-          <span>{{
+          <span class="font-mono">{{
             dcIntlTime.toLocaleString({
               dateStyle: 'medium',
               timeStyle: 'medium',
