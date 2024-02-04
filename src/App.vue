@@ -58,45 +58,45 @@
           <h2>Right now...</h2>
           <div id="extended-info">
             <FontAwesomeIcon :icon="`fa-solid fa-${extended.seasonIcon}`" />
-            <span
-              >{{
+            <p>
+              {{
                 extended.season.name.slice(0, 1).toUpperCase() +
                 extended.season.name.slice(1)
               }}
               {{ extended.season.begin.toLocaleString() }} &mdash;
-              {{ extended.season.end.toLocaleString() }}</span
-            >
+              {{ extended.season.end.toLocaleString() }}
+            </p>
 
             <FontAwesomeIcon icon="fa-solid fa-clock" />
-            <span>
+            <p>
               Dragcave is in
               <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
                 dcIntlTime.toFormat('ZZZZ')
               }}</abbr
               >,
               {{ extended.offsetWording }}
-            </span>
+            </p>
 
             <FontAwesomeIcon icon="fa-solid fa-skull" />
-            <span>
+            <p>
               {{
                 extended.zombies
                   ? `Zombies are active (Inactive at ${dcIntlTime.plus({ days: 1 }).set({ hour: 5, minute: 59, second: 59 }).setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)})`
                   : `Zombies are inactive (Returning at ${dcIntlTime.plus({ days: 1 }).startOf('day').setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)})`
               }}
-            </span>
+            </p>
 
             <FontAwesomeIcon icon="fa-solid fa-gem" />
-            <span
-              >Gemshards switch at
+            <p>
+              Gemshards switch at
               {{
                 dcIntlTime
                   .startOf('day')
                   .plus({ days: 1 })
                   .setZone(timezone)
                   .toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-              }}</span
-            >
+              }}
+            </p>
 
             <FontAwesomeIcon icon="fa-solid fa-moon" />
             <div>
@@ -116,8 +116,25 @@
               </p>
             </div>
 
-            <img :src="extended.fireGem.image" />
-            <span>{{ extended.fireGem.name }} Fire Gems are dropping</span>
+            <img
+              :src="extended.moonbeam.image"
+              alt=""
+            />
+            <p>
+              <b>Sunbeam</b> and <b>Moonglow drakes</b> caught or bred now will
+              hatch into <b>{{ extended.moonbeam.type }} drakes</b> (until
+              {{
+                extended.moonbeam.until.toLocaleString(
+                  DateTime.TIME_24_WITH_SECONDS,
+                )
+              }})
+            </p>
+
+            <img
+              :src="extended.fireGem.image"
+              alt=""
+            />
+            <p>{{ extended.fireGem.name }} Fire Gems are dropping.</p>
           </div>
         </div>
       </div>
@@ -400,6 +417,33 @@ const extended = computed(() => ({
     };
   })(),
   zombies: dcIntlTime.value.hour < 6,
+  moonbeam: (() => {
+    const type =
+      dcIntlTime.value.hour >= 6 && dcIntlTime.value.hour < 18
+        ? 'Sunbeam'
+        : 'Moonglow';
+
+    if (type === 'Sunbeam') {
+      return {
+        type,
+        image: new URL('/public/eggs/sunbeam.webp', import.meta.url).pathname,
+        until: dcIntlTime.value
+          .startOf('day')
+          .set({ hour: 18 })
+          .setZone(timezone.value),
+      };
+    }
+
+    return {
+      type,
+      image: new URL('/public/eggs/moonglow.webp', import.meta.url).pathname,
+      until: dcIntlTime.value
+        .startOf('day')
+        .plus({ days: 1 })
+        .set({ hour: 6 })
+        .setZone(timezone.value),
+    };
+  })(),
 }));
 
 onMounted(
@@ -477,8 +521,8 @@ onUnmounted(() => clearInterval(interval));
   margin-top: 0;
 }
 
-#extended-info p:last-child {
-  margin-bottom: 0;
+#extended-info p {
+  margin: 0;
 }
 
 #period {
