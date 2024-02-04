@@ -539,13 +539,4 @@ onUnmounted(() => clearInterval(interval));
     display: flex;
   }
 }
-
-@media (min-width: 30rem) {
-  #info {
-    /*  flex-wrap: nowrap; */
-  }
-}
-
-@media (min-width: 50rem) {
-}
 </style>
