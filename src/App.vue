@@ -6,7 +6,7 @@
     <h1>Dragcave Calendar</h1>
     <label for="timezone">Timezone</label>
     <select
-      v-model="timezone"
+      v-model="localTimezone"
       id="timezone"
     >
       <option
@@ -57,14 +57,11 @@
         <div id="extended-info-container">
           <h2>Right now...</h2>
           <div id="extended-info">
-            <FontAwesomeIcon :icon="`fa-solid fa-${extended.seasonIcon}`" />
+            <FontAwesomeIcon :icon="`fa-solid fa-${seasonIcon}`" />
             <p>
-              {{
-                extended.season.name.slice(0, 1).toUpperCase() +
-                extended.season.name.slice(1)
-              }}
-              {{ extended.season.begin.toLocaleString() }} &mdash;
-              {{ extended.season.end.toLocaleString() }}
+              {{ season.name.slice(0, 1).toUpperCase() + season.name.slice(1) }}
+              {{ season.begin.toLocaleString() }} &mdash;
+              {{ season.end.toLocaleString() }}
             </p>
 
             <FontAwesomeIcon icon="fa-solid fa-clock" />
@@ -74,15 +71,15 @@
                 dcIntlTime.toFormat('ZZZZ')
               }}</abbr
               >,
-              {{ extended.offsetWording }}
+              {{ offsetWording }}
             </p>
 
             <FontAwesomeIcon icon="fa-solid fa-skull" />
             <p>
               {{
-                extended.zombies
-                  ? `Zombies are active (Inactive at ${dcIntlTime.plus({ days: 1 }).set({ hour: 5, minute: 59, second: 59 }).setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)})`
-                  : `Zombies are inactive (Returning at ${dcIntlTime.plus({ days: 1 }).startOf('day').setZone(timezone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)})`
+                zombies
+                  ? `Zombies are active (Inactive at ${dcIntlTime.plus({ days: 1 }).set({ hour: 5, minute: 59, second: 59 }).setZone(localTimezone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)})`
+                  : `Zombies are inactive (Returning at ${dcIntlTime.plus({ days: 1 }).startOf('day').setZone(localTimezone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)})`
               }}
             </p>
 
@@ -93,7 +90,7 @@
                 dcIntlTime
                   .startOf('day')
                   .plus({ days: 1 })
-                  .setZone(timezone)
+                  .setZone(localTimezone)
                   .toLocaleString(DateTime.TIME_24_WITH_SECONDS)
               }}
             </p>
@@ -106,7 +103,7 @@
                   dcIntlTime
                     .startOf('day')
                     .set({ hour: 20 })
-                    .setZone(timezone)
+                    .setZone(localTimezone)
                     .toLocaleString(DateTime.TIME_24_WITH_SECONDS)
                 }}.
               </p>
@@ -117,104 +114,92 @@
             </div>
 
             <img
-              :src="extended.moonbeam.image"
+              :src="sunbeamMoonglow.image"
               alt=""
             />
             <div>
               <p>
                 <b>Sunbeam Drakes</b> can be caught or bred between
                 {{
-                  extended.moonbeam.sunbeam.begin.toLocaleString(
+                  sunbeamMoonglow.sunbeam.start.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
                   )
                 }}
                 and
                 {{
-                  extended.moonbeam.sunbeam.end.toLocaleString(
+                  sunbeamMoonglow.sunbeam.end.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
                   )
                 }}
                 <ActiveBadge
-                  :condition="
-                    dcIntlTime >= extended.moonbeam.sunbeam.begin &&
-                    dcIntlTime <= extended.moonbeam.sunbeam.end
-                  "
+                  :condition="sunbeamMoonglow.sunbeam.contains(dcIntlTime)"
                 />
               </p>
               <p>
                 <b>Moonglow Drakes</b> can be caught or bred between
                 {{
-                  extended.setrise.sunset.begin.toLocaleString(
+                  sunbeamMoonglow.moonglow.start.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
                   )
                 }}
                 and
                 {{
-                  extended.setrise.sunset.end.toLocaleString(
+                  sunbeamMoonglow.moonglow.end.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
                   )
                 }}
                 <ActiveBadge
-                  :condition="
-                    dcIntlTime >= extended.setrise.sunset.begin &&
-                    dcIntlTime <= extended.setrise.sunset.end
-                  "
+                  :condition="sunbeamMoonglow.moonglow.contains(dcIntlTime)"
                 />
               </p>
             </div>
 
             <img
-              :src="extended.setrise.image"
+              :src="sunriseSunset.image"
               alt=""
             />
             <div>
               <p>
                 <b>Sunrise Dragons</b> will hatch between
                 {{
-                  extended.setrise.sunrise.begin.toLocaleString(
+                  sunriseSunset.sunrise.start.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
                   )
                 }}
                 and
                 {{
-                  extended.setrise.sunrise.end.toLocaleString(
+                  sunriseSunset.sunrise.end.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
                   )
                 }}
                 <ActiveBadge
-                  :condition="
-                    dcIntlTime >= extended.setrise.sunrise.begin &&
-                    dcIntlTime <= extended.setrise.sunrise.end
-                  "
+                  :condition="sunriseSunset.sunrise.contains(dcIntlTime)"
                 />
               </p>
               <p>
                 <b>Sunset Dragons</b> will hatch between
                 {{
-                  extended.setrise.sunset.begin.toLocaleString(
+                  sunriseSunset.sunset.start.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
                   )
                 }}
                 and
                 {{
-                  extended.setrise.sunset.end.toLocaleString(
+                  sunriseSunset.sunset.end.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
                   )
                 }}
                 <ActiveBadge
-                  :condition="
-                    dcIntlTime >= extended.setrise.sunset.begin &&
-                    dcIntlTime <= extended.setrise.sunset.end
-                  "
+                  :condition="sunriseSunset.sunset.contains(dcIntlTime)"
                 />
               </p>
             </div>
 
             <img
-              :src="extended.fireGem.image"
+              :src="fireGem.image"
               alt=""
             />
-            <p>{{ extended.fireGem.name }} Fire Gems are dropping.</p>
+            <p>{{ fireGem.name }} Fire Gems are dropping.</p>
           </div>
         </div>
       </div>
@@ -268,7 +253,7 @@
         <ForecastTable
           :from="from"
           :to="end"
-          :timezone="timezone"
+          :localTimezone="localTimezone"
         />
       </section>
     </div>
@@ -280,9 +265,9 @@ import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { DateTime } from 'luxon';
-import { determineSeason } from './utils/utils';
 import ActiveBadge from './components/ActiveBadge.vue';
 import ForecastTable from './components/ForecastTable.vue';
+import { useExtendedInfo } from '@/composables/useExtendedInfo';
 
 const timezones = Intl.supportedValuesOf('timeZone');
 let interval: ReturnType<typeof setInterval>;
@@ -291,20 +276,20 @@ const intervalKey = ref(DateTime.local().toSeconds());
 const from = ref(DateTime.now().toISODate());
 const end = ref(DateTime.now().plus({ days: 7 }).toISODate());
 
-const timezone = useLocalStorage(
-  'timezone',
+const localTimezone = useLocalStorage(
+  'localTimezone',
   Intl.DateTimeFormat().resolvedOptions().timeZone,
 );
 
 const localIntlTime = computed(() =>
-  DateTime.fromSeconds(intervalKey.value).setZone(timezone.value),
+  DateTime.fromSeconds(intervalKey.value).setZone(localTimezone.value),
 );
 
 const dcIntlTime = computed(() => DateTime.fromSeconds(intervalKey.value));
 
 const localDateTime = computed(() => ({
-  begin: DateTime.fromISO(from.value).setZone(timezone.value),
-  end: DateTime.fromISO(end.value).setZone(timezone.value),
+  begin: DateTime.fromISO(from.value).setZone(localTimezone.value),
+  end: DateTime.fromISO(end.value).setZone(localTimezone.value),
 }));
 
 const dcDateTime = computed(() => ({
@@ -312,162 +297,15 @@ const dcDateTime = computed(() => ({
   end: localDateTime.value.end.setZone('America/New_York'),
 }));
 
-const extended = computed(() => ({
-  season: determineSeason(dcIntlTime.value),
-  seasonIcon: (() => {
-    switch (determineSeason(dcIntlTime.value).name) {
-      case 'autumn':
-        return 'canadian-maple-leaf';
-      case 'spring':
-        return 'leaf';
-      case 'summer':
-        return 'sun';
-    }
-    return 'snowflake';
-  })(),
-  timezone: dcIntlTime.value.toFormat('ZZZZ'),
-  offset: (dcIntlTime.value.offset - localIntlTime.value.offset) / 60,
-  offsetWording: (() => {
-    const offset = (dcIntlTime.value.offset - localIntlTime.value.offset) / 60;
-    if (offset === 0) {
-      return 'the same time as you.';
-    }
-
-    return (
-      Math.abs(offset).toString() +
-      ' hours ' +
-      (offset > 0 ? 'ahead of you.' : 'behind you.')
-    );
-  })(),
-  fireGem: (() => {
-    if ([0, 3, 6, 9, 12, 15, 18, 21].includes(dcIntlTime.value.hour)) {
-      return {
-        name: 'Blue',
-        image: new URL('/public/eggs/fire_gem_blue.webp', import.meta.url)
-          .pathname,
-      };
-    } else if ([1, 4, 7, 10, 13, 16, 19, 22].includes(dcIntlTime.value.hour)) {
-      return {
-        name: 'Red',
-        image: new URL('/public/eggs/fire_gem_red.webp', import.meta.url)
-          .pathname,
-      };
-    }
-
-    return {
-      name: 'Green',
-      image: new URL('/public/eggs/fire_gem_green.webp', import.meta.url)
-        .pathname,
-    };
-  })(),
-  zombies: dcIntlTime.value.hour < 6,
-  moonbeam: (() => {
-    const sunbeam = {
-      begin: dcIntlTime.value
-        .set({
-          hour: 6,
-          minute: 0,
-          second: 0,
-          millisecond: 0,
-        })
-        .setZone(timezone.value),
-      end: dcIntlTime.value
-        .set({
-          hour: 17,
-          minute: 59,
-          second: 59,
-          millisecond: 0,
-        })
-        .setZone(timezone.value),
-    };
-    const moonglow = {
-      begin: dcIntlTime.value
-        .set({
-          hour: 18,
-          minute: 0,
-          second: 0,
-          millisecond: 0,
-        })
-        .setZone(timezone.value),
-      end: dcIntlTime.value
-        .startOf('day')
-        .plus({ days: 1, hours: 5, minutes: 59, seconds: 59 })
-        .setZone(timezone.value),
-    };
-
-    let image: string = new URL(
-      '/public/eggs/sunbeam_moonglow.webp',
-      import.meta.url,
-    ).pathname;
-    if (dcIntlTime.value >= sunbeam.begin && dcIntlTime.value <= sunbeam.end) {
-      image = new URL('/public/eggs/sunbeam.webp', import.meta.url).pathname;
-    } else if (
-      dcIntlTime.value >= moonglow.begin &&
-      dcIntlTime.value <= moonglow.end
-    ) {
-      image = new URL('/public/eggs/moonglow.webp', import.meta.url).pathname;
-    }
-
-    return {
-      image,
-      sunbeam,
-      moonglow,
-    };
-  })(),
-  setrise: (() => {
-    const sunrise = {
-      begin: dcIntlTime.value
-        .set({
-          hour: 6,
-          minute: 0,
-          second: 0,
-          millisecond: 0,
-        })
-        .setZone(timezone.value),
-      end: dcIntlTime.value
-        .set({
-          hour: 12,
-          minute: 0,
-          second: 0,
-          millisecond: 0,
-        })
-        .setZone(timezone.value),
-    };
-    const sunset = {
-      begin: dcIntlTime.value
-        .set({
-          hour: 18,
-          minute: 0,
-          second: 0,
-          millisecond: 0,
-        })
-        .setZone(timezone.value),
-      end: dcIntlTime.value
-        .startOf('day')
-        .plus({ days: 1 })
-        .setZone(timezone.value),
-    };
-
-    let image: string = new URL(
-      '/public/eggs/sunrise_sunset.webp',
-      import.meta.url,
-    ).pathname;
-    if (dcIntlTime.value >= sunset.begin && dcIntlTime.value <= sunset.end) {
-      image = new URL('/public/eggs/sunset.webp', import.meta.url).pathname;
-    } else if (
-      dcIntlTime.value >= sunrise.begin &&
-      dcIntlTime.value <= sunrise.end
-    ) {
-      image = new URL('/public/eggs/sunrise.webp', import.meta.url).pathname;
-    }
-
-    return {
-      image,
-      sunrise,
-      sunset,
-    };
-  })(),
-}));
+const {
+  fireGem,
+  offsetWording,
+  season,
+  seasonIcon,
+  sunbeamMoonglow,
+  sunriseSunset,
+  zombies,
+} = useExtendedInfo(dcIntlTime, localIntlTime);
 
 onMounted(
   () =>
