@@ -253,7 +253,7 @@
         <ForecastTable
           :from="from"
           :to="end"
-          :localTimezone="localTimezone"
+          :timezone="localTimezone"
         />
       </section>
     </div>
