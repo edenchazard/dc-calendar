@@ -258,6 +258,13 @@
       </section>
     </div>
   </main>
+  <footer id="bottom">
+    <p>
+      &copy; eden chazard. Graphics courtesy of <b>Winya</b> with programming
+      contributions from <b>Mu-Cephei (endulum)</b> and <b>Hourai</b>. Art
+      &copy; Dragcave and artists.
+    </p>
+  </footer>
 </template>
 
 <script setup lang="ts">
@@ -419,6 +426,10 @@ onUnmounted(() => clearInterval(interval));
   display: block;
 }
 
+#bottom {
+  text-align: center;
+  font-size: 0.8rem;
+}
 @media (min-width: 22rem) {
   #period-wrapper {
     grid-template-columns: 1fr 2fr;
