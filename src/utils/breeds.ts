@@ -92,13 +92,28 @@ export function getBreedsLocal() {
       return {
         name: 'Previous Valentines',
         biome: 'Holiday',
-        image: new URL('/public/eggs/amarignis_egg.webp', import.meta.url)
+        image: new URL('/public/eggs/mint_valentines.png', import.meta.url)
           .pathname,
         backgroundColour: '204, 188, 209',
         accentColour: '181, 0, 6',
         availability: d >= begin && d <= end,
         begin,
         end,
+      };
+    },
+
+    (d) => {
+      const begin = DateTime.fromObject({ day: 21, month: 5, year: d.year });
+      return {
+        name: 'Birthday Release',
+        biome: 'Holiday',
+        image: new URL('/public/eggs/mint_birthday.png', import.meta.url)
+          .pathname,
+        backgroundColour: '204, 188, 209',
+        accentColour: '181, 0, 6',
+        availability: d.toISODate() === begin.toISODate(),
+        begin,
+        end: null,
       };
     },
 
