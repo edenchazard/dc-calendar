@@ -1,4 +1,4 @@
-import { determineSeason } from '@/utils/utils';
+import { determineSeason, getOverlappingRangeOrNearest } from '@/utils/utils';
 import { Interval, DateTime } from 'luxon';
 import type { Ref } from 'vue';
 import { computed } from 'vue';
@@ -62,39 +62,38 @@ export function useExtendedInfo(
 
   const sunbeamMoonglow = computed(() => {
     const sunbeam = Interval.fromDateTimes(
-      dragCaveTime.value
-        .set({
-          hour: 6,
-          minute: 0,
-          second: 0,
-          millisecond: 0,
-        })
-        .setZone(localTime.value.zone),
-
-      dragCaveTime.value
-        .set({
-          hour: 17,
-          minute: 59,
-          second: 59,
-          millisecond: 0,
-        })
-        .setZone(localTime.value.zone),
+      DateTime.fromObject({
+        hour: 6,
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+      }).setZone(localTime.value.zone),
+      DateTime.fromObject({
+        hour: 17,
+        minute: 59,
+        second: 59,
+        millisecond: 0,
+      }).setZone(localTime.value.zone),
     );
 
-    const moonglow = Interval.fromDateTimes(
-      dragCaveTime.value
-        .set({
+    const moonglow = getOverlappingRangeOrNearest(
+      dragCaveTime.value,
+      Interval.fromDateTimes(
+        DateTime.fromObject({
           hour: 18,
           minute: 0,
           second: 0,
           millisecond: 0,
         })
-        .minus({ days: 1 })
-        .setZone(localTime.value.zone),
-
-      dragCaveTime.value
-        .set({ hour: 5, minute: 59, second: 59, millisecond: 0 })
-        .setZone(localTime.value.zone),
+          .minus({ days: 1 })
+          .setZone(localTime.value.zone),
+        DateTime.fromObject({
+          hour: 5,
+          minute: 59,
+          second: 59,
+          millisecond: 0,
+        }).setZone(localTime.value.zone),
+      ),
     );
 
     let image: string = new URL(
@@ -102,9 +101,9 @@ export function useExtendedInfo(
       import.meta.url,
     ).pathname;
 
-    if (sunbeam.contains(dragCaveTime.value)) {
+    if (sunbeam.contains(localTime.value)) {
       image = new URL('/public/eggs/sunbeam.webp', import.meta.url).pathname;
-    } else if (moonglow.contains(dragCaveTime.value)) {
+    } else if (moonglow.contains(localTime.value)) {
       image = new URL('/public/eggs/moonglow.webp', import.meta.url).pathname;
     }
 

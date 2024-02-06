@@ -1,5 +1,5 @@
 import { solstice, julian } from 'astronomia';
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 import type { JDSeasonalCycle, SeasonName, Seasons } from './types';
 import { cache } from './cache';
 import moon from './moon.json' assert { type: 'json' };
@@ -123,7 +123,9 @@ export function mapJDSeasonsToDateTime(jDSeasons: JDSeasonalCycle): Seasons {
  * @param colour 0 = gold, 1 = blue, 2 = silver
  */
 export function sonataProbability(d: DateTime, colour: number): number {
-  const ts = Math.floor(((((d.toMillis() / 100000 - 16835652) / 864) % 128) + 128) % 128);
+  const ts = Math.floor(
+    ((((d.toMillis() / 100000 - 16835652) / 864) % 128) + 128) % 128,
+  );
   return moon.sonata[ts][colour];
 }
 
@@ -133,6 +135,20 @@ export function sonataProbability(d: DateTime, colour: number): number {
  * @returns The herald colour. 0 = Silver, 1 = Gold, 2 = Bronze, 3 = Indigo
  */
 export function heraldColour(d: DateTime): number {
-  const ts = Math.floor(((((d.toMillis() / 100000 - 16833924) / 864) % 32) + 32) % 32);
+  const ts = Math.floor(
+    ((((d.toMillis() / 100000 - 16833924) / 864) % 32) + 32) % 32,
+  );
   return moon.herald[ts];
+}
+
+export function getOverlappingRangeOrNearest(
+  date: DateTime,
+  interval: Interval,
+) {
+  const possibleRanges = [
+    interval.mapEndpoints((d) => d.plus({ days: 1 })),
+    interval,
+  ];
+
+  return possibleRanges.find((d) => d.contains(date)) ?? possibleRanges[0];
 }
