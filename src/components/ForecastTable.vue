@@ -309,7 +309,7 @@ function closeTooltip() {
   box-shadow: 0px 0px 7px 0px #000;
   padding: 0.25rem;
   border-radius: 0.25rem;
-  width: 10rem;
+  width: 12rem;
   left: 50%;
   position: absolute;
   transform: translate(-50%, -50%);
@@ -325,7 +325,7 @@ function closeTooltip() {
     display: inline-block;
     border-radius: 5px;
     padding: 0 0.4rem;
-    font-size: 0.2rem !important;
+    font-size: 0.8rem !important;
     color: #000;
 
     &.alpine {
