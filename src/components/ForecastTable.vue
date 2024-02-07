@@ -1,4 +1,30 @@
 <template>
+  <template v-if="hoveredBreed">
+    <div
+      class="tooltip"
+      ref="tooltip"
+      :style="{
+        ...floatingStyles,
+        '--background-colour': hoveredBreed.backgroundColour,
+        '--accent-colour': hoveredBreed.accentColour,
+      }"
+    >
+      <b class="name">{{ hoveredBreed.name }}</b>
+
+      <div class="biomes">
+        <b
+          :key="biome"
+          class="biome"
+          :class="biome.toLowerCase()"
+          v-for="biome in Array.isArray(hoveredBreed.biome)
+            ? hoveredBreed.biome
+            : [hoveredBreed.biome]"
+        >
+          {{ biome }}
+        </b>
+      </div>
+    </div>
+  </template>
   <div class="forecast-table">
     <div
       v-for="date in forecast"
@@ -15,23 +41,11 @@
         >
           <div
             class="breed"
-            :style="{
-              '--background-colour': `rgb(${breed.backgroundColour})`,
-              '--accent-colour': `rgb(${breed.accentColour})`,
-            }"
+            @mouseenter="openTooltip(breed, $event)"
+            @mouseleave="closeTooltip"
           >
             <div class="egg-container">
               <div class="egg-wrapper">
-                <div class="tooltip">
-                  <b class="name">{{ breed.name }}</b>
-                  <b class="biome">
-                    {{
-                      Array.isArray(breed.biome)
-                        ? breed.biome.join(', ')
-                        : breed.biome
-                    }}
-                  </b>
-                </div>
                 <img
                   :alt="breed.name"
                   :src="breed.image"
@@ -61,6 +75,8 @@
             <img
               :alt="breed.name"
               :src="breed.image"
+              @mouseenter="openTooltip(breed, $event)"
+              @mouseleave="closeTooltip"
             />
             {{ breed.begin?.toFormat('HH:mm:ss') }}
           </li>
@@ -80,6 +96,8 @@
             <img
               :alt="breed.name"
               :src="breed.image"
+              @mouseenter="openTooltip(breed, $event)"
+              @mouseleave="closeTooltip"
             />
             {{ breed?.end?.toFormat('HH:mm:ss') }}
           </li>
@@ -90,7 +108,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { useFloating, autoUpdate, flip, offset } from '@floating-ui/vue';
 import { DateTime } from 'luxon';
 import { getBreedsLocal } from '@/utils/breeds';
 
@@ -107,6 +126,10 @@ const props = defineProps({
     type: String,
   },
 });
+
+const hoveredBreed = ref();
+const hoveredEgg = ref<HTMLElement>();
+const tooltip = ref<HTMLElement>();
 
 const forecast = computed(() => {
   const breeds = getBreedsLocal();
@@ -160,9 +183,49 @@ const forecast = computed(() => {
   }
   return dayForecast;
 });
+
+const { floatingStyles } = useFloating(hoveredEgg, tooltip, {
+  whileElementsMounted: autoUpdate,
+  transform: true,
+  placement: 'top',
+  strategy: 'fixed',
+  middleware: [
+    offset(({ placement }) => {
+      if (placement.startsWith('bottom')) {
+        return 20;
+      }
+      if (hoveredBreed.value.appearing || hoveredBreed.value.leaving) {
+        return 10;
+      }
+      return 60;
+    }),
+    flip({
+      fallbackPlacements: [
+        'top-end',
+        'top-start',
+        'bottom',
+        'bottom-start',
+        'bottom-end',
+      ],
+    }),
+  ],
+});
+
+function openTooltip(breed, e: Event) {
+  if (e.target instanceof HTMLElement) {
+    hoveredBreed.value = breed;
+    hoveredEgg.value = (e.target.querySelector('.egg') ??
+      e.target) as HTMLElement;
+  }
+}
+
+function closeTooltip() {
+  hoveredBreed.value = null;
+  hoveredEgg.value = undefined;
+}
 </script>
 
-<style scoped>
+<style scoped lang="postcss">
 #forecast {
   text-align: center;
   width: 100%;
@@ -221,37 +284,73 @@ const forecast = computed(() => {
   transition: transform 0.2s;
   position: absolute;
 }
-.breeds-available .egg-container .egg-wrapper .badge {
-  display: block;
-  z-index: 10;
+
+.breeds-available .egg-container:hover .egg-wrapper {
+  transform: translateY(-100%);
 }
+
 .badge {
   font-size: 0.7rem;
   width: 2rem;
   height: 1rem;
   color: #fff;
-}
-.breeds-available .egg-container:hover .egg-wrapper {
-  transform: translateY(-100%);
+  display: block;
+  z-index: 10;
 }
 
-.breeds-available .egg-container:hover .tooltip {
-  display: block;
-}
-.breeds-available .egg-container .tooltip {
-  background: var(--background-colour);
+.tooltip {
+  /*   background: linear-gradient(
+    45deg,
+    var(--accent-colour) 0,
+    var(--background-colour) 10%
+  ); */
+  background-color: var(--background-colour);
   color: var(--accent-colour);
-  display: none;
+  box-shadow: 0px 0px 7px 0px #000;
   padding: 0.25rem;
-  border-radius: 0.25rem 0.25rem 0 0;
-  width: 6rem;
-  left: -2rem;
-  bottom: 130%;
+  border-radius: 0.25rem;
+  width: 10rem;
+  left: 50%;
   position: absolute;
-}
+  transform: translate(-50%, -50%);
+  z-index: 10;
 
-.breeds-available .breed .tooltip .biome {
-  display: block;
+  & .biomes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  & .biome {
+    display: inline-block;
+    border-radius: 5px;
+    padding: 0 0.4rem;
+    font-size: 0.2rem !important;
+    color: #000;
+
+    &.alpine {
+      background: #e5b39b;
+    }
+    &.forest {
+      background: #d4e4df;
+    }
+    &.desert {
+      background: #e6debe;
+    }
+    &.volcano {
+      background: #b890ca;
+    }
+    &.jungle {
+      background: #bfc4bc;
+    }
+    &.coast {
+      background: #a2aabe;
+    }
+    &.holiday {
+      background: #000;
+      color: #fff;
+    }
+  }
 }
 
 .breed-tile .name {
@@ -259,14 +358,14 @@ const forecast = computed(() => {
   flex: 1;
 }
 
-.breed-tile .biome {
-  font-size: 0.8rem;
-}
-
 .incoming-outgoing .block {
   display: block;
   font-size: 0.8rem;
   background: #5f214d;
+}
+
+.incoming-outgoing {
+  margin-top: 1rem;
 }
 
 .incoming-outgoing ul {
@@ -280,8 +379,5 @@ const forecast = computed(() => {
   gap: 0.25rem;
   justify-content: space-between;
   margin-top: 0.25rem;
-}
-.incoming-outgoing {
-  margin-top: 1rem;
 }
 </style>

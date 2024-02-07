@@ -10,7 +10,7 @@ export function getBreedsLocal() {
   const breeds: Array<
     (d: DateTime) => {
       name: string;
-      biome: string;
+      biome: string | string[];
       image: string;
       backgroundColour: string;
       accentColour: string;
@@ -26,8 +26,8 @@ export function getBreedsLocal() {
         biome: 'Alpine',
         image: new URL('/public/eggs/seasonal_winter.gif', import.meta.url)
           .pathname,
-        backgroundColour: '106, 162, 171',
-        accentColour: '4, 63, 181',
+        backgroundColour: '#B0E0E6',
+        accentColour: '#000',
         availability: season.name === 'winter',
         begin: seasonsOfCurrentYear(d)['winter'].start,
         end: seasonsOfCurrentYear(d)['winter'].end,
@@ -38,10 +38,10 @@ export function getBreedsLocal() {
       const season = determineSeason(d);
       return {
         name: 'Seasonal (Spring)',
-        biome: 'Alpine',
+        biome: 'Forest',
         image: new URL('/public/eggs/seasonal_spring.webp', import.meta.url)
           .pathname,
-        backgroundColour: '106, 162, 171',
+        backgroundColour: '#228B22',
         accentColour: '4, 63, 181',
         availability: season.name === 'spring',
         begin: seasonsOfCurrentYear(d)['spring'].start,
@@ -53,10 +53,10 @@ export function getBreedsLocal() {
       const season = determineSeason(d);
       return {
         name: 'Seasonal (Summer)',
-        biome: 'Alpine',
+        biome: 'Forest',
         image: new URL('/public/eggs/seasonal_summer.webp', import.meta.url)
           .pathname,
-        backgroundColour: '106, 162, 171',
+        backgroundColour: '#FFA500',
         accentColour: '4, 63, 181',
         availability: season.name === 'summer',
         begin: seasonsOfCurrentYear(d)['summer'].start,
@@ -68,10 +68,10 @@ export function getBreedsLocal() {
       const season = determineSeason(d);
       return {
         name: 'Seasonal (Autumn)',
-        biome: 'Alpine',
+        biome: 'Forest',
         image: new URL('/public/eggs/seasonal_autumn.webp', import.meta.url)
           .pathname,
-        backgroundColour: '106, 162, 171',
+        backgroundColour: '#8B4513',
         accentColour: '4, 63, 181',
         availability: season.name === 'autumn',
         begin: seasonsOfCurrentYear(d)['autumn'].start,
@@ -94,8 +94,8 @@ export function getBreedsLocal() {
         biome: 'Holiday',
         image: new URL('/public/eggs/mint_valentines.png', import.meta.url)
           .pathname,
-        backgroundColour: '204, 188, 209',
-        accentColour: '181, 0, 6',
+        backgroundColour: '#FFC0CB',
+        accentColour: '#000',
         availability: d >= begin && d <= end,
         begin,
         end,
@@ -109,8 +109,8 @@ export function getBreedsLocal() {
         biome: 'Holiday',
         image: new URL('/public/eggs/mint_birthday.png', import.meta.url)
           .pathname,
-        backgroundColour: '204, 188, 209',
-        accentColour: '181, 0, 6',
+        backgroundColour: '#ecdfbf',
+        accentColour: '#000',
         availability: d.toISODate() === begin.toISODate(),
         begin,
         end: null,
@@ -137,8 +137,8 @@ export function getBreedsLocal() {
         name: `${d.year} Valentine`,
         biome: 'All',
         image: new URL('/public/eggs/mystery.gif', import.meta.url).pathname,
-        backgroundColour: '176, 141, 141',
-        accentColour: '255, 0, 0',
+        backgroundColour: '#FFC0CB',
+        accentColour: '#000',
         availability: d >= begin && d <= end,
         begin,
         end,
@@ -152,7 +152,7 @@ export function getBreedsLocal() {
         biome: 'Jungle',
         image: new URL('/public/eggs/gemshard_jade.webp', import.meta.url)
           .pathname,
-        backgroundColour: '176, 141, 141',
+        backgroundColour: '#3CB371',
         accentColour: '255, 0, 0',
         availability,
         begin: null,
@@ -167,7 +167,7 @@ export function getBreedsLocal() {
         biome: 'Jungle',
         image: new URL('/public/eggs/gemshard_ruby.webp', import.meta.url)
           .pathname,
-        backgroundColour: '176, 141, 141',
+        backgroundColour: '#B22222',
         accentColour: '255, 0, 0',
         availability,
         begin: null,
@@ -182,7 +182,7 @@ export function getBreedsLocal() {
         biome: 'Jungle',
         image: new URL('/public/eggs/gemshard_sapphire.webp', import.meta.url)
           .pathname,
-        backgroundColour: '176, 141, 141',
+        backgroundColour: '#4169E1',
         accentColour: '255, 0, 0',
         availability,
         begin: null,
@@ -197,7 +197,7 @@ export function getBreedsLocal() {
         biome: 'Jungle',
         image: new URL('/public/eggs/gemshard_amethyst.webp', import.meta.url)
           .pathname,
-        backgroundColour: '176, 141, 141',
+        backgroundColour: '#800080',
         accentColour: '255, 0, 0',
         availability,
         begin: null,
@@ -212,8 +212,8 @@ export function getBreedsLocal() {
         biome: 'Jungle',
         image: new URL('/public/eggs/gemshard_aqua.webp', import.meta.url)
           .pathname,
-        backgroundColour: '176, 141, 141',
-        accentColour: '255, 0, 0',
+        backgroundColour: '#00FFFF',
+        accentColour: '#000',
         availability,
         begin: null,
         end: null,
@@ -227,8 +227,8 @@ export function getBreedsLocal() {
         biome: 'Jungle',
         image: new URL('/public/eggs/gemshard_citrine.webp', import.meta.url)
           .pathname,
-        backgroundColour: '176, 141, 141',
-        accentColour: '255, 0, 0',
+        backgroundColour: '#FFD700',
+        accentColour: '#000',
         availability,
         begin: null,
         end: null,
@@ -239,11 +239,11 @@ export function getBreedsLocal() {
       const probability = sonataProbability(d, 0);
       return {
         name: `Sonata (Gold)`,
-        biome: 'Jungle',
+        biome: [],
         image: new URL('/public/eggs/sonata_gold.webp', import.meta.url)
           .pathname,
-        backgroundColour: '176, 141, 141',
-        accentColour: '255, 0, 0',
+        backgroundColour: '#FF8C00',
+        accentColour: '#000',
         availability: probability > 0,
         probability,
         begin: null,
@@ -255,10 +255,10 @@ export function getBreedsLocal() {
       const probability = sonataProbability(d, 1);
       return {
         name: `Sonata (Blue)`,
-        biome: 'Jungle',
+        biome: [],
         image: new URL('/public/eggs/sonata_blue.webp', import.meta.url)
           .pathname,
-        backgroundColour: '176, 141, 141',
+        backgroundColour: '#00008B',
         accentColour: '255, 0, 0',
         availability: probability > 0,
         probability,
@@ -271,11 +271,11 @@ export function getBreedsLocal() {
       const probability = sonataProbability(d, 2);
       return {
         name: `Sonata (Silver)`,
-        biome: 'Jungle',
+        biome: [],
         image: new URL('/public/eggs/sonata_silver.webp', import.meta.url)
           .pathname,
-        backgroundColour: '122, 122, 122',
-        accentColour: '255, 255, 255',
+        backgroundColour: '#C0C0C0',
+        accentColour: '#000',
         availability: probability > 0,
         probability,
         begin: null,
@@ -287,10 +287,10 @@ export function getBreedsLocal() {
       const colour = heraldColour(d);
       return {
         name: `Lunar Herald (Indigo)`,
-        biome: 'Jungle',
+        biome: ['Alpine', 'Desert', 'Volcano'],
         image: new URL('/public/eggs/lunar_herald_indigo.webp', import.meta.url)
           .pathname,
-        backgroundColour: '122, 122, 122',
+        backgroundColour: '#00008B',
         accentColour: '255, 255, 255',
         availability: colour === 3,
         begin: null,
@@ -302,10 +302,10 @@ export function getBreedsLocal() {
       const colour = heraldColour(d);
       return {
         name: `Lunar Herald (Bronze)`,
-        biome: 'Jungle',
+        biome: ['Alpine', 'Desert', 'Volcano'],
         image: new URL('/public/eggs/lunar_herald_bronze.webp', import.meta.url)
           .pathname,
-        backgroundColour: '122, 122, 122',
+        backgroundColour: '#A0522D',
         accentColour: '255, 255, 255',
         availability: colour === 2,
         begin: null,
@@ -317,11 +317,11 @@ export function getBreedsLocal() {
       const colour = heraldColour(d);
       return {
         name: `Lunar Herald (Gold)`,
-        biome: 'Jungle',
+        biome: ['Alpine', 'Desert', 'Volcano'],
         image: new URL('/public/eggs/lunar_herald_gold.webp', import.meta.url)
           .pathname,
-        backgroundColour: '122, 122, 122',
-        accentColour: '255, 255, 255',
+        backgroundColour: '#FFD700',
+        accentColour: '#000',
         availability: colour === 1,
         begin: null,
         end: null,
@@ -332,11 +332,11 @@ export function getBreedsLocal() {
       const colour = heraldColour(d);
       return {
         name: `Lunar Herald (Silver)`,
-        biome: 'Jungle',
+        biome: ['Alpine', 'Desert', 'Volcano'],
         image: new URL('/public/eggs/lunar_herald_silver.webp', import.meta.url)
           .pathname,
-        backgroundColour: '122, 122, 122',
-        accentColour: '255, 255, 255',
+        backgroundColour: '#C0C0C0',
+        accentColour: '#000',
         availability: colour === 0,
         begin: null,
         end: null,
