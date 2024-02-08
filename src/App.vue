@@ -65,14 +65,27 @@
             </p>
 
             <FontAwesomeIcon icon="fa-solid fa-clock" />
-            <p>
-              Dragcave is in
-              <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
-                dcIntlTime.toFormat('ZZZZ')
-              }}</abbr
-              >,
-              {{ offsetWording }}
-            </p>
+            <div>
+              <p>
+                Dragcave is in
+                <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
+                  dcIntlTime.toFormat('ZZZZ')
+                }}</abbr
+                >, {{ offsetWording }}
+              </p>
+              <p>
+                DST will occur on
+                {{
+                  dst.begin.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                }}
+                and end on
+                {{
+                  dst.end.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                }}. Server time will go forwards 1 hour and backwards 1 hour at
+                these times respectively.
+                <ActiveBadge :condition="dcIntlTime.isInDST" />
+              </p>
+            </div>
 
             <FontAwesomeIcon icon="fa-solid fa-skull" />
             <p>
@@ -312,6 +325,7 @@ const {
   sunbeamMoonglow,
   sunriseSunset,
   zombies,
+  dst,
 } = useExtendedInfo(dcIntlTime, localIntlTime);
 
 onMounted(
@@ -369,6 +383,7 @@ onUnmounted(() => clearInterval(interval));
   justify-self: center;
   display: grid;
   grid-template-columns: auto 1fr;
+  max-width: 40rem;
 }
 
 #extended-info > *:nth-child(odd) {

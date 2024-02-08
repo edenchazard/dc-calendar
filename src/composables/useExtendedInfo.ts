@@ -9,6 +9,22 @@ export function useExtendedInfo(
 ) {
   const season = computed(() => determineSeason(dragCaveTime.value));
 
+  const dst = computed(() => ({
+    begin: DateTime.local()
+      .set({ month: 2 })
+      .endOf('month')
+      .startOf('day')
+      .set({ weekday: 7, hour: 1, minute: 59, second: 59 })
+      .plus({ days: 7 })
+      .setZone(localTime.value.zone),
+    end: DateTime.local()
+      .set({ month: 10 })
+      .endOf('month')
+      .startOf('day')
+      .set({ weekday: 7, hour: 1, minute: 59, second: 59 })
+      .setZone(localTime.value.zone),
+  }));
+
   const seasonIcon = computed(() => {
     switch (determineSeason(dragCaveTime.value).name) {
       case 'autumn':
@@ -168,5 +184,6 @@ export function useExtendedInfo(
     zombies,
     sunbeamMoonglow,
     sunriseSunset,
+    dst,
   };
 }
