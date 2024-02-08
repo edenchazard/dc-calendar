@@ -236,10 +236,9 @@ function closeTooltip() {
   display: inline-grid;
   justify-items: center;
   justify-content: center;
-  grid-template-columns: repeat(auto-fill, 10rem);
+  grid-template-columns: repeat(auto-fill, 11rem);
   gap: 1rem;
   width: 100%;
-  max-width: 70rem;
   margin-top: 1rem;
 }
 .forecast-cell {
