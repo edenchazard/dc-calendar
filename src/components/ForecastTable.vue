@@ -31,9 +31,8 @@
       class="forecast-cell"
       :key="date.date.toSeconds()"
     >
-      <b class="year">{{ date.date.toFormat('y') }}</b>
-      <b class="day">{{ date.date.toFormat('d') }}</b>
-      <b class="month">{{ date.date.toFormat('MMM') }}</b>
+      <b class="year">{{ date.date.toFormat('MMM y') }}</b>
+      <b class="day">{{ date.date.toFormat('EEE d') }}</b>
       <div class="breeds-available">
         <template
           v-for="breed in date.continuing"
@@ -226,11 +225,6 @@ function closeTooltip() {
 </script>
 
 <style scoped lang="postcss">
-#forecast {
-  text-align: center;
-  width: 100%;
-}
-
 .forecast-table {
   margin: auto;
   display: inline-grid;
@@ -249,15 +243,9 @@ function closeTooltip() {
 }
 .forecast-cell .day {
   display: block;
-  font-size: 3rem;
-  background: #7f466f;
-  text-align: center;
-}
-
-.forecast-cell .month {
   font-size: 1.5rem;
-  display: block;
-  text-transform: uppercase;
+  border-radius: 0.4rem;
+  background: #7f466f;
   text-align: center;
 }
 
@@ -268,6 +256,7 @@ function closeTooltip() {
   align-items: center;
   justify-content: center;
   padding-left: 6%;
+  margin-top: 1rem;
 }
 
 .breeds-available .breed:nth-child(1n + 1) {
