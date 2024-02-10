@@ -130,7 +130,7 @@ export function seasonsOfCurrentYear(date: DateTime) {
 /**
  * @returns A Interval calculating the DST period for new york of the given year.
  */
-export function getNewYorkDSTPeriodForYear(year: number): Interval {
+export function getNewYorkDSTPeriodForYear(year: number): Interval<true> {
   return Interval.fromDateTimes(
     DateTime.local()
       .set({ year, month: 2 })
@@ -143,10 +143,10 @@ export function getNewYorkDSTPeriodForYear(year: number): Interval {
       .endOf('month')
       .startOf('day')
       .set({ weekday: 7, hour: 1, minute: 59, second: 59 }),
-  );
+  ) as Interval<true>;
 }
 
-export function getSunbeamIntervalForDateTime(dt: DateTime): Interval {
+export function getSunbeamIntervalForDateTime(dt: DateTime): Interval<true> {
   return getOverlappingRangeOrNearest(
     dt,
     Interval.fromDateTimes(
@@ -166,7 +166,7 @@ export function getSunbeamIntervalForDateTime(dt: DateTime): Interval {
   );
 }
 
-export function getMoonglowIntervalForDateTime(dt: DateTime): Interval {
+export function getMoonglowIntervalForDateTime(dt: DateTime): Interval<true> {
   return getOverlappingRangeOrNearest(
     dt,
     Interval.fromDateTimes(
@@ -188,7 +188,7 @@ export function getMoonglowIntervalForDateTime(dt: DateTime): Interval {
   );
 }
 
-export function getSunriseIntervalForDateTime(dt: DateTime): Interval {
+export function getSunriseIntervalForDateTime(dt: DateTime): Interval<true> {
   return getOverlappingRangeOrNearest(
     dt,
     Interval.fromDateTimes(
@@ -208,7 +208,7 @@ export function getSunriseIntervalForDateTime(dt: DateTime): Interval {
   );
 }
 
-export function getSunsetIntervalForDateTime(dt: DateTime): Interval {
+export function getSunsetIntervalForDateTime(dt: DateTime): Interval<true> {
   return Interval.fromDateTimes(
     dt.set({
       hour: 18,
@@ -217,10 +217,10 @@ export function getSunsetIntervalForDateTime(dt: DateTime): Interval {
       millisecond: 0,
     }),
     dt.plus({ days: 1 }).startOf('day'),
-  );
+  ) as Interval<true>;
 }
 
-export function getZombieIntervalForDateTime(dt: DateTime): Interval {
+export function getZombieIntervalForDateTime(dt: DateTime): Interval<true> {
   return getOverlappingRangeOrNearest(
     dt,
     Interval.fromDateTimes(
@@ -243,7 +243,7 @@ export function getZombieIntervalForDateTime(dt: DateTime): Interval {
 export function getFireGemForDateTime(dt: DateTime): {
   colour: string;
   image: string;
-  interval: Interval;
+  interval: Interval<true>;
 } {
   let colour: string;
   let image: URL;
@@ -268,6 +268,9 @@ export function getFireGemForDateTime(dt: DateTime): {
   return {
     colour,
     image: image.pathname,
-    interval: Interval.fromDateTimes(dt.startOf('hour'), dt.endOf('hour')),
+    interval: Interval.fromDateTimes(
+      dt.startOf('hour'),
+      dt.endOf('hour'),
+    ) as Interval<true>,
   };
 }

@@ -20,8 +20,13 @@ export function useExtendedInfo(
   /**
    * Helper to adjust an interval to the zone from the user
    */
-  const local = (interval: Interval) =>
-    localiseInterval(interval, localTime.value.zone);
+  function local(obj: Interval): Interval;
+  function local(obj: DateTime): DateTime;
+  function local(obj: DateTime | Interval) {
+    return DateTime.isDateTime(obj)
+      ? obj.setZone(localTime.value.zone)
+      : localiseInterval(obj, localTime.value.zone);
+  }
 
   const season = computed(() => determineSeason(dragCaveTime.value));
 
@@ -56,15 +61,15 @@ export function useExtendedInfo(
 
   const fireGem = computed(() => getFireGemForDateTime(dragCaveTime.value));
 
-  const zombies = computed<Interval>(() =>
+  const zombies = computed(() =>
     local(getZombieIntervalForDateTime(dragCaveTime.value)),
   );
 
-  const sunbeam = computed<Interval>(() =>
+  const sunbeam = computed(() =>
     local(getSunbeamIntervalForDateTime(dragCaveTime.value)),
   );
 
-  const moonglow = computed<Interval>(() =>
+  const moonglow = computed(() =>
     local(getMoonglowIntervalForDateTime(dragCaveTime.value)),
   );
 
@@ -98,6 +103,14 @@ export function useExtendedInfo(
       .pathname;
   });
 
+  const gemshardSwitchOver = computed(() =>
+    local(dragCaveTime.value.startOf('day').plus({ days: 1 })),
+  );
+
+  const moonSwitchOver = computed(() =>
+    local(dragCaveTime.value.startOf('day').set({ hour: 20 })),
+  );
+
   return {
     season,
     seasonIcon,
@@ -111,5 +124,7 @@ export function useExtendedInfo(
     sunrise,
     sunset,
     dst,
+    gemshardSwitchOver,
+    moonSwitchOver,
   };
 }

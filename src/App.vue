@@ -67,7 +67,7 @@
             <FontAwesomeIcon icon="fa-solid fa-clock" />
             <div>
               <p>
-                Dragcave is in
+                <b>Dragcave</b> is in
                 <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
                   dcIntlTime.toFormat('ZZZZ')
                 }}</abbr
@@ -89,7 +89,7 @@
 
             <FontAwesomeIcon icon="fa-solid fa-skull" />
             <p>
-              Zombies will be active between
+              <b>Zombies</b> will be active between
               {{ zombies.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
               and
               {{ zombies.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
@@ -98,13 +98,9 @@
 
             <FontAwesomeIcon icon="fa-solid fa-gem" />
             <p>
-              Gemshards switch at
+              <b>Gemshards</b> switch at
               {{
-                dcIntlTime
-                  .startOf('day')
-                  .plus({ days: 1 })
-                  .setZone(localTimezone)
-                  .toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                gemshardSwitchOver.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
               }}
             </p>
 
@@ -113,11 +109,7 @@
               <p>
                 Moon phases will occur at
                 {{
-                  dcIntlTime
-                    .startOf('day')
-                    .set({ hour: 20 })
-                    .setZone(localTimezone)
-                    .toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  moonSwitchOver.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
                 }}.
               </p>
               <p>
@@ -284,6 +276,7 @@ const dcDateTime = computed(() => ({
 }));
 
 const {
+  gemshardSwitchOver,
   fireGem,
   offsetWording,
   season,
@@ -296,6 +289,7 @@ const {
   sunriseSunsetImage,
   zombies,
   dst,
+  moonSwitchOver,
 } = useExtendedInfo(dcIntlTime, localIntlTime);
 
 onMounted(
