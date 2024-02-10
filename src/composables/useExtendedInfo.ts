@@ -59,7 +59,13 @@ export function useExtendedInfo(
     );
   });
 
-  const fireGem = computed(() => getFireGemForDateTime(dragCaveTime.value));
+  const fireGem = computed(() => {
+    const gem = getFireGemForDateTime(dragCaveTime.value);
+    return {
+      ...gem,
+      interval: local(gem.interval),
+    };
+  });
 
   const zombies = computed(() =>
     local(getZombieIntervalForDateTime(dragCaveTime.value)),

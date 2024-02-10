@@ -170,7 +170,34 @@
               :src="fireGem.image"
               alt=""
             />
-            <p>{{ fireGem.colour }} Fire Gems are dropping.</p>
+            <div>
+              <p>
+                <b>Fire Gems</b> caught or bred now will be
+                <b>{{ fireGem.colour.toLowerCase() }}</b> until
+                {{
+                  fireGem.interval.end.toLocaleString(
+                    DateTime.TIME_24_WITH_SECONDS,
+                  )
+                }}. Over the next 24 hours:
+              </p>
+              <div class="fire-gem-table">
+                <span
+                  :title="`${dt.start
+                    .setZone(localIntlTime.zone)
+                    .toLocaleString(
+                      DateTime.TIME_24_WITH_SECONDS,
+                    )} – ${dt.end.setZone(localIntlTime.zone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)}`"
+                  :class="getFireGemForDateTime(dt.start).colour.toLowerCase()"
+                  :key="dt.start?.toSeconds()"
+                  v-for="dt in Interval.fromDateTimes(
+                    dcIntlTime.startOf('hour').plus({ hours: 1 }),
+                    dcIntlTime.startOf('hour').plus({ hours: 25 }),
+                  ).splitBy({ hours: 1 })"
+                >
+                  {{ dt.start?.setZone(localIntlTime.zone).toFormat('HH') }}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -242,10 +269,11 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
 import ActiveBadge from './components/ActiveBadge.vue';
 import ForecastTable from './components/ForecastTable.vue';
 import { useExtendedInfo } from '@/composables/useExtendedInfo';
+import { getFireGemForDateTime } from './utils/calculations';
 
 const timezones = Intl.supportedValuesOf('timeZone');
 let interval: ReturnType<typeof setInterval>;
@@ -303,7 +331,7 @@ onMounted(
 onUnmounted(() => clearInterval(interval));
 </script>
 
-<style scoped>
+<style scoped lang="postcss">
 #top {
   color: white;
   display: flex;
@@ -409,6 +437,29 @@ onUnmounted(() => clearInterval(interval));
   text-align: center;
   font-size: 0.8rem;
 }
+
+.fire-gem-table {
+  margin-top: 0.4rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(1rem, 1.5rem));
+
+  > span {
+    text-align: center;
+    display: block;
+    font-size: 0.8rem;
+    padding: 0.5rem 0;
+  }
+  > .blue {
+    background: rgb(69, 69, 114);
+  }
+  > .green {
+    background: rgb(87, 128, 87);
+  }
+  > .red {
+    background: rgb(110, 73, 73);
+  }
+}
+
 @media (min-width: 22rem) {
   #period-wrapper {
     grid-template-columns: 1fr 2fr;
