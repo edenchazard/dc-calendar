@@ -28,8 +28,7 @@
     "@vueuse/core": "^10.7.2",
     "astronomia": "^4.1.1",
     "luxon": "^3.4.4",
-    "vue": "^3.3.11",
-    "vue-router": "^4.2.5"
+    "vue": "^3.3.11"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.1",
