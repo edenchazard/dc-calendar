@@ -4,7 +4,7 @@ import {
   heraldColour,
   seasonsOfCurrentYear,
   sonataProbability,
-} from './utils';
+} from './calculations';
 
 export function getBreedsLocal() {
   const breeds: Array<

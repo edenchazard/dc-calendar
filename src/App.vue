@@ -76,7 +76,7 @@
               <p>
                 DST will occur on
                 {{
-                  dst.begin.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                  dst.start.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
                 }}
                 and end on
                 {{
@@ -89,11 +89,11 @@
 
             <FontAwesomeIcon icon="fa-solid fa-skull" />
             <p>
-              {{
-                zombies
-                  ? `Zombies are active (Inactive at ${dcIntlTime.plus({ days: 1 }).set({ hour: 5, minute: 59, second: 59 }).setZone(localTimezone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)})`
-                  : `Zombies are inactive (Returning at ${dcIntlTime.plus({ days: 1 }).startOf('day').setZone(localTimezone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)})`
-              }}
+              Zombies will be active between
+              {{ zombies.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+              and
+              {{ zombies.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
+              <ActiveBadge :condition="zombies.contains(dcIntlTime)" />
             </p>
 
             <FontAwesomeIcon icon="fa-solid fa-gem" />
@@ -127,84 +127,50 @@
             </div>
 
             <img
-              :src="sunbeamMoonglow.image"
+              :src="sunbeamMoonglowImage"
               alt=""
             />
             <div>
               <p>
                 <b>Sunbeam Drakes</b> can be caught or bred between
                 {{
-                  sunbeamMoonglow.sunbeam.start.toLocaleString(
-                    DateTime.TIME_24_WITH_SECONDS,
-                  )
+                  sunbeam.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
                 }}
                 and
-                {{
-                  sunbeamMoonglow.sunbeam.end.toLocaleString(
-                    DateTime.TIME_24_WITH_SECONDS,
-                  )
-                }}
-                <ActiveBadge
-                  :condition="sunbeamMoonglow.sunbeam.contains(dcIntlTime)"
-                />
+                {{ sunbeam.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+                <ActiveBadge :condition="sunbeam.contains(dcIntlTime)" />
               </p>
               <p>
                 <b>Moonglow Drakes</b> can be caught or bred between
                 {{
-                  sunbeamMoonglow.moonglow.start.toLocaleString(
-                    DateTime.TIME_24_WITH_SECONDS,
-                  )
+                  moonglow.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
                 }}
                 and
-                {{
-                  sunbeamMoonglow.moonglow.end.toLocaleString(
-                    DateTime.TIME_24_WITH_SECONDS,
-                  )
-                }}
-                <ActiveBadge
-                  :condition="sunbeamMoonglow.moonglow.contains(dcIntlTime)"
-                />
+                {{ moonglow.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+                <ActiveBadge :condition="moonglow.contains(dcIntlTime)" />
               </p>
             </div>
 
             <img
-              :src="sunriseSunset.image"
+              :src="sunriseSunsetImage"
               alt=""
             />
             <div>
               <p>
                 <b>Sunrise Dragons</b> will hatch between
                 {{
-                  sunriseSunset.sunrise.start.toLocaleString(
-                    DateTime.TIME_24_WITH_SECONDS,
-                  )
+                  sunrise.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
                 }}
                 and
-                {{
-                  sunriseSunset.sunrise.end.toLocaleString(
-                    DateTime.TIME_24_WITH_SECONDS,
-                  )
-                }}
-                <ActiveBadge
-                  :condition="sunriseSunset.sunrise.contains(dcIntlTime)"
-                />
+                {{ sunrise.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+                <ActiveBadge :condition="sunrise.contains(dcIntlTime)" />
               </p>
               <p>
                 <b>Sunset Dragons</b> will hatch between
-                {{
-                  sunriseSunset.sunset.start.toLocaleString(
-                    DateTime.TIME_24_WITH_SECONDS,
-                  )
-                }}
+                {{ sunset.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
                 and
-                {{
-                  sunriseSunset.sunset.end.toLocaleString(
-                    DateTime.TIME_24_WITH_SECONDS,
-                  )
-                }}
-                <ActiveBadge
-                  :condition="sunriseSunset.sunset.contains(dcIntlTime)"
-                />
+                {{ sunset.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+                <ActiveBadge :condition="sunset.contains(dcIntlTime)" />
               </p>
             </div>
 
@@ -212,7 +178,7 @@
               :src="fireGem.image"
               alt=""
             />
-            <p>{{ fireGem.name }} Fire Gems are dropping.</p>
+            <p>{{ fireGem.colour }} Fire Gems are dropping.</p>
           </div>
         </div>
       </div>
@@ -322,8 +288,12 @@ const {
   offsetWording,
   season,
   seasonIcon,
-  sunbeamMoonglow,
-  sunriseSunset,
+  sunbeam,
+  moonglow,
+  sunbeamMoonglowImage,
+  sunrise,
+  sunset,
+  sunriseSunsetImage,
   zombies,
   dst,
 } = useExtendedInfo(dcIntlTime, localIntlTime);

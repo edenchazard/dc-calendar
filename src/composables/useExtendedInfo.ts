@@ -1,4 +1,14 @@
-import { determineSeason, getOverlappingRangeOrNearest } from '@/utils/utils';
+import {
+  determineSeason,
+  getFireGemForDateTime,
+  getMoonglowIntervalForDateTime,
+  getNewYorkDSTPeriodForYear,
+  getSunbeamIntervalForDateTime,
+  getSunriseIntervalForDateTime,
+  getSunsetIntervalForDateTime,
+  getZombieIntervalForDateTime,
+} from '@/utils/calculations';
+import { localiseInterval } from '@/utils/utils';
 import { Interval, DateTime } from 'luxon';
 import type { Ref } from 'vue';
 import { computed } from 'vue';
@@ -7,26 +17,20 @@ export function useExtendedInfo(
   dragCaveTime: Ref<DateTime>,
   localTime: Ref<DateTime>,
 ) {
+  /**
+   * Helper to adjust an interval to the zone from the user
+   */
+  const local = (interval: Interval) =>
+    localiseInterval(interval, localTime.value.zone);
+
   const season = computed(() => determineSeason(dragCaveTime.value));
 
-  const dst = computed(() => ({
-    begin: DateTime.local()
-      .set({ month: 2 })
-      .endOf('month')
-      .startOf('day')
-      .set({ weekday: 7, hour: 1, minute: 59, second: 59 })
-      .plus({ days: 7 })
-      .setZone(localTime.value.zone),
-    end: DateTime.local()
-      .set({ month: 10 })
-      .endOf('month')
-      .startOf('day')
-      .set({ weekday: 7, hour: 1, minute: 59, second: 59 })
-      .setZone(localTime.value.zone),
-  }));
+  const dst = computed(() =>
+    local(getNewYorkDSTPeriodForYear(dragCaveTime.value.year)),
+  );
 
   const seasonIcon = computed(() => {
-    switch (determineSeason(dragCaveTime.value).name) {
+    switch (season.value.name) {
       case 'autumn':
         return 'canadian-maple-leaf';
       case 'spring':
@@ -50,130 +54,48 @@ export function useExtendedInfo(
     );
   });
 
-  const fireGem = computed(() => {
-    if ([0, 3, 6, 9, 12, 15, 18, 21].includes(dragCaveTime.value.hour)) {
-      return {
-        name: 'Blue',
-        image: new URL('/public/eggs/fire_gem_blue.webp', import.meta.url)
-          .pathname,
-      };
-    } else if (
-      [1, 4, 7, 10, 13, 16, 19, 22].includes(dragCaveTime.value.hour)
-    ) {
-      return {
-        name: 'Red',
-        image: new URL('/public/eggs/fire_gem_red.webp', import.meta.url)
-          .pathname,
-      };
+  const fireGem = computed(() => getFireGemForDateTime(dragCaveTime.value));
+
+  const zombies = computed<Interval>(() =>
+    local(getZombieIntervalForDateTime(dragCaveTime.value)),
+  );
+
+  const sunbeam = computed<Interval>(() =>
+    local(getSunbeamIntervalForDateTime(dragCaveTime.value)),
+  );
+
+  const moonglow = computed<Interval>(() =>
+    local(getMoonglowIntervalForDateTime(dragCaveTime.value)),
+  );
+
+  const sunbeamMoonglowImage = computed<string>(() => {
+    if (sunbeam.value.contains(localTime.value)) {
+      return new URL('/public/eggs/sunbeam.webp', import.meta.url).pathname;
+    } else if (moonglow.value.contains(localTime.value)) {
+      return new URL('/public/eggs/moonglow.webp', import.meta.url).pathname;
     }
 
-    return {
-      name: 'Green',
-      image: new URL('/public/eggs/fire_gem_green.webp', import.meta.url)
-        .pathname,
-    };
+    return new URL('/public/eggs/sunbeam_moonglow.webp', import.meta.url)
+      .pathname;
   });
 
-  const zombies = computed(() => dragCaveTime.value.hour < 6);
+  const sunrise = computed(() =>
+    local(getSunriseIntervalForDateTime(dragCaveTime.value)),
+  );
 
-  const sunbeamMoonglow = computed(() => {
-    const sunbeam = Interval.fromDateTimes(
-      DateTime.fromObject({
-        hour: 6,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-      }).setZone(localTime.value.zone),
-      DateTime.fromObject({
-        hour: 17,
-        minute: 59,
-        second: 59,
-        millisecond: 0,
-      }).setZone(localTime.value.zone),
-    );
+  const sunset = computed(() =>
+    local(getSunsetIntervalForDateTime(dragCaveTime.value)),
+  );
 
-    const moonglow = getOverlappingRangeOrNearest(
-      dragCaveTime.value,
-      Interval.fromDateTimes(
-        DateTime.fromObject({
-          hour: 18,
-          minute: 0,
-          second: 0,
-          millisecond: 0,
-        })
-          .minus({ days: 1 })
-          .setZone(localTime.value.zone),
-        DateTime.fromObject({
-          hour: 5,
-          minute: 59,
-          second: 59,
-          millisecond: 0,
-        }).setZone(localTime.value.zone),
-      ),
-    );
-
-    let image: string = new URL(
-      '/public/eggs/sunbeam_moonglow.webp',
-      import.meta.url,
-    ).pathname;
-
-    if (sunbeam.contains(localTime.value)) {
-      image = new URL('/public/eggs/sunbeam.webp', import.meta.url).pathname;
-    } else if (moonglow.contains(localTime.value)) {
-      image = new URL('/public/eggs/moonglow.webp', import.meta.url).pathname;
+  const sunriseSunsetImage = computed(() => {
+    if (sunset.value.contains(dragCaveTime.value)) {
+      return new URL('/public/eggs/sunset.webp', import.meta.url).pathname;
+    } else if (sunrise.value.contains(dragCaveTime.value)) {
+      return new URL('/public/eggs/sunrise.webp', import.meta.url).pathname;
     }
 
-    return {
-      image,
-      sunbeam,
-      moonglow,
-    };
-  });
-
-  const sunriseSunset = computed(() => {
-    const sunrise = Interval.fromDateTimes(
-      DateTime.fromObject({
-        hour: 6,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-      }).setZone(localTime.value.zone),
-      DateTime.fromObject({
-        hour: 12,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-      }).setZone(localTime.value.zone),
-    );
-
-    const sunset = Interval.fromDateTimes(
-      DateTime.fromObject({
-        hour: 18,
-        minute: 0,
-        second: 0,
-        millisecond: 0,
-      }).setZone(localTime.value.zone),
-      dragCaveTime.value
-        .plus({ days: 1 })
-        .startOf('day')
-        .setZone(localTime.value.zone),
-    );
-
-    let image: string = new URL(
-      '/public/eggs/sunrise_sunset.webp',
-      import.meta.url,
-    ).pathname;
-    if (sunset.contains(dragCaveTime.value)) {
-      image = new URL('/public/eggs/sunset.webp', import.meta.url).pathname;
-    } else if (sunrise.contains(dragCaveTime.value)) {
-      image = new URL('/public/eggs/sunrise.webp', import.meta.url).pathname;
-    }
-
-    return {
-      image,
-      sunrise,
-      sunset,
-    };
+    return new URL('/public/eggs/sunrise_sunset.webp', import.meta.url)
+      .pathname;
   });
 
   return {
@@ -182,8 +104,12 @@ export function useExtendedInfo(
     offsetWording,
     fireGem,
     zombies,
-    sunbeamMoonglow,
-    sunriseSunset,
+    sunbeamMoonglowImage,
+    moonglow,
+    sunbeam,
+    sunriseSunsetImage,
+    sunrise,
+    sunset,
     dst,
   };
 }
