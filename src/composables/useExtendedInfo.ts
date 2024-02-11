@@ -38,6 +38,14 @@ export function useExtendedInfo(
     local(getNighttimeIntervalForDateTime(dragCaveTime.value)),
   );
 
+  const sunrise = computed(() =>
+    local(getSunriseIntervalForDateTime(dragCaveTime.value)),
+  );
+
+  const sunset = computed(() =>
+    local(getSunsetIntervalForDateTime(dragCaveTime.value)),
+  );
+
   const dst = computed(() =>
     local(getNewYorkDSTPeriodForYear(dragCaveTime.value.year)),
   );
@@ -79,24 +87,21 @@ export function useExtendedInfo(
     local(getZombieIntervalForDateTime(dragCaveTime.value)),
   );
 
-  const sunbeamMoonglowImage = computed<string>(() => {
+  const harkfrostImage = computed<string>(() => {
     if (daytime.value.contains(localTime.value)) {
-      return new URL('/public/eggs/sunbeam.webp', import.meta.url).pathname;
-    } else if (nighttime.value.contains(localTime.value)) {
-      return new URL('/public/eggs/moonglow.webp', import.meta.url).pathname;
+      return new URL('/public/eggs/harkfrost_daytime.png', import.meta.url)
+        .pathname;
     }
-
-    return new URL('/public/eggs/sunbeam_moonglow.webp', import.meta.url)
+    return new URL('/public/eggs/harkfrost_nighttime.webp', import.meta.url)
       .pathname;
   });
 
-  const sunrise = computed(() =>
-    local(getSunriseIntervalForDateTime(dragCaveTime.value)),
-  );
-
-  const sunset = computed(() =>
-    local(getSunsetIntervalForDateTime(dragCaveTime.value)),
-  );
+  const sunbeamMoonglowImage = computed<string>(() => {
+    if (daytime.value.contains(localTime.value)) {
+      return new URL('/public/eggs/sunbeam.webp', import.meta.url).pathname;
+    }
+    return new URL('/public/eggs/moonglow.webp', import.meta.url).pathname;
+  });
 
   const sunriseSunsetImage = computed(() => {
     if (sunset.value.contains(dragCaveTime.value)) {
@@ -127,6 +132,7 @@ export function useExtendedInfo(
     zombies,
     sunbeamMoonglowImage,
     sunriseSunsetImage,
+    harkfrostImage,
     sunrise,
     sunset,
     dst,

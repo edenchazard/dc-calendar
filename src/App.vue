@@ -146,6 +146,25 @@
             </div>
 
             <img
+              :src="harkfrostImage"
+              alt=""
+            />
+            <div>
+              <p>
+                <b>Harkfrost Dragons</b> will be surrounded by snowflakes
+                between
+                {{
+                  nighttime.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                }}
+                and
+                {{
+                  nighttime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                }}.
+                <ActiveBadge :condition="nighttime.contains(dcIntlTime)" />
+              </p>
+            </div>
+
+            <img
               :src="sunriseSunsetImage"
               alt=""
             />
@@ -318,6 +337,7 @@ const {
   sunrise,
   sunset,
   sunriseSunsetImage,
+  harkfrostImage,
   zombies,
   dst,
   moonSwitchOver,
@@ -403,6 +423,9 @@ onUnmounted(() => clearInterval(interval));
   margin: 0;
 }
 
+#extended-info img {
+  max-height: 3rem;
+}
 #period {
   background: darkslateblue;
   padding: 1rem;
