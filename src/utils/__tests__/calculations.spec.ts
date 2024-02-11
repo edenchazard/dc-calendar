@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import {
+  getDaytimeIntervalForDateTime,
   getFireGemForDateTime,
-  getMoonglowIntervalForDateTime,
   getNewYorkDSTPeriodForYear,
-  getSunbeamIntervalForDateTime,
+  getNighttimeIntervalForDateTime,
   getSunriseIntervalForDateTime,
   getSunsetIntervalForDateTime,
   getZombieIntervalForDateTime,
@@ -31,10 +31,10 @@ describe('Calculations', () => {
     });
   });
 
-  describe('#getSunbeamIntervalForDateTime', () => {
+  describe('#getDaytimeIntervalForDateTime', () => {
     it('calculates beginning and ending when in range of current day', () => {
       expect(
-        getSunbeamIntervalForDateTime(
+        getDaytimeIntervalForDateTime(
           DateTime.fromObject({
             month: 1,
             day: 1,
@@ -48,7 +48,7 @@ describe('Calculations', () => {
 
     it("returns the current day's beginning and ending if before 6am and after midnight", () => {
       expect(
-        getSunbeamIntervalForDateTime(
+        getDaytimeIntervalForDateTime(
           DateTime.fromObject({
             month: 1,
             day: 1,
@@ -62,7 +62,7 @@ describe('Calculations', () => {
 
     it("returns the next day's beginning and ending if after 6pm and before midnight", () => {
       expect(
-        getSunbeamIntervalForDateTime(
+        getDaytimeIntervalForDateTime(
           DateTime.fromObject({
             month: 1,
             day: 1,
@@ -75,10 +75,10 @@ describe('Calculations', () => {
     });
   });
 
-  describe('#getMoonglowIntervalForDateTime', () => {
+  describe('#getNighttimeIntervalForDateTime', () => {
     it('calculates beginning and ending after midnight but before 6am', () => {
       expect(
-        getMoonglowIntervalForDateTime(
+        getNighttimeIntervalForDateTime(
           DateTime.fromObject({
             month: 1,
             day: 2,
@@ -92,7 +92,7 @@ describe('Calculations', () => {
 
     it("returns the current day's beginning and ending if before 6pm", () => {
       expect(
-        getMoonglowIntervalForDateTime(
+        getNighttimeIntervalForDateTime(
           DateTime.fromObject({
             month: 1,
             day: 1,
@@ -106,7 +106,7 @@ describe('Calculations', () => {
 
     it("returns the current day's beginning and ending if after 6pm but before midnight", () => {
       expect(
-        getMoonglowIntervalForDateTime(
+        getNighttimeIntervalForDateTime(
           DateTime.fromObject({
             month: 1,
             day: 2,

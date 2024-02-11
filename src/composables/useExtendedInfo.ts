@@ -1,9 +1,9 @@
 import {
   determineSeason,
+  getDaytimeIntervalForDateTime,
   getFireGemForDateTime,
-  getMoonglowIntervalForDateTime,
   getNewYorkDSTPeriodForYear,
-  getSunbeamIntervalForDateTime,
+  getNighttimeIntervalForDateTime,
   getSunriseIntervalForDateTime,
   getSunsetIntervalForDateTime,
   getZombieIntervalForDateTime,
@@ -29,6 +29,14 @@ export function useExtendedInfo(
   }
 
   const season = computed(() => determineSeason(dragCaveTime.value));
+
+  const daytime = computed(() =>
+    local(getDaytimeIntervalForDateTime(dragCaveTime.value)),
+  );
+
+  const nighttime = computed(() =>
+    local(getNighttimeIntervalForDateTime(dragCaveTime.value)),
+  );
 
   const dst = computed(() =>
     local(getNewYorkDSTPeriodForYear(dragCaveTime.value.year)),
@@ -71,18 +79,10 @@ export function useExtendedInfo(
     local(getZombieIntervalForDateTime(dragCaveTime.value)),
   );
 
-  const sunbeam = computed(() =>
-    local(getSunbeamIntervalForDateTime(dragCaveTime.value)),
-  );
-
-  const moonglow = computed(() =>
-    local(getMoonglowIntervalForDateTime(dragCaveTime.value)),
-  );
-
   const sunbeamMoonglowImage = computed<string>(() => {
-    if (sunbeam.value.contains(localTime.value)) {
+    if (daytime.value.contains(localTime.value)) {
       return new URL('/public/eggs/sunbeam.webp', import.meta.url).pathname;
-    } else if (moonglow.value.contains(localTime.value)) {
+    } else if (nighttime.value.contains(localTime.value)) {
       return new URL('/public/eggs/moonglow.webp', import.meta.url).pathname;
     }
 
@@ -118,14 +118,14 @@ export function useExtendedInfo(
   );
 
   return {
+    daytime,
+    nighttime,
     season,
     seasonIcon,
     offsetWording,
     fireGem,
     zombies,
     sunbeamMoonglowImage,
-    moonglow,
-    sunbeam,
     sunriseSunsetImage,
     sunrise,
     sunset,

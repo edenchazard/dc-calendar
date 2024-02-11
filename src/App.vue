@@ -126,20 +126,22 @@
               <p>
                 <b>Sunbeam Drakes</b> can be caught or bred between
                 {{
-                  sunbeam.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  daytime.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
                 }}
                 and
-                {{ sunbeam.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
-                <ActiveBadge :condition="sunbeam.contains(dcIntlTime)" />
+                {{ daytime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+                <ActiveBadge :condition="daytime.contains(dcIntlTime)" />
               </p>
               <p>
                 <b>Moonglow Drakes</b> can be caught or bred between
                 {{
-                  moonglow.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  nighttime.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
                 }}
                 and
-                {{ moonglow.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
-                <ActiveBadge :condition="moonglow.contains(dcIntlTime)" />
+                {{
+                  nighttime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                }}
+                <ActiveBadge :condition="nighttime.contains(dcIntlTime)" />
               </p>
             </div>
 
@@ -304,13 +306,13 @@ const dcDateTime = computed(() => ({
 }));
 
 const {
+  nighttime,
+  daytime,
+  season,
+  seasonIcon,
   gemshardSwitchOver,
   fireGem,
   offsetWording,
-  season,
-  seasonIcon,
-  sunbeam,
-  moonglow,
   sunbeamMoonglowImage,
   sunrise,
   sunset,

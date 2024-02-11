@@ -146,7 +146,7 @@ export function getNewYorkDSTPeriodForYear(year: number): Interval<true> {
   ) as Interval<true>;
 }
 
-export function getSunbeamIntervalForDateTime(dt: DateTime): Interval<true> {
+export function getDaytimeIntervalForDateTime(dt: DateTime): Interval<true> {
   return getOverlappingRangeOrNearest(
     dt,
     Interval.fromDateTimes(
@@ -166,7 +166,7 @@ export function getSunbeamIntervalForDateTime(dt: DateTime): Interval<true> {
   );
 }
 
-export function getMoonglowIntervalForDateTime(dt: DateTime): Interval<true> {
+export function getNighttimeIntervalForDateTime(dt: DateTime): Interval<true> {
   return getOverlappingRangeOrNearest(
     dt,
     Interval.fromDateTimes(
