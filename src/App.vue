@@ -89,7 +89,7 @@
 
             <FontAwesomeIcon icon="fa-solid fa-skull" />
             <p>
-              <b>Zombies</b> will be active between
+              <b>Undead Dragons</b> will be active between
               {{ zombies.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
               and
               {{ zombies.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
@@ -98,7 +98,7 @@
 
             <FontAwesomeIcon icon="fa-solid fa-gem" />
             <p>
-              <b>Gemshards</b> switch at
+              <b>Gemshard Dragons</b> switch at
               {{
                 gemshardSwitchOver.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
               }}
@@ -113,8 +113,8 @@
                 }}.
               </p>
               <p>
-                <b>Sonatas</b> and <b>Lunar Heralds</b> will change at this
-                time.
+                <b>Sonata Dragons</b> and <b>Lunar Herald Dragons</b> will
+                change at this time.
               </p>
             </div>
 
@@ -193,7 +193,7 @@
             />
             <div>
               <p>
-                <b>Fire Gems</b> caught or bred now will be
+                <b>Fire Gem Dragons</b> caught or bred now will be
                 <b>{{ fireGem.colour.toLowerCase() }}</b> until
                 {{
                   fireGem.interval.end.toLocaleString(
