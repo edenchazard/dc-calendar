@@ -87,15 +87,6 @@
               </p>
             </div>
 
-            <FontAwesomeIcon icon="fa-solid fa-skull" />
-            <p>
-              <b>Undead Dragons</b> will be active between
-              {{ zombies.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
-              and
-              {{ zombies.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
-              <ActiveBadge :condition="zombies.contains(dcIntlTime)" />
-            </p>
-
             <FontAwesomeIcon icon="fa-solid fa-gem" />
             <p>
               <b>Gemshard Dragons</b> switch at
@@ -117,6 +108,18 @@
                 change at this time.
               </p>
             </div>
+
+            <img
+              :src="zombieImage"
+              alt=""
+            />
+            <p>
+              <b>Undead Dragons</b> will be active between
+              {{ zombies.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+              and
+              {{ zombies.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
+              <ActiveBadge :condition="zombies.contains(dcIntlTime)" />
+            </p>
 
             <img
               :src="sunbeamMoonglowImage"
@@ -357,6 +360,7 @@ const {
   sunriseSunsetImage,
   harkfrostImage,
   nocturneImage,
+  zombieImage,
   zombies,
   dst,
   moonSwitchOver,

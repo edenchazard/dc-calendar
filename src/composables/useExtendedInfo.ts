@@ -130,6 +130,15 @@ export function useExtendedInfo(
       .pathname;
   });
 
+  const zombieImage = computed(() => {
+    if (zombies.value.contains(dragCaveTime.value)) {
+      return new URL('/public/eggs/zombie_active.png', import.meta.url)
+        .pathname;
+    }
+    return new URL('/public/eggs/zombie_inactive.gif', import.meta.url)
+      .pathname;
+  });
+
   return {
     season,
     daytime,
@@ -147,5 +156,6 @@ export function useExtendedInfo(
     sunriseSunsetImage,
     harkfrostImage,
     nocturneImage,
+    zombieImage,
   };
 }
