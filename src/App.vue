@@ -4,19 +4,32 @@
     class="max-content"
   >
     <h1 id="site-title">Dragcave Calendar</h1>
-    <label for="timezone">Timezone</label>
-    <select
-      v-model="localTimezone"
-      id="timezone"
-    >
-      <option
-        v-for="timezone in timezones"
-        :key="timezone.toString()"
-        :value="timezone"
+    <nav id="menu">
+      <a href="https://github.com/edenchazard/dc-calendar"
+        ><FontAwesomeIcon icon="fa-brands fa-github" /> Github
+      </a>
+      <a href="https://ko-fi.com/dctools"
+        ><FontAwesomeIcon icon="fa-solid fa-coffee" /> Donation link
+      </a>
+      <a href="https://chazza.me/dc/tools"
+        ><FontAwesomeIcon icon="fa-solid fa-toolbox" /> More tools
+      </a>
+    </nav>
+    <div id="timezone-wrapper">
+      <label for="timezone">Timezone</label>
+      <select
+        v-model="localTimezone"
+        id="timezone"
       >
-        {{ timezone }}
-      </option>
-    </select>
+        <option
+          v-for="timezone in timezones"
+          :key="timezone.toString()"
+          :value="timezone"
+        >
+          {{ timezone }}
+        </option>
+      </select>
+    </div>
   </header>
 
   <main class="max-content">
@@ -387,15 +400,45 @@ onUnmounted(() => clearInterval(interval));
 #top {
   color: white;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: auto 1fr;
   align-items: center;
   gap: 0.25rem 1rem;
   background: #15366a;
   padding: 0.5rem 1rem;
+  justify-items: center;
 }
 
 #site-title {
   line-height: 2.7rem;
+  grid-column: 1/-1;
+  text-align: center;
+}
+
+#menu {
+  grid-column: 1/-1;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  > a {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-underline-offset: 0.3rem;
+    text-decoration-style: dotted;
+
+    > svg {
+      height: 1.5rem;
+    }
+  }
+}
+
+#timezone-wrapper {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  grid-column: 1/-1;
 }
 
 #timezone {
@@ -515,9 +558,34 @@ onUnmounted(() => clearInterval(interval));
   }
 }
 
-@media (min-width: 22rem) {
+@media (min-width: 10rem) {
   #period-wrapper {
-    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+  }
+}
+
+@media (min-width: 37rem) {
+  #top {
+    grid-template-columns: auto 1fr;
+    justify-items: unset;
+  }
+
+  #site-title {
+    grid-column: unset;
+    text-align: left;
+  }
+
+  #menu {
+    justify-content: end;
+    grid-column: unset;
+  }
+
+  #timezone-wrapper {
+    justify-self: end;
+  }
+
+  #period-wrapper {
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
   }
 
@@ -526,22 +594,12 @@ onUnmounted(() => clearInterval(interval));
   }
 }
 
-@media (min-width: 25rem) {
-  #top {
-    grid-template-columns: auto 1fr;
-  }
-
-  #site-title {
-    grid-column: 1/-1;
-  }
-}
-
-@media (min-width: 46rem) {
+@media (min-width: 58rem) {
   #top {
     grid-template-columns: 1fr auto auto;
   }
 
-  #site-title {
+  #timezone-wrapper {
     grid-column: unset;
   }
 
