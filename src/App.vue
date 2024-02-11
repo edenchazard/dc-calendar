@@ -186,9 +186,10 @@
                 <span
                   :title="`${dt.start
                     .setZone(localIntlTime.zone)
-                    .toLocaleString(
-                      DateTime.TIME_24_WITH_SECONDS,
-                    )} – ${dt.end.setZone(localIntlTime.zone).toLocaleString(DateTime.TIME_24_WITH_SECONDS)}`"
+                    .toLocaleString(DateTime.TIME_24_WITH_SECONDS)} – ${dt.end
+                    ?.minus({ seconds: 1 })
+                    .setZone(localIntlTime.zone)
+                    .toLocaleString(DateTime.TIME_24_WITH_SECONDS)}`"
                   :class="getFireGemForDateTime(dt.start).colour.toLowerCase()"
                   :key="dt.start?.toSeconds()"
                   v-for="dt in Interval.fromDateTimes(
