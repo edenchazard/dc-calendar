@@ -59,9 +59,13 @@
           <div id="extended-info">
             <FontAwesomeIcon :icon="`fa-solid fa-${seasonIcon}`" />
             <p>
+              The current season is
               {{ season.name.slice(0, 1).toUpperCase() + season.name.slice(1) }}
               {{ season.begin.toLocaleString() }} &mdash;
               {{ season.end.toLocaleString() }}.
+              {{ daytime.contains(dcIntlTime) ? 'It is day.' : 'It is night.' }}
+              {{ sunrise.contains(dcIntlTime) ? 'The sun is rising.' : '' }}
+              {{ sunset.contains(dcIntlTime) ? 'The sun is setting.' : '' }}
             </p>
 
             <FontAwesomeIcon icon="fa-solid fa-clock" />
