@@ -14,12 +14,25 @@ import {
   faSkull,
   faGem,
   faMoon,
+  faToolbox,
+  faCoffee,
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Settings } from 'luxon';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 /* add icons to the library */
-library.add(faSnowflake, faSun, faClock, faSkull, faGem, faMoon);
+library.add(
+  faSnowflake,
+  faSun,
+  faClock,
+  faSkull,
+  faGem,
+  faMoon,
+  faToolbox,
+  faCoffee,
+  faGithub,
+);
 
 Settings.defaultZone = 'America/New_York';
 
