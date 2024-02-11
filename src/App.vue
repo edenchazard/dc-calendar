@@ -61,7 +61,7 @@
             <p>
               {{ season.name.slice(0, 1).toUpperCase() + season.name.slice(1) }}
               {{ season.begin.toLocaleString() }} &mdash;
-              {{ season.end.toLocaleString() }}
+              {{ season.end.toLocaleString() }}.
             </p>
 
             <FontAwesomeIcon icon="fa-solid fa-clock" />
@@ -91,8 +91,10 @@
             <p>
               <b>Gemshard Dragons</b> switch at
               {{
-                gemshardSwitchOver.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-              }}
+                gemshardSwitchOver.toLocaleString(
+                  DateTime.TIME_24_WITH_SECONDS,
+                )
+              }}.
             </p>
 
             <FontAwesomeIcon icon="fa-solid fa-moon" />
@@ -132,7 +134,7 @@
                   daytime.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
                 }}
                 and
-                {{ daytime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+                {{ daytime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
                 <ActiveBadge :condition="daytime.contains(dcIntlTime)" />
               </p>
               <p>
@@ -143,7 +145,7 @@
                 and
                 {{
                   nighttime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-                }}
+                }}.
                 <ActiveBadge :condition="nighttime.contains(dcIntlTime)" />
               </p>
             </div>
@@ -196,14 +198,14 @@
                   sunrise.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
                 }}
                 and
-                {{ sunrise.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+                {{ sunrise.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
                 <ActiveBadge :condition="sunrise.contains(dcIntlTime)" />
               </p>
               <p>
                 <b>Sunset Dragons</b> will hatch between
                 {{ sunset.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
                 and
-                {{ sunset.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+                {{ sunset.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
                 <ActiveBadge :condition="sunset.contains(dcIntlTime)" />
               </p>
             </div>
