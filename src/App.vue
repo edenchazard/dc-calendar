@@ -3,7 +3,7 @@
     id="top"
     class="max-content"
   >
-    <h1>Dragcave Calendar</h1>
+    <h1 id="site-title">Dragcave Calendar</h1>
     <label for="timezone">Timezone</label>
     <select
       v-model="localTimezone"
@@ -386,12 +386,21 @@ onUnmounted(() => clearInterval(interval));
 <style scoped lang="postcss">
 #top {
   color: white;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr;
   align-items: center;
-  gap: 1rem;
-  background: navy;
-  padding: 0.2rem 1rem;
+  gap: 0.25rem 1rem;
+  background: #15366a;
+  padding: 0.5rem 1rem;
+}
+
+#site-title {
+  line-height: 2.7rem;
+}
+
+#timezone {
+  max-width: 20rem;
+  width: 100%;
 }
 
 #info {
@@ -517,7 +526,25 @@ onUnmounted(() => clearInterval(interval));
   }
 }
 
+@media (min-width: 25rem) {
+  #top {
+    grid-template-columns: auto 1fr;
+  }
+
+  #site-title {
+    grid-column: 1/-1;
+  }
+}
+
 @media (min-width: 46rem) {
+  #top {
+    grid-template-columns: 1fr auto auto;
+  }
+
+  #site-title {
+    grid-column: unset;
+  }
+
   #period-wrapper {
     display: flex;
   }
