@@ -20,12 +20,11 @@ export function useExtendedInfo(
   /**
    * Helper to adjust an interval to the zone from the user
    */
-  function local(obj: Interval): Interval;
-  function local(obj: DateTime): DateTime;
-  function local(obj: DateTime | Interval) {
-    return DateTime.isDateTime(obj)
-      ? obj.setZone(localTime.value.zone)
-      : localiseInterval(obj, localTime.value.zone);
+  function local<T extends DateTime | Interval>(obj: T): T {
+    if (DateTime.isDateTime(obj)) {
+      return obj.setZone(localTime.value.zone) as T;
+    }
+    return localiseInterval(obj, localTime.value.zone) as T;
   }
 
   const season = computed(() => determineSeason(dragCaveTime.value));
