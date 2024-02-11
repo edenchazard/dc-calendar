@@ -121,6 +121,15 @@ export function useExtendedInfo(
       .pathname;
   });
 
+  const nocturneImage = computed(() => {
+    if (daytime.value.contains(dragCaveTime.value)) {
+      return new URL('/public/eggs/nocturne_daytime.gif', import.meta.url)
+        .pathname;
+    }
+    return new URL('/public/eggs/nocturne_nighttime.webp', import.meta.url)
+      .pathname;
+  });
+
   return {
     season,
     daytime,
@@ -137,5 +146,6 @@ export function useExtendedInfo(
     sunbeamMoonglowImage,
     sunriseSunsetImage,
     harkfrostImage,
+    nocturneImage,
   };
 }

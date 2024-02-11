@@ -146,6 +146,24 @@
             </div>
 
             <img
+              :src="nocturneImage"
+              alt=""
+            />
+            <div>
+              <p>
+                <b>Nocturne Dragons</b> will be active between
+                {{
+                  nighttime.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                }}
+                and
+                {{
+                  nighttime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                }}.
+                <ActiveBadge :condition="nighttime.contains(dcIntlTime)" />
+              </p>
+            </div>
+
+            <img
               :src="harkfrostImage"
               alt=""
             />
@@ -338,6 +356,7 @@ const {
   sunset,
   sunriseSunsetImage,
   harkfrostImage,
+  nocturneImage,
   zombies,
   dst,
   moonSwitchOver,
