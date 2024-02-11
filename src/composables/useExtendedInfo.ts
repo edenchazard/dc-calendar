@@ -50,6 +50,14 @@ export function useExtendedInfo(
     local(getNewYorkDSTPeriodForYear(dragCaveTime.value.year)),
   );
 
+  const gemshardSwitchOver = computed(() =>
+    local(dragCaveTime.value.startOf('day').plus({ days: 1 })),
+  );
+
+  const moonSwitchOver = computed(() =>
+    local(dragCaveTime.value.startOf('day').set({ hour: 20 })),
+  );
+
   const seasonIcon = computed(() => {
     switch (season.value.name) {
       case 'autumn':
@@ -114,29 +122,21 @@ export function useExtendedInfo(
       .pathname;
   });
 
-  const gemshardSwitchOver = computed(() =>
-    local(dragCaveTime.value.startOf('day').plus({ days: 1 })),
-  );
-
-  const moonSwitchOver = computed(() =>
-    local(dragCaveTime.value.startOf('day').set({ hour: 20 })),
-  );
-
   return {
+    season,
     daytime,
     nighttime,
-    season,
-    seasonIcon,
-    offsetWording,
-    fireGem,
-    zombies,
-    sunbeamMoonglowImage,
-    sunriseSunsetImage,
-    harkfrostImage,
     sunrise,
     sunset,
     dst,
+    zombies,
     gemshardSwitchOver,
     moonSwitchOver,
+    fireGem,
+    seasonIcon,
+    offsetWording,
+    sunbeamMoonglowImage,
+    sunriseSunsetImage,
+    harkfrostImage,
   };
 }
