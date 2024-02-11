@@ -427,21 +427,12 @@ onUnmounted(() => clearInterval(interval));
   justify-self: center;
   display: grid;
   grid-template-columns: auto 1fr;
-  max-width: 40rem;
+  max-width: 41rem;
 }
 
 #extended-info > *:nth-child(odd) {
   justify-self: center;
   text-align: center;
-}
-
-#extended-info .cell .svg-inline--fa {
-  width: 4rem;
-  height: 4rem;
-}
-
-#extended-info .cell .offset {
-  font-size: 3rem;
 }
 
 #extended-info p:first-child {
