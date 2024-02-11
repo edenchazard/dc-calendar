@@ -220,7 +220,7 @@
                   fireGem.interval.end.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
                   )
-                }}. Over the next 24 hours:
+                }}. Over the next 23 hours:
               </p>
               <div class="fire-gem-table">
                 <span
@@ -234,7 +234,7 @@
                   :key="dt.start?.toSeconds()"
                   v-for="dt in Interval.fromDateTimes(
                     dcIntlTime.startOf('hour').plus({ hours: 1 }),
-                    dcIntlTime.startOf('hour').plus({ hours: 25 }),
+                    dcIntlTime.startOf('hour').plus({ hours: 24 }),
                   ).splitBy({ hours: 1 })"
                 >
                   {{ dt.start?.setZone(localIntlTime.zone).toFormat('HH') }}
