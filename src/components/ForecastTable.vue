@@ -31,8 +31,12 @@
       class="forecast-cell"
       :key="date.date.toSeconds()"
     >
-      <b class="year">{{ date.date.toFormat('MMM y') }}</b>
-      <b class="day">{{ date.date.toFormat('EEE d') }}</b>
+      <b class="year">{{
+        date.date.toLocaleString({ year: 'numeric', month: 'long' })
+      }}</b>
+      <b class="day">{{
+        date.date.toLocaleString({ weekday: 'short', day: '2-digit' })
+      }}</b>
       <div class="breeds-available">
         <template
           v-for="breed in date.continuing"
@@ -54,7 +58,11 @@
                   class="badge"
                   v-if="breed.probability"
                 >
-                  {{ breed.probability * 100 }}%
+                  {{
+                    Intl.NumberFormat(language, { style: 'percent' }).format(
+                      breed.probability,
+                    )
+                  }}
                 </span>
               </div>
             </div>
@@ -77,7 +85,7 @@
               @mouseenter="openTooltip(breed, $event)"
               @mouseleave="closeTooltip"
             />
-            {{ breed.begin?.toFormat('HH:mm:ss') }}
+            {{ breed.begin?.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
           </li>
         </ul>
       </div>
@@ -98,7 +106,7 @@
               @mouseenter="openTooltip(breed, $event)"
               @mouseleave="closeTooltip"
             />
-            {{ breed?.end?.toFormat('HH:mm:ss') }}
+            {{ breed?.end?.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
           </li>
         </ul>
       </div>
@@ -126,6 +134,7 @@ const props = defineProps({
   },
 });
 
+const language = navigator.language;
 const hoveredBreed = ref();
 const hoveredEgg = ref<HTMLElement>();
 const tooltip = ref<HTMLElement>();
@@ -287,11 +296,6 @@ function closeTooltip() {
 }
 
 .tooltip {
-  /*   background: linear-gradient(
-    45deg,
-    var(--accent-colour) 0,
-    var(--background-colour) 10%
-  ); */
   background-color: var(--background-colour);
   color: var(--accent-colour);
   box-shadow: 0px 0px 7px 0px #000;

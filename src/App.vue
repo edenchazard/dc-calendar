@@ -53,18 +53,12 @@
           <span class="time">Local time</span>
           <span class="font-mono">
             {{
-              localIntlTime.toLocaleString({
-                dateStyle: 'medium',
-                timeStyle: 'medium',
-              })
+              localIntlTime.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
             }}
           </span>
           <span class="time">DC time</span>
           <span class="font-mono">{{
-            dcIntlTime.toLocaleString({
-              dateStyle: 'medium',
-              timeStyle: 'medium',
-            })
+            dcIntlTime.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
           }}</span>
         </div>
         <div id="extended-info-container">
@@ -74,8 +68,8 @@
             <p>
               The current season is
               {{ season.name.slice(0, 1).toUpperCase() + season.name.slice(1) }}
-              {{ season.begin.toLocaleString() }} &mdash;
-              {{ season.end.toLocaleString() }}.
+              {{ season.begin.toLocaleString({ dateStyle: 'full' }) }} &mdash;
+              {{ season.end.toLocaleString({ dateStyle: 'full' }) }}.
               {{ daytime.contains(dcIntlTime) ? 'It is day.' : 'It is night.' }}
               {{ sunrise.contains(dcIntlTime) ? 'The sun is rising.' : '' }}
               {{ sunset.contains(dcIntlTime) ? 'The sun is setting.' : '' }}
@@ -86,7 +80,7 @@
               <p>
                 <b>Dragcave</b> is in
                 <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
-                  dcIntlTime.toFormat('ZZZZ')
+                  dcIntlTime.toFormat('ZZZZ', { locale: 'en-us' })
                 }}</abbr
                 >, {{ offsetWording }}
               </p>
@@ -256,7 +250,11 @@
                     dcIntlTime.startOf('hour').plus({ hours: 24 }),
                   ).splitBy({ hours: 1 })"
                 >
-                  {{ dt.start?.setZone(localIntlTime.zone).toFormat('HH') }}
+                  {{
+                    dt.start
+                      ?.setZone(localIntlTime.zone)
+                      .toLocaleString({ hour: '2-digit' })
+                  }}
                 </span>
               </div>
             </div>
@@ -299,15 +297,30 @@
         class="subsection"
       >
         <p>
-          Between {{ localDateTime.begin.toFormat('MMM d HH:mm:ss') }} and
-          {{ localDateTime.end.toFormat('MMM d HH:mm:ss') }}, the following
-          breeds will be available.
+          Between
+          {{
+            localDateTime.begin.toLocaleString(
+              DateTime.DATETIME_MED_WITH_SECONDS,
+            )
+          }}
+          and
+          {{
+            localDateTime.end.toLocaleString(
+              DateTime.DATETIME_MED_WITH_SECONDS,
+            )
+          }}, the following breeds will be available.
         </p>
 
         <p class="italic">
           (This period corresponds to
-          {{ dcDateTime.begin.toFormat('MMM d HH:mm:ss') }} to
-          {{ dcDateTime.end.toFormat('MMM d HH:mm:ss') }} on DragCave)
+          {{
+            dcDateTime.begin.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+          }}
+          to
+          {{
+            dcDateTime.end.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+          }}
+          on DragCave)
         </p>
 
         <ForecastTable
@@ -539,7 +552,7 @@ onUnmounted(() => clearInterval(interval));
 .fire-gem-table {
   margin-top: 0.4rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(1rem, 1.5rem));
+  grid-template-columns: repeat(auto-fill, 3rem);
 
   > span {
     text-align: center;
