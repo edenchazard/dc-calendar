@@ -35,6 +35,7 @@ library.add(
 );
 
 Settings.defaultZone = 'America/New_York';
+Settings.defaultLocale = navigator.language;
 
 const app = createApp(App);
 
