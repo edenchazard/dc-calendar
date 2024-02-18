@@ -42,6 +42,8 @@ defineProps({
     display: block;
     font-size: 0.8rem;
     padding: 0.5rem 0;
+    word-spacing: 100rem;
+    overflow: hidden;
   }
   > .blue {
     background: rgb(69, 69, 114);
