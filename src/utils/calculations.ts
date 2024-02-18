@@ -274,3 +274,58 @@ export function getFireGemForDateTime(dt: DateTime): {
     ) as Interval<true>,
   };
 }
+
+export function getSpiritWardForDateTime(dt: DateTime): {
+  colour: string;
+  image: string;
+  interval: Interval<true>;
+} {
+  let colour: string;
+  let image: URL;
+  let interval: Interval;
+
+  const getInterval = (diff: number = 2): Interval => {
+    const hoursOver = dt.hour % diff;
+    const begin = dt.minus({ hours: hoursOver }).startOf('hour');
+
+    return Interval.fromDateTimes(
+      begin,
+      begin.plus({ hours: diff }).minus({ milliseconds: 1 }),
+    );
+  };
+
+  if (dt.hour >= 6 && dt.hour < 18) {
+    colour = 'Day';
+    image = new URL('/public/eggs/spirit_ward_day.webp', import.meta.url);
+    interval = Interval.fromDateTimes(
+      dt.set({ hour: 6 }).startOf('hour'),
+      dt.set({ hour: 17 }).endOf('hour'),
+    );
+  } else if ((dt.hour >= 18 && dt.hour < 20) || (dt.hour >= 4 && dt.hour < 6)) {
+    colour = 'Glowy';
+    image = new URL('/public/eggs/spirit_ward_night_1.webp', import.meta.url);
+    interval = getInterval(2);
+  } else if ((dt.hour >= 20 && dt.hour < 22) || (dt.hour >= 2 && dt.hour < 4)) {
+    colour = 'Glowier';
+    image = new URL('/public/eggs/spirit_ward_night_2.webp', import.meta.url);
+    interval = getInterval(2);
+  } else if ((dt.hour >= 22 && dt.hour < 23) || (dt.hour >= 1 && dt.hour < 2)) {
+    colour = 'Glowiest';
+    image = new URL('/public/eggs/spirit_ward_night_3.webp', import.meta.url);
+    interval = getInterval(1);
+  } else {
+    colour = 'Glowmostest';
+    image = new URL('/public/eggs/spirit_ward_night_4.webp', import.meta.url);
+
+    interval = Interval.fromDateTimes(
+      dt.set({ hour: 23 }).startOf('hour'),
+      dt.set({ hour: 23 }).plus({ hours: 1 }).endOf('hour'),
+    );
+  }
+
+  return {
+    colour,
+    image: image.pathname,
+    interval: interval as Interval<true>,
+  };
+}

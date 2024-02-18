@@ -233,30 +233,38 @@
                   fireGem.interval.end.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
                   )
-                }}. Over the next 23 hours:
+                }}. Over the next {{ fireGemForecast.length }} hours:
               </p>
-              <div class="fire-gem-table">
-                <span
-                  :title="`${dt.start
-                    .setZone(localIntlTime.zone)
-                    .toLocaleString(DateTime.TIME_24_WITH_SECONDS)} – ${dt.end
-                    ?.minus({ seconds: 1 })
-                    .setZone(localIntlTime.zone)
-                    .toLocaleString(DateTime.TIME_24_WITH_SECONDS)}`"
-                  :class="getFireGemForDateTime(dt.start).colour.toLowerCase()"
-                  :key="dt.start?.toSeconds()"
-                  v-for="dt in Interval.fromDateTimes(
-                    dcIntlTime.startOf('hour').plus({ hours: 1 }),
-                    dcIntlTime.startOf('hour').plus({ hours: 24 }),
-                  ).splitBy({ hours: 1 })"
-                >
-                  {{
-                    dt.start
-                      ?.setZone(localIntlTime.zone)
-                      .toLocaleString({ hour: '2-digit', minute: '2-digit' })
-                  }}
-                </span>
-              </div>
+              <HourlyTable
+                :forecast="fireGemForecast"
+                class="hourly-table"
+              />
+            </div>
+
+            <img
+              :src="spiritWard.image"
+              alt=""
+            />
+            <div>
+              <p>
+                <b>Spirit Ward Dragons</b> are currently in their
+                <b>{{ spiritWard.colour.toLowerCase() }}</b> form between
+                {{
+                  spiritWard.interval.start.toLocaleString(
+                    DateTime.TIME_24_WITH_SECONDS,
+                  )
+                }}
+                and
+                {{
+                  spiritWard.interval.end.toLocaleString(
+                    DateTime.TIME_24_WITH_SECONDS,
+                  )
+                }}. Over the next {{ spiritWardForecast.length }} hours:
+              </p>
+              <HourlyTable
+                :forecast="spiritWardForecast"
+                class="hourly-table"
+              />
             </div>
           </div>
         </div>
@@ -344,11 +352,11 @@
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useLocalStorage } from '@vueuse/core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { DateTime, Interval } from 'luxon';
+import { DateTime } from 'luxon';
 import ActiveBadge from './components/ActiveBadge.vue';
 import ForecastTable from './components/ForecastTable.vue';
 import { useExtendedInfo } from '@/composables/useExtendedInfo';
-import { getFireGemForDateTime } from './utils/calculations';
+import HourlyTable from './components/HourlyTable.vue';
 
 const timezones = Intl.supportedValuesOf('timeZone');
 let interval: ReturnType<typeof setInterval>;
@@ -385,6 +393,9 @@ const {
   seasonIcon,
   gemshardSwitchOver,
   fireGem,
+  fireGemForecast,
+  spiritWard,
+  spiritWardForecast,
   offsetWording,
   sunbeamMoonglowImage,
   sunrise,
@@ -492,7 +503,7 @@ onUnmounted(() => clearInterval(interval));
   justify-self: center;
   display: grid;
   grid-template-columns: auto 1fr;
-  max-width: 41rem;
+  max-width: 42rem;
 }
 
 #extended-info > *:nth-child(odd) {
@@ -511,6 +522,7 @@ onUnmounted(() => clearInterval(interval));
 #extended-info img {
   max-height: 3rem;
 }
+
 #period {
   background: darkslateblue;
   padding: 1rem;
@@ -544,31 +556,13 @@ onUnmounted(() => clearInterval(interval));
   display: block;
 }
 
+.hourly-table {
+  margin-top: 0.5rem;
+}
+
 #bottom {
   text-align: center;
   font-size: 0.8rem;
-}
-
-.fire-gem-table {
-  margin-top: 0.4rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 3rem);
-
-  > span {
-    text-align: center;
-    display: block;
-    font-size: 0.8rem;
-    padding: 0.5rem 0;
-  }
-  > .blue {
-    background: rgb(69, 69, 114);
-  }
-  > .green {
-    background: rgb(87, 128, 87);
-  }
-  > .red {
-    background: rgb(110, 73, 73);
-  }
 }
 
 @media (min-width: 10rem) {
