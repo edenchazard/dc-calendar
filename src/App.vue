@@ -3,7 +3,7 @@
     id="top"
     class="max-content"
   >
-    <h1 id="site-title">Dragcave Calendar</h1>
+    <h1 id="site-title">Dragon Cave Calendar</h1>
     <nav id="menu">
       <a href="https://github.com/edenchazard/dc-calendar"
         ><FontAwesomeIcon icon="fa-brands fa-github" /> Github
@@ -78,7 +78,7 @@
             <FontAwesomeIcon icon="fa-solid fa-clock" />
             <div>
               <p>
-                <b>Dragcave</b> is in
+                <b>Dragon Cave</b> is in
                 <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
                   dcIntlTime.toFormat('ZZZZ', { locale: 'en-us' })
                 }}</abbr
@@ -328,7 +328,7 @@
           {{
             dcDateTime.end.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
           }}
-          on DragCave)
+          on Dragon Cave)
         </p>
 
         <ForecastTable
@@ -343,7 +343,7 @@
     <p>
       &copy; eden chazard. Graphics courtesy of <b>Winya</b> with programming
       contributions from <b>Mu-Cephei (endulum)</b> and <b>Hourai</b>. Art
-      &copy; Dragcave and artists.
+      &copy; Dragon Cave and artists.
     </p>
   </footer>
 </template>
