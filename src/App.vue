@@ -68,8 +68,8 @@
             <p>
               The current season is
               {{ season.name.slice(0, 1).toUpperCase() + season.name.slice(1) }}
-              {{ season.begin.toLocaleString({ dateStyle: 'full' }) }} &mdash;
-              {{ season.end.toLocaleString({ dateStyle: 'full' }) }}.
+              {{ season.begin.toLocaleString({ dateStyle: 'short' }) }} &mdash;
+              {{ season.end.toLocaleString({ dateStyle: 'short' }) }}.
               {{ daytime.contains(dcIntlTime) ? 'It is day.' : 'It is night.' }}
               {{ sunrise.contains(dcIntlTime) ? 'The sun is rising.' : '' }}
               {{ sunset.contains(dcIntlTime) ? 'The sun is setting.' : '' }}
