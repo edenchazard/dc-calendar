@@ -253,7 +253,7 @@
                   {{
                     dt.start
                       ?.setZone(localIntlTime.zone)
-                      .toLocaleString({ hour: '2-digit' })
+                      .toLocaleString({ hour: '2-digit', minute: '2-digit' })
                   }}
                 </span>
               </div>
