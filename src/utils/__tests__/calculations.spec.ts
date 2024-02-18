@@ -4,11 +4,13 @@ import {
   getFireGemForDateTime,
   getNewYorkDSTPeriodForYear,
   getNighttimeIntervalForDateTime,
+  getSpiritWardForDateTime,
   getSunriseIntervalForDateTime,
   getSunsetIntervalForDateTime,
   getZombieIntervalForDateTime,
 } from '../calculations';
 import { DateTime } from 'luxon';
+import { getOverlappingRangeOrNearest } from '../utils';
 
 describe('Calculations', () => {
   describe('#getNewYorkDSTPeriodForYear', () => {
@@ -233,10 +235,10 @@ describe('Calculations', () => {
           minute: 23,
         });
 
-        const green = getFireGemForDateTime(dt);
+        const blue = getFireGemForDateTime(dt);
 
-        expect(green).to.have.property('colour', 'Blue');
-        expect(green.interval.end?.toString()).to.be.eql(
+        expect(blue).to.have.property('colour', 'Blue');
+        expect(blue.interval.end?.toString()).to.be.eql(
           dt.endOf('hour').toString(),
         );
       });
@@ -251,10 +253,10 @@ describe('Calculations', () => {
           minute: 23,
         });
 
-        const green = getFireGemForDateTime(dt);
+        const red = getFireGemForDateTime(dt);
 
-        expect(green).to.have.property('colour', 'Red');
-        expect(green.interval.end?.toString()).to.be.eql(
+        expect(red).to.have.property('colour', 'Red');
+        expect(red.interval.end?.toString()).to.be.eql(
           dt.endOf('hour').toString(),
         );
       });
@@ -276,6 +278,152 @@ describe('Calculations', () => {
           dt.endOf('hour').toString(),
         );
       });
+    });
+  });
+
+  describe('#getSpiritWardForDateTime', () => {
+    it('returns day between 6am and 6pm', () => {
+      const dt = DateTime.fromObject({
+        month: 1,
+        day: 1,
+        hour: 6,
+        minute: 0,
+      });
+
+      const spiritWard = getSpiritWardForDateTime(dt);
+
+      expect(spiritWard).to.have.property('colour', 'Day');
+      expect(spiritWard.interval.toString()).to.be.eql(
+        '[2024-01-01T06:00:00.000+00:00 – 2024-01-01T17:59:59.999+00:00)',
+      );
+    });
+
+    it('returns night 1 between 6pm and 8pm', () => {
+      const dt = DateTime.fromObject({
+        month: 1,
+        day: 1,
+        hour: 19,
+        minute: 0,
+      });
+
+      const spiritWard = getSpiritWardForDateTime(dt);
+
+      expect(spiritWard).to.have.property('colour', 'Glowy');
+      expect(spiritWard.interval.toString()).to.be.eql(
+        '[2024-01-01T18:00:00.000+00:00 – 2024-01-01T19:59:59.999+00:00)',
+      );
+    });
+
+    it('returns night 1 between 4am and 6am', () => {
+      const dt = DateTime.fromObject({
+        month: 1,
+        day: 1,
+        hour: 5,
+        minute: 0,
+      });
+
+      const spiritWard = getSpiritWardForDateTime(dt);
+
+      expect(spiritWard).to.have.property('colour', 'Glowy');
+      expect(spiritWard.interval.toString()).to.be.eql(
+        '[2024-01-01T04:00:00.000+00:00 – 2024-01-01T05:59:59.999+00:00)',
+      );
+    });
+
+    it('returns night 2 between 8pm and 10pm', () => {
+      const dt = DateTime.fromObject({
+        month: 1,
+        day: 1,
+        hour: 20,
+        minute: 0,
+      });
+
+      const spiritWard = getSpiritWardForDateTime(dt);
+
+      expect(spiritWard).to.have.property('colour', 'Glowier');
+      expect(spiritWard.interval.toString()).to.be.eql(
+        '[2024-01-01T20:00:00.000+00:00 – 2024-01-01T21:59:59.999+00:00)',
+      );
+    });
+
+    it('returns night 2 between 2am and 4am', () => {
+      const dt = DateTime.fromObject({
+        month: 1,
+        day: 1,
+        hour: 2,
+        minute: 0,
+      });
+
+      const spiritWard = getSpiritWardForDateTime(dt);
+
+      expect(spiritWard).to.have.property('colour', 'Glowier');
+      expect(spiritWard.interval.toString()).to.be.eql(
+        '[2024-01-01T02:00:00.000+00:00 – 2024-01-01T03:59:59.999+00:00)',
+      );
+    });
+
+    it('returns night 3 between 10pm and 11pm', () => {
+      const dt = DateTime.fromObject({
+        month: 1,
+        day: 1,
+        hour: 22,
+        minute: 30,
+      });
+
+      const spiritWard = getSpiritWardForDateTime(dt);
+
+      expect(spiritWard).to.have.property('colour', 'Glowiest');
+      expect(spiritWard.interval.toString()).to.be.eql(
+        '[2024-01-01T22:00:00.000+00:00 – 2024-01-01T22:59:59.999+00:00)',
+      );
+    });
+
+    it('returns night 3 between 1am and 2am', () => {
+      const dt = DateTime.fromObject({
+        month: 1,
+        day: 1,
+        hour: 1,
+        minute: 30,
+      });
+
+      const spiritWard = getSpiritWardForDateTime(dt);
+
+      expect(spiritWard).to.have.property('colour', 'Glowiest');
+      expect(spiritWard.interval.toString()).to.be.eql(
+        '[2024-01-01T01:00:00.000+00:00 – 2024-01-01T01:59:59.999+00:00)',
+      );
+    });
+
+    it('returns night 4 between 11pm and midnight', () => {
+      const dt = DateTime.fromObject({
+        month: 1,
+        day: 1,
+        hour: 23,
+        minute: 30,
+      });
+
+      const spiritWard = getSpiritWardForDateTime(dt);
+
+      expect(spiritWard).to.have.property('colour', 'Glowmostest');
+      expect(spiritWard.interval.toString()).to.be.eql(
+        '[2024-01-01T23:00:00.000+00:00 – 2024-01-02T00:59:59.999+00:00)',
+      );
+    });
+
+    it('returns night 4 between midnight and 1am', () => {
+      const dt = DateTime.fromObject({
+        month: 1,
+        day: 1,
+        hour: 0,
+        minute: 30,
+      });
+
+      const spiritWard = getSpiritWardForDateTime(dt);
+
+      expect(spiritWard).to.have.property('colour', 'Glowmostest');
+      expect(spiritWard.interval.toString()).to.be.eql(
+        '[2024-01-01T23:00:00.000+00:00 – 2024-01-02T00:59:59.999+00:00)',
+      );
     });
   });
 });

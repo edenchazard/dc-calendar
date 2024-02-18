@@ -4,6 +4,7 @@ import {
   getFireGemForDateTime,
   getNewYorkDSTPeriodForYear,
   getNighttimeIntervalForDateTime,
+  getSpiritWardForDateTime,
   getSunriseIntervalForDateTime,
   getSunsetIntervalForDateTime,
   getZombieIntervalForDateTime,
@@ -90,6 +91,48 @@ export function useExtendedInfo(
     };
   });
 
+  const fireGemForecast = computed(() =>
+    Interval.fromDateTimes(
+      dragCaveTime.value.startOf('hour').plus({ hours: 1 }),
+      dragCaveTime.value.startOf('hour').plus({ hours: 25 }),
+    )
+      .splitBy({ hours: 1 })
+      .map((period) => {
+        const gem = getFireGemForDateTime(period.start as DateTime);
+
+        return {
+          date: local(period.start as DateTime),
+          ...gem,
+          interval: local(gem.interval),
+        };
+      }),
+  );
+
+  const spiritWard = computed(() => {
+    const spirit = getSpiritWardForDateTime(dragCaveTime.value);
+    return {
+      ...spirit,
+      interval: local(spirit.interval),
+    };
+  });
+
+  const spiritWardForecast = computed(() =>
+    Interval.fromDateTimes(
+      dragCaveTime.value.startOf('hour').plus({ hours: 1 }),
+      dragCaveTime.value.startOf('hour').plus({ hours: 25 }),
+    )
+      .splitBy({ hours: 1 })
+      .map((period) => {
+        const spiritWard = getSpiritWardForDateTime(period.start as DateTime);
+
+        return {
+          date: local(period.start as DateTime),
+          ...spiritWard,
+          interval: local(spiritWard.interval),
+        };
+      }),
+  );
+
   const zombies = computed(() =>
     local(getZombieIntervalForDateTime(dragCaveTime.value)),
   );
@@ -149,7 +192,10 @@ export function useExtendedInfo(
     zombies,
     gemshardSwitchOver,
     moonSwitchOver,
+    spiritWard,
+    spiritWardForecast,
     fireGem,
+    fireGemForecast,
     seasonIcon,
     offsetWording,
     sunbeamMoonglowImage,
