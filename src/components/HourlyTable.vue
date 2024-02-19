@@ -4,9 +4,9 @@
       :title="`${hourly.colour}: ${hourly.interval.start.toLocaleString(
         DateTime.TIME_24_WITH_SECONDS,
       )} – ${hourly.interval.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)}`"
-      :key="hourly.interval.start.toSeconds()"
+      :key="index"
       :class="hourly.colour.toLowerCase()"
-      v-for="hourly in forecast"
+      v-for="(hourly, index) in forecast"
     >
       {{ hourly.date.toLocaleString(DateTime.TIME_SIMPLE) }}
     </span>
