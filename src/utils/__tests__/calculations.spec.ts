@@ -8,6 +8,7 @@ import {
   getSunriseIntervalForDateTime,
   getSunsetIntervalForDateTime,
   getZombieIntervalForDateTime,
+  getZombieMonthForDateTime,
 } from '../calculations';
 import { DateTime } from 'luxon';
 import { getOverlappingRangeOrNearest } from '../utils';
@@ -424,6 +425,38 @@ describe('Calculations', () => {
       expect(spiritWard.interval.toString()).to.be.eql(
         '[2024-01-01T23:00:00.000+00:00 – 2024-01-02T00:59:59.999+00:00)',
       );
+    });
+  });
+
+  describe('#getZombieMonthForDateTime', () => {
+    it('returns the current month with 31 days', () => {
+      const monthsWith31Days = [1, 3, 5, 7, 8, 10, 12];
+      monthsWith31Days.forEach((month) => {
+        const dt = DateTime.fromObject({
+          year: 2024,
+          month,
+          day: 2,
+        }).startOf('day');
+
+        expect(getZombieMonthForDateTime(dt).month).to.be.eql(dt.month);
+      });
+    });
+
+    it('returns the next month with 31 days', () => {
+      const monthsWithout31Days = [2, 4, 6, 9, 11];
+      const monthsWith31Days = [3, 5, 7, 10, 12];
+
+      monthsWithout31Days.forEach((month, index) => {
+        const dt = DateTime.fromObject({
+          year: 2024,
+          month,
+          day: 2,
+        }).startOf('day');
+
+        expect(getZombieMonthForDateTime(dt).month).to.be.eql(
+          monthsWith31Days[index],
+        );
+      });
     });
   });
 });
