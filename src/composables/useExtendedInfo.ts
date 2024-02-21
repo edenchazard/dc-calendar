@@ -8,6 +8,7 @@ import {
   getSunriseIntervalForDateTime,
   getSunsetIntervalForDateTime,
   getZombieIntervalForDateTime,
+  getZombieMonthForDateTime,
 } from '@/utils/calculations';
 import { localiseInterval } from '@/utils/utils';
 import { Interval, DateTime } from 'luxon';
@@ -182,6 +183,10 @@ export function useExtendedInfo(
       .pathname;
   });
 
+  const zombieMonth = computed(() =>
+    local(getZombieMonthForDateTime(dragCaveTime.value)),
+  );
+
   return {
     season,
     daytime,
@@ -190,6 +195,7 @@ export function useExtendedInfo(
     sunset,
     dst,
     zombies,
+    zombieMonth,
     gemshardSwitchOver,
     moonSwitchOver,
     spiritWard,

@@ -126,13 +126,22 @@
               :src="zombieImage"
               alt=""
             />
-            <p>
-              <b>Undead Dragons</b> will be active between
-              {{ zombies.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
-              and
-              {{ zombies.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
-              <ActiveBadge :condition="zombies.contains(dcIntlTime)" />
-            </p>
+            <div>
+              <p>
+                <b>Undead Dragons</b> will be active between
+                {{
+                  zombies.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                }}
+                and
+                {{ zombies.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
+                <ActiveBadge :condition="zombies.contains(dcIntlTime)" />
+              </p>
+              <p>
+                On the {{ zombieMonth.toLocaleString(DateTime.DATETIME_MED) }},
+                dragons will have an increased chance of zombifying
+                successfully.
+              </p>
+            </div>
 
             <img
               :src="sunbeamMoonglowImage"
@@ -405,6 +414,7 @@ const {
   nocturneImage,
   zombieImage,
   zombies,
+  zombieMonth,
   dst,
   moonSwitchOver,
 } = useExtendedInfo(dcIntlTime, localIntlTime);

@@ -329,3 +329,9 @@ export function getSpiritWardForDateTime(dt: DateTime): {
     interval: interval as Interval<true>,
   };
 }
+
+export function getZombieMonthForDateTime(dt: DateTime) {
+  let m = dt.set({ day: 2 });
+  for (; m.daysInMonth !== 31; m = m.plus({ months: 1 }));
+  return m.endOf('month').startOf('day');
+}
