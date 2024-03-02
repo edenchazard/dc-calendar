@@ -11,26 +11,18 @@ import {
   getZombieMonthForDateTime,
 } from '../calculations';
 import { DateTime } from 'luxon';
-import { getOverlappingRangeOrNearest } from '../utils';
 
 describe('Calculations', () => {
   describe('#getNewYorkDSTPeriodForYear', () => {
-    it('calculates beginning and ending for years 2023 to 2026', () => {
-      const p2023 = getNewYorkDSTPeriodForYear(2023);
-      expect(p2023.start?.toSeconds()).to.be.eql(1678586399);
-      expect(p2023.end?.toSeconds()).to.be.eql(1699149599);
-
-      const p2024 = getNewYorkDSTPeriodForYear(2024);
-      expect(p2024.start?.toSeconds()).to.be.eql(1710035999);
-      expect(p2024.end?.toSeconds()).to.be.eql(1730599199);
-
-      const p2025 = getNewYorkDSTPeriodForYear(2025);
-      expect(p2025.start?.toSeconds()).to.be.eql(1741485599);
-      expect(p2025.end?.toSeconds()).to.be.eql(1762048799);
-
-      const p2026 = getNewYorkDSTPeriodForYear(2026);
-      expect(p2026.start?.toSeconds()).to.be.eql(1772935199);
-      expect(p2026.end?.toSeconds()).to.be.eql(1793498399);
+    it.each([
+      [2023, 1678586399, 1699149599],
+      [2024, 1710035999, 1730599199],
+      [2025, 1741485599, 1762048799],
+      [2026, 1772935199, 1793498399],
+    ])('calculates beginning and ending for year %i', (year, start, end) => {
+      const dst = getNewYorkDSTPeriodForYear(year);
+      expect(dst.start?.toSeconds()).to.be.eql(start);
+      expect(dst.end?.toSeconds()).to.be.eql(end);
     });
   });
 
@@ -227,8 +219,9 @@ describe('Calculations', () => {
   });
 
   describe('#getFireGemForDateTime', () => {
-    it('returns blue fire gem for hours 0, 3, 6, 9, 12, 15, 18, 21', () => {
-      [0, 3, 6, 9, 12, 15, 18, 21].forEach((hour) => {
+    it.each([0, 3, 6, 9, 12, 15, 18, 21])(
+      'returns blue fire gem for hour %i',
+      (hour) => {
         const dt = DateTime.fromObject({
           month: 1,
           day: 1,
@@ -242,11 +235,12 @@ describe('Calculations', () => {
         expect(blue.interval.end?.toString()).to.be.eql(
           dt.endOf('hour').toString(),
         );
-      });
-    });
+      },
+    );
 
-    it('returns red fire gem for hours 1, 4, 7, 10, 13, 16, 19, 22', () => {
-      [1, 4, 7, 10, 13, 16, 19, 22].forEach((hour) => {
+    it.each([1, 4, 7, 10, 13, 16, 19, 22])(
+      'returns red fire gem for hour %i',
+      (hour) => {
         const dt = DateTime.fromObject({
           month: 1,
           day: 1,
@@ -260,11 +254,12 @@ describe('Calculations', () => {
         expect(red.interval.end?.toString()).to.be.eql(
           dt.endOf('hour').toString(),
         );
-      });
-    });
+      },
+    );
 
-    it('returns green fire gem for hours 2, 5, 8, 11, 14, 17, 20, 23', () => {
-      [2, 5, 8, 11, 14, 17, 20, 23].forEach((hour) => {
+    it.each([2, 5, 8, 11, 14, 17, 20, 23])(
+      'returns green fire gem for hour %i',
+      (hour) => {
         const dt = DateTime.fromObject({
           month: 1,
           day: 1,
@@ -278,8 +273,8 @@ describe('Calculations', () => {
         expect(green.interval.end?.toString()).to.be.eql(
           dt.endOf('hour').toString(),
         );
-      });
-    });
+      },
+    );
   });
 
   describe('#getSpiritWardForDateTime', () => {
@@ -429,34 +424,36 @@ describe('Calculations', () => {
   });
 
   describe('#getZombieMonthForDateTime', () => {
-    it('returns the current month with 31 days', () => {
-      const monthsWith31Days = [1, 3, 5, 7, 8, 10, 12];
-      monthsWith31Days.forEach((month) => {
-        const dt = DateTime.fromObject({
+    it.each(
+      [
+        [1, 1],
+        [2, 3],
+        [3, 3],
+        [4, 5],
+        [5, 5],
+        [6, 7],
+        [7, 7],
+        [8, 8],
+        [9, 10],
+        [10, 10],
+        [11, 12],
+      ].map(([m, expected]) => [
+        DateTime.fromObject({ month: expected }).monthLong,
+        DateTime.fromObject({ month: m }).monthLong,
+        m,
+        expected,
+      ]),
+    )('returns %s for %s', (_, _1, month, expected) => {
+      const zombie = getZombieMonthForDateTime(
+        DateTime.fromObject({
           year: 2024,
           month,
           day: 2,
-        }).startOf('day');
+        }).startOf('day'),
+      );
 
-        expect(getZombieMonthForDateTime(dt).month).to.be.eql(dt.month);
-      });
-    });
-
-    it('returns the next month with 31 days', () => {
-      const monthsWithout31Days = [2, 4, 6, 9, 11];
-      const monthsWith31Days = [3, 5, 7, 10, 12];
-
-      monthsWithout31Days.forEach((month, index) => {
-        const dt = DateTime.fromObject({
-          year: 2024,
-          month,
-          day: 2,
-        }).startOf('day');
-
-        expect(getZombieMonthForDateTime(dt).month).to.be.eql(
-          monthsWith31Days[index],
-        );
-      });
+      expect(zombie.daysInMonth).to.be.eql(31);
+      expect(zombie.month).to.be.eql(expected);
     });
   });
 });
