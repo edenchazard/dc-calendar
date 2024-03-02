@@ -6,7 +6,7 @@ import vue from '@vitejs/plugin-vue';
 export default defineConfig({
   plugins: [vue()],
   build: {
-    outDir: './pages',
+    outDir: './docs',
     emptyOutDir: true,
   },
   base: '/dc-calendar/',
