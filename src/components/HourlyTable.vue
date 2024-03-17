@@ -46,13 +46,13 @@ defineProps({
     overflow: hidden;
   }
   > .blue {
-    background: rgb(69, 69, 114);
+    background: #1d3f94;
   }
   > .green {
-    background: rgb(87, 128, 87);
+    background: #13623a;
   }
   > .red {
-    background: rgb(110, 73, 73);
+    background: #8e0d14;
   }
 
   > .day {
