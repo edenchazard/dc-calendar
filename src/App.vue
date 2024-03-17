@@ -94,7 +94,7 @@
                   dst.end.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
                 }}. Server time will go forwards 1 hour and backwards 1 hour at
                 these times respectively.
-                <ActiveBadge :condition="dcIntlTime.isInDST" />
+                <ActiveBadge :condition="dst.contains(dcIntlTime)" />
               </p>
             </div>
 
