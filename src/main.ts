@@ -9,6 +9,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 /* import specific icons */
 import {
   faSnowflake,
+  faLeaf,
   faSun,
   faClock,
   faSkull,
@@ -19,7 +20,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Settings } from 'luxon';
-import { faGithub } from '@fortawesome/free-brands-svg-icons';
+import {
+  faGithub,
+  faCanadianMapleLeaf,
+} from '@fortawesome/free-brands-svg-icons';
 
 /* add icons to the library */
 library.add(
@@ -32,6 +36,8 @@ library.add(
   faToolbox,
   faCoffee,
   faGithub,
+  faCanadianMapleLeaf,
+  faLeaf,
 );
 
 Settings.defaultZone = 'America/New_York';
