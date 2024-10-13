@@ -64,7 +64,7 @@
         <div id="extended-info-container">
           <h2>Right now...</h2>
           <div id="extended-info">
-            <FontAwesomeIcon :icon="`fa-solid fa-${seasonIcon}`" />
+            <FontAwesomeIcon :icon="seasonIcon" />
             <p>
               The current season is
               {{ season.name.slice(0, 1).toUpperCase() + season.name.slice(1) }}

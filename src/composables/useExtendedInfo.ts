@@ -62,13 +62,13 @@ export function useExtendedInfo(
   const seasonIcon = computed(() => {
     switch (season.value.name) {
       case 'autumn':
-        return 'canadian-maple-leaf';
+        return 'fa-brands fa-canadian-maple-leaf';
       case 'spring':
-        return 'leaf';
+        return 'fa-solid fa-leaf';
       case 'summer':
-        return 'sun';
+        return 'fa-solid fa-sun';
     }
-    return 'snowflake';
+    return 'fa-solid fa-snowflake';
   });
 
   const offsetWording = computed(() => {
