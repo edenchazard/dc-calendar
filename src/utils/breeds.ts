@@ -103,6 +103,102 @@ export function getBreedsLocal() {
     },
 
     (d) => {
+      const begin = DateTime.fromObject({ day: 25, month: 10, year: d.year });
+      const end = DateTime.fromObject({
+        day: 31,
+        month: 10,
+        year: d.year,
+        hour: 23,
+        minute: 59,
+        second: 59,
+      });
+      return {
+        name: 'Previous Halloweens',
+        biome: 'Holiday',
+        image: new URL('/public/eggs/mint_halloween.png', import.meta.url)
+          .pathname,
+        backgroundColour: '#993300',
+        accentColour: '#000',
+        availability: d >= begin && d <= end,
+        begin,
+        end,
+      };
+    },
+
+    (d) => {
+      const begin = DateTime.fromObject({ day: 31, month: 10, year: d.year });
+      const end = DateTime.fromObject({
+        day: 31,
+        month: 10,
+        year: d.year,
+        hour: 23,
+        minute: 59,
+        second: 59,
+      });
+      return {
+        name: `${d.year} Halloween`,
+        biome: 'All',
+        image: new URL('/public/eggs/mystery.gif', import.meta.url).pathname,
+        backgroundColour: '#993300',
+        accentColour: '#000',
+        availability: d.toISODate() === begin.toISODate(),
+        begin,
+        end,
+      };
+    },
+
+    (d) => {
+      const begin = DateTime.fromObject({ day: 19, month: 12, year: d.year });
+      const end = DateTime.fromObject({
+        day: 25,
+        month: 12,
+        year: d.year,
+        hour: 23,
+        minute: 59,
+        second: 59,
+      });
+      return {
+        name: 'Previous Holidays',
+        biome: 'Holiday',
+        image: new URL('/public/eggs/mint_christmas.png', import.meta.url)
+          .pathname,
+        backgroundColour: '#FFC0CB',
+        accentColour: '#000',
+        availability: d >= begin && d <= end,
+        begin,
+        end,
+      };
+    },
+
+    (d) => {
+      const begin = DateTime.fromObject({
+        day: 25,
+        month: 12,
+        year: d.year,
+      });
+
+      const end = DateTime.fromObject({
+        day: 27,
+        month: 12,
+        year: d.year,
+        hour: 23,
+        minute: 59,
+        second: 59,
+      });
+
+      return {
+        name: `${d.year} Holiday`,
+        biome: 'All',
+        image: new URL('/public/eggs/mystery.gif', import.meta.url).pathname,
+        backgroundColour: '#FFC0CB',
+        accentColour: '#000',
+        availability: d >= begin && d <= end,
+        begin,
+        end,
+      };
+    },
+
+    (d) => {
       const begin = DateTime.fromObject({ day: 21, month: 5, year: d.year });
       return {
         name: 'Birthday Release',
