@@ -13,7 +13,6 @@ import {
 import { localiseInterval } from '@/utils/utils';
 import { Interval, DateTime } from 'luxon';
 import type { Ref } from 'vue';
-import { computed } from 'vue';
 
 export function useExtendedInfo(
   dragCaveTime: Ref<DateTime>,

@@ -1,12 +1,6 @@
-import './assets/main.css';
-
-import { createApp } from 'vue';
-import App from './App.vue';
-
-/* import the fontawesome core */
-import { library } from '@fortawesome/fontawesome-svg-core';
-
-/* import specific icons */
+// For Nuxt 3
+import { library, config } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {
   faSnowflake,
   faLeaf,
@@ -18,12 +12,13 @@ import {
   faToolbox,
   faCoffee,
 } from '@fortawesome/free-solid-svg-icons';
-
-import { Settings } from 'luxon';
 import {
   faGithub,
   faCanadianMapleLeaf,
 } from '@fortawesome/free-brands-svg-icons';
+
+// This is important, we are going to let Nuxt worry about the CSS
+config.autoAddCss = false;
 
 /* add icons to the library */
 library.add(
@@ -40,9 +35,6 @@ library.add(
   faLeaf,
 );
 
-Settings.defaultZone = 'America/New_York';
-Settings.defaultLocale = navigator.language;
-
-const app = createApp(App);
-
-app.mount('#app');
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.component('font-awesome-icon', FontAwesomeIcon);
+});

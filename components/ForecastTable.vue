@@ -1,30 +1,4 @@
 <template>
-  <template v-if="hoveredBreed">
-    <div
-      class="tooltip"
-      ref="tooltip"
-      :style="{
-        ...floatingStyles,
-        '--background-colour': hoveredBreed.backgroundColour,
-        '--accent-colour': hoveredBreed.accentColour,
-      }"
-    >
-      <b class="name">{{ hoveredBreed.name }}</b>
-
-      <div class="biomes">
-        <b
-          :key="biome"
-          class="biome"
-          :class="biome.toLowerCase()"
-          v-for="biome in Array.isArray(hoveredBreed.biome)
-            ? hoveredBreed.biome
-            : [hoveredBreed.biome]"
-        >
-          {{ biome }}
-        </b>
-      </div>
-    </div>
-  </template>
   <div class="forecast-table">
     <div
       v-for="date in forecast"
@@ -42,30 +16,24 @@
           v-for="breed in date.continuing"
           :key="`${date.date.toSeconds()}-${breed.name}`"
         >
-          <div
-            class="breed"
-            @mouseenter="openTooltip(breed, $event)"
-            @mouseleave="closeTooltip"
-          >
-            <div class="egg-container">
-              <div class="egg-wrapper">
-                <img
-                  :alt="breed.name"
-                  :src="breed.image"
-                  class="egg"
-                />
-                <span
-                  class="badge"
-                  v-if="breed.probability"
-                >
-                  {{
-                    Intl.NumberFormat(language, { style: 'percent' }).format(
-                      breed.probability,
-                    )
-                  }}
-                </span>
-              </div>
-            </div>
+          <div class="breed">
+            <TooltipBreed :hoveredBreed="breed">
+              <img
+                :alt="breed.name"
+                :src="breed.image"
+                class="egg"
+              />
+              <span
+                class="badge"
+                v-if="breed.probability"
+              >
+                {{
+                  Intl.NumberFormat(language, { style: 'percent' }).format(
+                    breed.probability,
+                  )
+                }}
+              </span>
+            </TooltipBreed>
           </div>
         </template>
       </div>
@@ -82,8 +50,6 @@
             <img
               :alt="breed.name"
               :src="breed.image"
-              @mouseenter="openTooltip(breed, $event)"
-              @mouseleave="closeTooltip"
             />
             {{ breed.begin?.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
           </li>
@@ -103,8 +69,6 @@
             <img
               :alt="breed.name"
               :src="breed.image"
-              @mouseenter="openTooltip(breed, $event)"
-              @mouseleave="closeTooltip"
             />
             {{ breed?.end?.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
           </li>
@@ -115,10 +79,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-import { useFloating, autoUpdate, flip, offset } from '@floating-ui/vue';
 import { DateTime } from 'luxon';
 import { getBreedsLocal } from '@/utils/breeds';
+import TooltipBreed from '@/components/TooltipBreed.vue';
 
 const props = defineProps({
   from: {
@@ -135,9 +98,6 @@ const props = defineProps({
 });
 
 const language = navigator.language;
-const hoveredBreed = ref();
-const hoveredEgg = ref<HTMLElement>();
-const tooltip = ref<HTMLElement>();
 
 const forecast = computed(() => {
   const breeds = getBreedsLocal();
@@ -191,46 +151,6 @@ const forecast = computed(() => {
   }
   return dayForecast;
 });
-
-const { floatingStyles } = useFloating(hoveredEgg, tooltip, {
-  whileElementsMounted: autoUpdate,
-  transform: true,
-  placement: 'top',
-  strategy: 'fixed',
-  middleware: [
-    offset(({ placement }) => {
-      if (placement.startsWith('bottom')) {
-        return 20;
-      }
-      if (hoveredBreed.value.appearing || hoveredBreed.value.leaving) {
-        return 10;
-      }
-      return 60;
-    }),
-    flip({
-      fallbackPlacements: [
-        'top-end',
-        'top-start',
-        'bottom',
-        'bottom-start',
-        'bottom-end',
-      ],
-    }),
-  ],
-});
-
-function openTooltip(breed, e: Event) {
-  if (e.target instanceof HTMLElement) {
-    hoveredBreed.value = breed;
-    hoveredEgg.value = (e.target.querySelector('.egg') ??
-      e.target) as HTMLElement;
-  }
-}
-
-function closeTooltip() {
-  hoveredBreed.value = null;
-  hoveredEgg.value = undefined;
-}
 </script>
 
 <style scoped lang="postcss">
@@ -272,20 +192,6 @@ function closeTooltip() {
   position: relative;
 }
 
-.breeds-available .egg-container {
-  height: 3rem;
-  position: relative;
-  width: 2rem;
-}
-.breeds-available .egg-container .egg-wrapper {
-  transition: transform 0.2s;
-  position: absolute;
-}
-
-.breeds-available .egg-container:hover .egg-wrapper {
-  transform: translateY(-100%);
-}
-
 .badge {
   font-size: 0.7rem;
   width: 2rem;
@@ -293,60 +199,6 @@ function closeTooltip() {
   color: #fff;
   display: block;
   z-index: 10;
-}
-
-.tooltip {
-  background-color: var(--background-colour);
-  color: var(--accent-colour);
-  box-shadow: 0px 0px 7px 0px #000;
-  padding: 0.25rem;
-  border-radius: 0.25rem;
-  width: 12rem;
-  left: 50%;
-  position: absolute;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-
-  & .biomes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-  }
-
-  & .biome {
-    display: inline-block;
-    border-radius: 5px;
-    padding: 0 0.4rem;
-    font-size: 0.8rem !important;
-    color: #000;
-
-    &.alpine {
-      background: #e5b39b;
-    }
-    &.forest {
-      background: #d4e4df;
-    }
-    &.desert {
-      background: #e6debe;
-    }
-    &.volcano {
-      background: #b890ca;
-    }
-    &.jungle {
-      background: #bfc4bc;
-    }
-    &.coast {
-      background: #a2aabe;
-    }
-    &.holiday {
-      background: #000;
-      color: #fff;
-    }
-    &.all {
-      background: #fff;
-      color: #000;
-    }
-  }
 }
 
 .breed-tile .name {

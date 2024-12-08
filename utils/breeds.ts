@@ -71,8 +71,8 @@ export function getBreedsLocal() {
         biome: 'Forest',
         image: new URL('/public/eggs/seasonal_autumn.webp', import.meta.url)
           .pathname,
-        backgroundColour: '#8B4513',
-        accentColour: '4, 63, 181',
+        backgroundColour: '#7d4824',
+        accentColour: '255, 255, 255',
         availability: season.name === 'autumn',
         begin: seasonsOfCurrentYear(d)['autumn'].start,
         end: seasonsOfCurrentYear(d)['autumn'].end,
@@ -338,8 +338,8 @@ export function getBreedsLocal() {
         biome: [],
         image: new URL('/public/eggs/sonata_gold.webp', import.meta.url)
           .pathname,
-        backgroundColour: '#FF8C00',
-        accentColour: '#000',
+        backgroundColour: '#9c5300',
+        accentColour: '255, 201, 120',
         availability: probability > 0,
         probability,
         begin: null,
@@ -354,8 +354,8 @@ export function getBreedsLocal() {
         biome: [],
         image: new URL('/public/eggs/sonata_blue.webp', import.meta.url)
           .pathname,
-        backgroundColour: '#00008B',
-        accentColour: '255, 0, 0',
+        backgroundColour: '#172f99',
+        accentColour: '199, 209, 255',
         availability: probability > 0,
         probability,
         begin: null,
