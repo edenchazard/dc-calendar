@@ -1,80 +1,95 @@
 <template>
   <div class="forecast-table">
-    <div
+    <template
       v-for="date in forecast"
-      class="forecast-cell"
       :key="date.date.toSeconds()"
     >
-      <b class="year">{{
-        date.date.toLocaleString({ year: 'numeric', month: 'long' })
-      }}</b>
-      <b class="day">{{
-        date.date.toLocaleString({ weekday: 'short', day: '2-digit' })
-      }}</b>
-      <div class="breeds-available">
-        <template
-          v-for="breed in date.continuing"
-          :key="`${date.date.toSeconds()}-${breed.name}`"
-        >
-          <div class="breed">
-            <TooltipBreed :hoveredBreed="breed">
-              <img
-                :alt="breed.name"
-                :src="breed.image"
-                class="egg"
-              />
-              <span
-                class="badge"
-                v-if="breed.probability"
-              >
-                {{
-                  Intl.NumberFormat(language, { style: 'percent' }).format(
-                    breed.probability,
-                  )
-                }}
-              </span>
-            </TooltipBreed>
+      <h3
+        v-if="date.firstOfTheMonth"
+        class="month-header"
+      >
+        {{ date.date.toLocaleString({ month: 'long', year: 'numeric' }) }}
+      </h3>
+      <div class="row">
+        <div class="row-section">
+          <span class="date label">
+            {{
+              date.date.toLocaleString({
+                day: 'numeric',
+                weekday: 'short',
+              })
+            }}</span
+          >
+          <div class="breeds-available">
+            <div
+              v-for="breed in date.continuing"
+              :key="`${date.date.toSeconds()}-${breed.name}`"
+              class="breed"
+            >
+              <TooltipBreed :breed="breed">
+                <img
+                  :alt="breed.name"
+                  :src="breed.image"
+                  class="egg"
+                />
+                <span
+                  v-if="breed.probability"
+                  class="badge"
+                >
+                  {{
+                    Intl.NumberFormat(language, { style: 'percent' }).format(
+                      breed.probability,
+                    )
+                  }}
+                </span>
+              </TooltipBreed>
+            </div>
           </div>
-        </template>
-      </div>
-      <div
-        v-if="date.appearing.length > 0"
-        class="incoming-outgoing"
-      >
-        <span class="block">Appearing</span>
-        <ul
-          v-for="breed in date.appearing"
-          :key="`${date.date.toSeconds()}-${breed.name}`"
-        >
-          <li>
-            <img
-              :alt="breed.name"
-              :src="breed.image"
-            />
-            {{ breed.begin?.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
-          </li>
-        </ul>
-      </div>
+        </div>
 
-      <div
-        v-if="date.leaving.length > 0"
-        class="incoming-outgoing"
-      >
-        <span class="block">Leaving</span>
-        <ul
-          v-for="breed in date.leaving"
-          :key="`${date.date.toSeconds()}-${breed.name}`"
+        <div
+          v-if="date.appearing.length > 0"
+          class="row-section"
         >
-          <li>
-            <img
-              :alt="breed.name"
-              :src="breed.image"
-            />
-            {{ breed?.end?.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
-          </li>
-        </ul>
+          <span class="label">Appearing</span>
+          <div class="incoming-outgoing">
+            <ul
+              v-for="breed in date.appearing"
+              :key="`${date.date.toSeconds()}-${breed.name}`"
+            >
+              <li>
+                <img
+                  :alt="breed.name"
+                  :src="breed.image"
+                />
+                {{ breed.begin?.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          v-if="date.leaving.length > 0"
+          class="row-section"
+        >
+          <span class="label">Leaving</span>
+          <div class="incoming-outgoing">
+            <ul
+              v-for="breed in date.leaving"
+              :key="`${date.date.toSeconds()}-${breed.name}`"
+            >
+              <li>
+                <img
+                  :alt="breed.name"
+                  :src="breed.image"
+                />
+                {{ breed.end?.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -94,12 +109,15 @@ const props = defineProps({
   },
   timezone: {
     type: String,
+    required: true,
   },
 });
 
 const language = navigator.language;
 
 const forecast = computed(() => {
+  const monthHeaders = new Set();
+
   const breeds = getBreedsLocal();
   const dateBegin = DateTime.fromISO(props.from);
   const dateEnd = DateTime.fromISO(props.to);
@@ -107,6 +125,8 @@ const forecast = computed(() => {
   let curDate = dateBegin;
 
   while (curDate < dateEnd) {
+    const monthYear = curDate.toFormat('MMMM-yyyy');
+
     const results = breeds.map((breed) => {
       const result = breed(curDate);
       const range = {
@@ -139,6 +159,7 @@ const forecast = computed(() => {
     });
 
     dayForecast.push({
+      firstOfTheMonth: !monthHeaders.has(monthYear),
       date: curDate,
       continuing: results.filter(
         (breed) => !breed.appearing && !breed.leaving && breed.availability,
@@ -146,6 +167,8 @@ const forecast = computed(() => {
       leaving: results.filter((breed) => breed.leaving),
       appearing: results.filter((breed) => breed.appearing),
     });
+
+    monthHeaders.add(monthYear);
 
     curDate = curDate.plus({ day: 1 });
   }
@@ -155,41 +178,54 @@ const forecast = computed(() => {
 
 <style scoped lang="postcss">
 .forecast-table {
-  margin: auto;
-  display: inline-grid;
-  justify-items: center;
-  justify-content: center;
-  grid-template-columns: repeat(auto-fill, 11rem);
+  display: grid;
+  gap: 2rem;
+  max-width: 100%;
+  overflow-x: auto;
+  padding-top: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(27rem, 1fr));
+}
+
+.row {
+  position: relative;
+  display: flex;
+  border: 1px solid hsl(317, 29%, 20%);
   gap: 1rem;
-  width: 100%;
-  margin-top: 1rem;
 }
-.forecast-cell {
-  width: 100%;
+
+.row-section {
+  position: relative;
+  padding: 1rem 0.5rem 1rem 0.5rem;
 }
-.forecast-cell .year {
+
+.label {
+  background: hsl(317, 29%, 20%);
   font-size: 0.7rem;
+  position: absolute;
+  left: 0;
+  letter-spacing: 0.1rem;
+  top: -1.25rem;
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
 }
-.forecast-cell .day {
-  display: block;
-  font-size: 1.5rem;
-  border-radius: 0.4rem;
-  background: #7f466f;
-  text-align: center;
+
+.month-header {
+  font-weight: bold;
+  grid-column: 1 / -1;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+
+.date {
+  left: -1px;
+  font-weight: bold;
 }
 
 .breeds-available {
   position: relative;
-  height: 3rem;
+  min-height: 3rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-left: 6%;
-  margin-top: 1rem;
-}
-
-.breeds-available .breed:nth-child(1n + 1) {
-  position: relative;
 }
 
 .badge {
@@ -201,19 +237,9 @@ const forecast = computed(() => {
   z-index: 10;
 }
 
-.breed-tile .name {
-  font-weight: bold;
-  flex: 1;
-}
-
-.incoming-outgoing .block {
-  display: block;
-  font-size: 0.8rem;
-  background: #5f214d;
-}
-
 .incoming-outgoing {
-  margin-top: 1rem;
+  position: relative;
+  margin-right: 1rem;
 }
 
 .incoming-outgoing ul {
@@ -224,8 +250,8 @@ const forecast = computed(() => {
 .incoming-outgoing li {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.5rem;
   justify-content: space-between;
-  margin-top: 0.25rem;
+  font-size: 0.8rem;
 }
 </style>

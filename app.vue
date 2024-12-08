@@ -18,8 +18,8 @@
     <div id="timezone-wrapper">
       <label for="timezone">Timezone</label>
       <select
-        v-model="localTimezone"
         id="timezone"
+        v-model="localTimezone"
       >
         <option
           v-for="timezone in timezones"

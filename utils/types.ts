@@ -15,3 +15,15 @@ export interface JDSeasonalCycle {
 }
 
 export type SeasonName = 'winter' | 'autumn' | 'summer' | 'spring';
+
+export type BreedCallback = (d: DateTime) => {
+  name: string;
+  biome: string | string[];
+  image: string;
+  backgroundColour: string;
+  accentColour: string;
+  availability: boolean;
+  begin: DateTime | null;
+  end: DateTime | null;
+  probability: number | null;
+};

@@ -9,22 +9,22 @@
       <div
         class="tooltip-breed"
         :style="{
-          'background-color': hoveredBreed.backgroundColour,
-          color: `rgb(${hoveredBreed.accentColour})`,
+          'background-color': breed.backgroundColour,
+          color: `rgb(${breed.accentColour})`,
         }"
       >
-        <b class="name">{{ hoveredBreed.name }}</b>
+        <b class="name">{{ breed.name }}</b>
         <div
           class="biomes"
-          v-if="hoveredBreed.biome"
+          v-if="breed.biome"
         >
           <b
             :key="biome"
             class="biome"
             :class="biome.toLowerCase()"
-            v-for="biome in Array.isArray(hoveredBreed.biome)
-              ? hoveredBreed.biome
-              : [hoveredBreed.biome]"
+            v-for="biome in Array.isArray(breed.biome)
+              ? breed.biome
+              : [breed.biome]"
           >
             {{ biome }}
           </b>
@@ -36,7 +36,7 @@
 
 <script lang="ts" setup>
 defineProps({
-  hoveredBreed: Object as PropType<{}>,
+  breed: Object as PropType<{}>,
 });
 </script>
 
@@ -44,15 +44,6 @@ defineProps({
 .egg-container {
   height: 3rem;
   position: relative;
-  width: 2rem;
-}
-.breeds-available .egg-container .egg-wrapper {
-  transition: transform 0.2s;
-  position: absolute;
-}
-
-.breeds-available .egg-container:hover .egg-wrapper {
-  transform: translateY(-100%);
 }
 </style>
 

@@ -5,20 +5,10 @@ import {
   seasonsOfCurrentYear,
   sonataProbability,
 } from './calculations';
+import type { BreedCallback } from './types';
 
 export function getBreedsLocal() {
-  const breeds: Array<
-    (d: DateTime) => {
-      name: string;
-      biome: string | string[];
-      image: string;
-      backgroundColour: string;
-      accentColour: string;
-      availability: boolean;
-      begin: DateTime | null;
-      end: DateTime | null;
-    }
-  > = [
+  const breeds: Array<BreedCallback> = [
     (d) => {
       const season = determineSeason(d);
       return {
@@ -31,6 +21,7 @@ export function getBreedsLocal() {
         availability: season.name === 'winter',
         begin: seasonsOfCurrentYear(d)['winter'].start,
         end: seasonsOfCurrentYear(d)['winter'].end,
+        probability: null,
       };
     },
 
@@ -46,6 +37,7 @@ export function getBreedsLocal() {
         availability: season.name === 'spring',
         begin: seasonsOfCurrentYear(d)['spring'].start,
         end: seasonsOfCurrentYear(d)['spring'].end,
+        probability: null,
       };
     },
 
@@ -61,6 +53,7 @@ export function getBreedsLocal() {
         availability: season.name === 'summer',
         begin: seasonsOfCurrentYear(d)['summer'].start,
         end: seasonsOfCurrentYear(d)['summer'].end,
+        probability: null,
       };
     },
 
@@ -76,6 +69,7 @@ export function getBreedsLocal() {
         availability: season.name === 'autumn',
         begin: seasonsOfCurrentYear(d)['autumn'].start,
         end: seasonsOfCurrentYear(d)['autumn'].end,
+        probability: null,
       };
     },
 
@@ -99,6 +93,7 @@ export function getBreedsLocal() {
         availability: d >= begin && d <= end,
         begin,
         end,
+        probability: null,
       };
     },
 
@@ -122,6 +117,7 @@ export function getBreedsLocal() {
         availability: d >= begin && d <= end,
         begin,
         end,
+        probability: null,
       };
     },
 
@@ -144,6 +140,7 @@ export function getBreedsLocal() {
         availability: d.toISODate() === begin.toISODate(),
         begin,
         end,
+        probability: null,
       };
     },
 
@@ -167,6 +164,7 @@ export function getBreedsLocal() {
         availability: d >= begin && d <= end,
         begin,
         end,
+        probability: null,
       };
     },
 
@@ -195,6 +193,7 @@ export function getBreedsLocal() {
         availability: d >= begin && d <= end,
         begin,
         end,
+        probability: null,
       };
     },
 
@@ -210,6 +209,7 @@ export function getBreedsLocal() {
         availability: d.toISODate() === begin.toISODate(),
         begin,
         end: null,
+        probability: null,
       };
     },
 
@@ -238,6 +238,7 @@ export function getBreedsLocal() {
         availability: d >= begin && d <= end,
         begin,
         end,
+        probability: null,
       };
     },
 
@@ -253,6 +254,7 @@ export function getBreedsLocal() {
         availability,
         begin: null,
         end: null,
+        probability: null,
       };
     },
 
@@ -268,6 +270,7 @@ export function getBreedsLocal() {
         availability,
         begin: null,
         end: null,
+        probability: null,
       };
     },
 
@@ -283,6 +286,7 @@ export function getBreedsLocal() {
         availability,
         begin: null,
         end: null,
+        probability: null,
       };
     },
 
@@ -298,6 +302,7 @@ export function getBreedsLocal() {
         availability,
         begin: null,
         end: null,
+        probability: null,
       };
     },
 
@@ -313,6 +318,7 @@ export function getBreedsLocal() {
         availability,
         begin: null,
         end: null,
+        probability: null,
       };
     },
 
@@ -328,6 +334,7 @@ export function getBreedsLocal() {
         availability,
         begin: null,
         end: null,
+        probability: null,
       };
     },
 
@@ -391,6 +398,7 @@ export function getBreedsLocal() {
         availability: colour === 3,
         begin: null,
         end: null,
+        probability: null,
       };
     },
 
@@ -406,6 +414,7 @@ export function getBreedsLocal() {
         availability: colour === 2,
         begin: null,
         end: null,
+        probability: null,
       };
     },
 
@@ -421,6 +430,7 @@ export function getBreedsLocal() {
         availability: colour === 1,
         begin: null,
         end: null,
+        probability: null,
       };
     },
 
@@ -436,6 +446,7 @@ export function getBreedsLocal() {
         availability: colour === 0,
         begin: null,
         end: null,
+        probability: null,
       };
     },
   ];
