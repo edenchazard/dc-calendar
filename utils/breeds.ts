@@ -5,7 +5,7 @@ import {
   seasonsOfCurrentYear,
   sonataProbability,
 } from './calculations';
-import type { BreedCallback } from './types';
+import type { BreedCallback } from '@/types/types';
 
 export function getBreedsLocal() {
   const breeds: Array<BreedCallback> = [

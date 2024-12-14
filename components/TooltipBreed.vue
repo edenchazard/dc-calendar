@@ -35,6 +35,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { Breed } from '@/types/types';
+
 defineProps<{
   breed: Breed;
 }>();

@@ -97,6 +97,7 @@
 import { DateTime } from 'luxon';
 import { getBreedsLocal } from '@/utils/breeds';
 import TooltipBreed from '@/components/TooltipBreed.vue';
+import type { Breed } from '~/types/types';
 
 const props = defineProps({
   from: {
@@ -129,7 +130,10 @@ const forecast = computed(() => {
 
     const results = breeds.map((breed) => {
       const result = breed(curDate);
-      const range = {
+      const range: Pick<Breed, 'begin' | 'end'> & {
+        appearing: boolean | null;
+        leaving: boolean | null;
+      } = {
         appearing: null,
         leaving: null,
         begin: null,

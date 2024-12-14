@@ -1,8 +1,9 @@
+// @ts-expect-error - No types available for 'astronomia'
 import { solstice } from 'astronomia';
 import { DateTime, Interval } from 'luxon';
 import { getOverlappingRangeOrNearest, mapJDSeasonsToDateTime } from './utils';
 import moon from './moon.json' assert { type: 'json' };
-import type { JDSeasonalCycle, SeasonName } from './types';
+import type { JDSeasonalCycle, SeasonName } from '../types/types';
 import { cache } from './cache';
 
 /**
