@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - .:/src
+      - node_modules:/src/node_modules
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+
+volumes:
+  node_modules:
