@@ -283,28 +283,28 @@
     <div class="section center">
       <h2>Forecast</h2>
       <form
-        @submit.prevent
         id="period"
         class="subsection"
+        @submit.prevent
       >
         <div id="period-wrapper">
           <span>
             <label for="from">From</label>
           </span>
           <input
-            type="date"
             id="from"
-            name="from"
             v-model="from"
+            type="date"
+            name="from"
           />
           <span>
             <label for="to">To</label>
           </span>
           <input
-            type="date"
             id="to"
-            name="to"
             v-model="end"
+            type="date"
+            name="to"
           />
         </div>
       </form>

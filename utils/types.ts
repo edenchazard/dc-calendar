@@ -16,7 +16,7 @@ export interface JDSeasonalCycle {
 
 export type SeasonName = 'winter' | 'autumn' | 'summer' | 'spring';
 
-export type BreedCallback = (d: DateTime) => {
+export type Breed = {
   name: string;
   biome: string | string[];
   image: string;
@@ -27,3 +27,5 @@ export type BreedCallback = (d: DateTime) => {
   end: DateTime | null;
   probability: number | null;
 };
+
+export type BreedCallback = (d: DateTime) => Breed;

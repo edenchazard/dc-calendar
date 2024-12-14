@@ -1,12 +1,12 @@
 <template>
   <div class="table">
     <span
+      v-for="(hourly, index) in forecast"
+      :key="index"
       :title="`${hourly.colour}: ${hourly.interval.start.toLocaleString(
         DateTime.TIME_24_WITH_SECONDS,
       )} – ${hourly.interval.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)}`"
-      :key="index"
       :class="hourly.colour.toLowerCase()"
-      v-for="(hourly, index) in forecast"
     >
       {{ hourly.date.toLocaleString(DateTime.TIME_SIMPLE) }}
     </span>
@@ -14,9 +14,9 @@
 </template>
 
 <script setup lang="ts">
-import { DateTime, Interval } from 'luxon';
+import { DateTime } from 'luxon';
 import type { PropType } from 'vue';
-
+import type { Interval } from 'luxon';
 defineProps({
   forecast: {
     type: Array as PropType<

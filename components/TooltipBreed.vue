@@ -1,5 +1,5 @@
 <template>
-  <Tooltip theme="breed">
+  <TooltipBase theme="breed">
     <div class="egg-container">
       <div class="egg-wrapper">
         <slot />
@@ -15,29 +15,29 @@
       >
         <b class="name">{{ breed.name }}</b>
         <div
-          class="biomes"
           v-if="breed.biome"
+          class="biomes"
         >
           <b
-            :key="biome"
-            class="biome"
-            :class="biome.toLowerCase()"
             v-for="biome in Array.isArray(breed.biome)
               ? breed.biome
               : [breed.biome]"
+            :key="biome"
+            class="biome"
+            :class="biome.toLowerCase()"
           >
             {{ biome }}
           </b>
         </div>
       </div>
     </template>
-  </Tooltip>
+  </TooltipBase>
 </template>
 
 <script lang="ts" setup>
-defineProps({
-  breed: Object as PropType<{}>,
-});
+defineProps<{
+  breed: Breed;
+}>();
 </script>
 
 <style scoped>
@@ -58,9 +58,6 @@ defineProps({
 
 .v-popper--theme-breed .v-popper__arrow-inner {
   visibility: visible;
-}
-
-.v-popper--theme-breed .v-popper__arrow-outer {
 }
 
 /* Transition */

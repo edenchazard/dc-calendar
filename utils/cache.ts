@@ -1,6 +1,6 @@
-const theCache: { [x: string]: any } = {};
+const theCache: { [x: string]: unknown } = {};
 
-export function cache(key: string, callback: () => any) {
+export function cache<T>(key: string, callback: () => T) {
   if (key in theCache) {
     return theCache[key];
   }

@@ -1,7 +1,7 @@
 <template>
   <span
-    class="active-badge"
     v-if="condition"
+    class="active-badge"
     >active</span
   >
 </template>
