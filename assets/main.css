@@ -1,9 +1,11 @@
+html {
+  height: 100%;
+}
+
 body {
-  min-height: 100%;
   line-height: 1.6;
   font-family: Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans',
     'Helvetica Neue', sans-serif;
-  font-size: 15px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -13,8 +15,19 @@ body {
   margin: 0;
 }
 
+#__nuxt {
+  min-height: 100dvh;
+  display: flex;
+  align-items: stretch;
+  justify-items: stretch;
+  flex-direction: column;
+  width: 100%;
+}
+main {
+  flex: 1;
+}
+
 .max-content {
-  margin: 0 auto;
   max-width: 90rem;
 }
 

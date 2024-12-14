@@ -15,21 +15,6 @@
         ><FontAwesomeIcon icon="fa-solid fa-toolbox" /> More tools
       </a>
     </nav>
-    <div id="timezone-wrapper">
-      <label for="timezone">Timezone</label>
-      <select
-        id="timezone"
-        v-model="localTimezone"
-      >
-        <option
-          v-for="timezone in timezones"
-          :key="timezone.toString()"
-          :value="timezone"
-        >
-          {{ timezone }}
-        </option>
-      </select>
-    </div>
   </header>
 
   <main class="max-content">
@@ -41,313 +26,370 @@
       </p>
       <p><strong class="bold">This tool is experimental.</strong></p>
     </section>
-    <section
-      id="currently"
-      class="section"
-    >
-      <div id="info">
+
+    <ClientOnly>
+      <template #fallback>
         <div
-          id="now"
-          :key="intervalKey"
+          id="waiting"
+          class="section center"
         >
-          <span class="time">Local time</span>
-          <span class="font-mono">
-            {{
-              localIntlTime.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
-            }}
-          </span>
-          <span class="time">DC time</span>
-          <span class="font-mono">{{
-            dcIntlTime.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
-          }}</span>
+          <p>Magic is happening! Be patient...</p>
+          <p>
+            If this message persists, please ensure that JavaScript is enabled
+            in your browser.
+          </p>
         </div>
-        <div id="extended-info-container">
-          <h2>Right now...</h2>
-          <div id="extended-info">
-            <FontAwesomeIcon :icon="seasonIcon" />
-            <p>
-              The current season is
-              {{ season.name.slice(0, 1).toUpperCase() + season.name.slice(1) }}
-              {{ season.begin.toLocaleString({ dateStyle: 'short' }) }} &mdash;
-              {{ season.end.toLocaleString({ dateStyle: 'short' }) }}.
-              {{ daytime.contains(dcIntlTime) ? 'It is day.' : 'It is night.' }}
-              {{ sunrise.contains(dcIntlTime) ? 'The sun is rising.' : '' }}
-              {{ sunset.contains(dcIntlTime) ? 'The sun is setting.' : '' }}
-            </p>
-
-            <FontAwesomeIcon icon="fa-solid fa-clock" />
-            <div>
-              <p>
-                <b>Dragon Cave</b> is in
-                <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
-                  dcIntlTime.toFormat('ZZZZ', { locale: 'en-us' })
-                }}</abbr
-                >, {{ offsetWording }}
-              </p>
-              <p>
-                DST will occur on
-                {{
-                  dst.start.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
-                }}
-                and end on
-                {{
-                  dst.end.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
-                }}. Server time will go forwards 1 hour and backwards 1 hour at
-                these times respectively.
-                <ActiveBadge :condition="dst.contains(dcIntlTime)" />
-              </p>
-            </div>
-
-            <FontAwesomeIcon icon="fa-solid fa-gem" />
-            <p>
-              <b>Gemshard Dragons</b> switch at
+      </template>
+      <section
+        id="currently"
+        class="section"
+      >
+        <div id="info">
+          <div
+            id="now"
+            :key="intervalKey"
+          >
+            <span class="time">Local time</span>
+            <span class="font-mono">
               {{
-                gemshardSwitchOver.toLocaleString(
-                  DateTime.TIME_24_WITH_SECONDS,
-                )
-              }}.
-            </p>
-
-            <FontAwesomeIcon icon="fa-solid fa-moon" />
-            <div>
+                localIntlTime.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+              }}
+            </span>
+            <span class="time">DC time</span>
+            <span class="font-mono">{{
+              dcIntlTime.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+            }}</span>
+          </div>
+          <div id="extended-info-container">
+            <h2>Right now...</h2>
+            <div id="extended-info">
+              <FontAwesomeIcon :icon="seasonIcon" />
               <p>
-                Moon phases will occur at
+                The current season is
                 {{
-                  moonSwitchOver.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-                }}.
-              </p>
-              <p>
-                <b>Sonata Dragons</b> and <b>Lunar Herald Dragons</b> will
-                change at this time.
-              </p>
-            </div>
-
-            <img
-              :src="zombieImage"
-              alt=""
-            />
-            <div>
-              <p>
-                <b>Undead Dragons</b> will be active between
-                {{
-                  zombies.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  season.name.slice(0, 1).toUpperCase() + season.name.slice(1)
                 }}
-                and
-                {{ zombies.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
-                <ActiveBadge :condition="zombies.contains(dcIntlTime)" />
-              </p>
-              <p>
-                On the {{ zombieMonth.toLocaleString(DateTime.DATETIME_MED) }},
-                dragons will have an increased chance of zombifying
-                successfully.
-              </p>
-            </div>
-
-            <img
-              :src="sunbeamMoonglowImage"
-              alt=""
-            />
-            <div>
-              <p>
-                <b>Sunbeam Drakes</b> can be caught or bred between
+                {{ season.begin.toLocaleString({ dateStyle: 'short' }) }}
+                &mdash; {{ season.end.toLocaleString({ dateStyle: 'short' }) }}.
                 {{
-                  daytime.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  daytime.contains(dcIntlTime) ? 'It is day.' : 'It is night.'
                 }}
-                and
-                {{ daytime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
-                <ActiveBadge :condition="daytime.contains(dcIntlTime)" />
+                {{ sunrise.contains(dcIntlTime) ? 'The sun is rising.' : '' }}
+                {{ sunset.contains(dcIntlTime) ? 'The sun is setting.' : '' }}
               </p>
-              <p>
-                <b>Moonglow Drakes</b> can be caught or bred between
-                {{
-                  nighttime.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-                }}
-                and
-                {{
-                  nighttime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-                }}.
-                <ActiveBadge :condition="nighttime.contains(dcIntlTime)" />
-              </p>
-            </div>
 
-            <img
-              :src="nocturneImage"
-              alt=""
-            />
-            <div>
-              <p>
-                <b>Nocturne Dragons</b> will be active between
-                {{
-                  nighttime.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-                }}
-                and
-                {{
-                  nighttime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-                }}.
-                <ActiveBadge :condition="nighttime.contains(dcIntlTime)" />
-              </p>
-            </div>
+              <FontAwesomeIcon icon="fa-solid fa-clock" />
+              <div>
+                <p>
+                  <b>Dragon Cave</b> is in
+                  <abbr :title="dcIntlTime.offsetNameLong ?? ''">{{
+                    dcIntlTime.toFormat('ZZZZ', { locale: 'en-us' })
+                  }}</abbr
+                  >, {{ offsetWording }}
+                </p>
+                <p>
+                  DST will occur on
+                  {{
+                    dst.start.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                  }}
+                  and end on
+                  {{
+                    dst.end.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+                  }}. Server time will go forwards 1 hour and backwards 1 hour
+                  at these times respectively.
+                  <ActiveBadge :condition="dst.contains(dcIntlTime)" />
+                </p>
+              </div>
 
-            <img
-              :src="harkfrostImage"
-              alt=""
-            />
-            <div>
+              <FontAwesomeIcon icon="fa-solid fa-gem" />
               <p>
-                <b>Harkfrost Dragons</b> will be surrounded by snowflakes
-                between
+                <b>Gemshard Dragons</b> switch at
                 {{
-                  nighttime.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-                }}
-                and
-                {{
-                  nighttime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-                }}.
-                <ActiveBadge :condition="nighttime.contains(dcIntlTime)" />
-              </p>
-            </div>
-
-            <img
-              :src="sunriseSunsetImage"
-              alt=""
-            />
-            <div>
-              <p>
-                <b>Sunrise Dragons</b> will hatch between
-                {{
-                  sunrise.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
-                }}
-                and
-                {{ sunrise.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
-                <ActiveBadge :condition="sunrise.contains(dcIntlTime)" />
-              </p>
-              <p>
-                <b>Sunset Dragons</b> will hatch between
-                {{ sunset.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
-                and
-                {{ sunset.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}.
-                <ActiveBadge :condition="sunset.contains(dcIntlTime)" />
-              </p>
-            </div>
-
-            <img
-              :src="fireGem.image"
-              alt=""
-            />
-            <div>
-              <p>
-                <b>Fire Gem Dragons</b> caught or bred now will be
-                <b>{{ fireGem.colour.toLowerCase() }}</b> until
-                {{
-                  fireGem.interval.end.toLocaleString(
+                  gemshardSwitchOver.toLocaleString(
                     DateTime.TIME_24_WITH_SECONDS,
                   )
-                }}. Over the next {{ fireGemForecast.length }} hours:
+                }}.
               </p>
-              <HourlyTable
-                :forecast="fireGemForecast"
-                class="hourly-table"
+
+              <FontAwesomeIcon icon="fa-solid fa-moon" />
+              <div>
+                <p>
+                  Moon phases will occur at
+                  {{
+                    moonSwitchOver.toLocaleString(
+                      DateTime.TIME_24_WITH_SECONDS,
+                    )
+                  }}.
+                </p>
+                <p>
+                  <b>Sonata Dragons</b> and <b>Lunar Herald Dragons</b> will
+                  change at this time.
+                </p>
+              </div>
+
+              <img
+                :src="zombieImage"
+                alt=""
               />
-            </div>
+              <div>
+                <p>
+                  <b>Undead Dragons</b> will be active between
+                  {{
+                    zombies.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}
+                  and
+                  {{
+                    zombies.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}.
+                  <ActiveBadge :condition="zombies.contains(dcIntlTime)" />
+                </p>
+                <p>
+                  On the
+                  {{ zombieMonth.toLocaleString(DateTime.DATETIME_MED) }},
+                  dragons will have an increased chance of zombifying
+                  successfully.
+                </p>
+              </div>
 
-            <img
-              :src="spiritWard.image"
-              alt=""
-            />
-            <div>
-              <p>
-                <b>Spirit Ward Dragons</b> are currently in their
-                <b>{{ spiritWard.colour.toLowerCase() }}</b> form between
-                {{
-                  spiritWard.interval.start.toLocaleString(
-                    DateTime.TIME_24_WITH_SECONDS,
-                  )
-                }}
-                and
-                {{
-                  spiritWard.interval.end.toLocaleString(
-                    DateTime.TIME_24_WITH_SECONDS,
-                  )
-                }}. Over the next {{ spiritWardForecast.length }} hours:
-              </p>
-              <HourlyTable
-                :forecast="spiritWardForecast"
-                class="hourly-table"
+              <img
+                :src="sunbeamMoonglowImage"
+                alt=""
               />
+              <div>
+                <p>
+                  <b>Sunbeam Drakes</b> can be caught or bred between
+                  {{
+                    daytime.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}
+                  and
+                  {{
+                    daytime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}.
+                  <ActiveBadge :condition="daytime.contains(dcIntlTime)" />
+                </p>
+                <p>
+                  <b>Moonglow Drakes</b> can be caught or bred between
+                  {{
+                    nighttime.start.toLocaleString(
+                      DateTime.TIME_24_WITH_SECONDS,
+                    )
+                  }}
+                  and
+                  {{
+                    nighttime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}.
+                  <ActiveBadge :condition="nighttime.contains(dcIntlTime)" />
+                </p>
+              </div>
+
+              <img
+                :src="nocturneImage"
+                alt=""
+              />
+              <div>
+                <p>
+                  <b>Nocturne Dragons</b> will be active between
+                  {{
+                    nighttime.start.toLocaleString(
+                      DateTime.TIME_24_WITH_SECONDS,
+                    )
+                  }}
+                  and
+                  {{
+                    nighttime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}.
+                  <ActiveBadge :condition="nighttime.contains(dcIntlTime)" />
+                </p>
+              </div>
+
+              <img
+                :src="harkfrostImage"
+                alt=""
+              />
+              <div>
+                <p>
+                  <b>Harkfrost Dragons</b> will be surrounded by snowflakes
+                  between
+                  {{
+                    nighttime.start.toLocaleString(
+                      DateTime.TIME_24_WITH_SECONDS,
+                    )
+                  }}
+                  and
+                  {{
+                    nighttime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}.
+                  <ActiveBadge :condition="nighttime.contains(dcIntlTime)" />
+                </p>
+              </div>
+
+              <img
+                :src="sunriseSunsetImage"
+                alt=""
+              />
+              <div>
+                <p>
+                  <b>Sunrise Dragons</b> will hatch between
+                  {{
+                    sunrise.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}
+                  and
+                  {{
+                    sunrise.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}.
+                  <ActiveBadge :condition="sunrise.contains(dcIntlTime)" />
+                </p>
+                <p>
+                  <b>Sunset Dragons</b> will hatch between
+                  {{
+                    sunset.start.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}
+                  and
+                  {{
+                    sunset.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}.
+                  <ActiveBadge :condition="sunset.contains(dcIntlTime)" />
+                </p>
+              </div>
+
+              <img
+                :src="fireGem.image"
+                alt=""
+              />
+              <div>
+                <p>
+                  <b>Fire Gem Dragons</b> caught or bred now will be
+                  <b>{{ fireGem.colour.toLowerCase() }}</b> until
+                  {{
+                    fireGem.interval.end.toLocaleString(
+                      DateTime.TIME_24_WITH_SECONDS,
+                    )
+                  }}. Over the next {{ fireGemForecast.length }} hours:
+                </p>
+                <HourlyTable
+                  :forecast="fireGemForecast"
+                  class="hourly-table"
+                />
+              </div>
+
+              <img
+                :src="spiritWard.image"
+                alt=""
+              />
+              <div>
+                <p>
+                  <b>Spirit Ward Dragons</b> are currently in their
+                  <b>{{ spiritWard.colour.toLowerCase() }}</b> form between
+                  {{
+                    spiritWard.interval.start.toLocaleString(
+                      DateTime.TIME_24_WITH_SECONDS,
+                    )
+                  }}
+                  and
+                  {{
+                    spiritWard.interval.end.toLocaleString(
+                      DateTime.TIME_24_WITH_SECONDS,
+                    )
+                  }}. Over the next {{ spiritWardForecast.length }} hours:
+                </p>
+                <HourlyTable
+                  :forecast="spiritWardForecast"
+                  class="hourly-table"
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <div class="section center">
-      <h2>Forecast</h2>
-      <form
-        id="period"
-        class="subsection"
-        @submit.prevent
-      >
-        <div id="period-wrapper">
-          <span>
-            <label for="from">From</label>
-          </span>
-          <input
-            id="from"
-            v-model="from"
-            type="date"
-            name="from"
-          />
-          <span>
-            <label for="to">To</label>
-          </span>
-          <input
-            id="to"
-            v-model="end"
-            type="date"
-            name="to"
-          />
-        </div>
-      </form>
-
-      <section
-        id="forecast"
-        class="subsection"
-      >
-        <p>
-          Between
-          {{
-            localDateTime.begin.toLocaleString(
-              DateTime.DATETIME_MED_WITH_SECONDS,
-            )
-          }}
-          and
-          {{
-            localDateTime.end.toLocaleString(
-              DateTime.DATETIME_MED_WITH_SECONDS,
-            )
-          }}, the following breeds will be available.
-        </p>
-
-        <p class="italic">
-          (This period corresponds to
-          {{
-            dcDateTime.begin.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
-          }}
-          to
-          {{
-            dcDateTime.end.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
-          }}
-          on Dragon Cave)
-        </p>
-
-        <ForecastTable
-          :from="from"
-          :to="end"
-          :timezone="localTimezone"
-        />
       </section>
-    </div>
+
+      <div class="section center">
+        <h2>Forecast</h2>
+        <form
+          id="period"
+          class="subsection"
+          @submit.prevent
+        >
+          <div id="period-wrapper">
+            <span>
+              <label for="timezone">Timezone</label>
+            </span>
+            <select
+              id="timezone"
+              v-model="localTimezone"
+              name="timezone"
+            >
+              <option
+                v-for="timezone in timezones"
+                :key="timezone.toString()"
+                :value="timezone"
+              >
+                {{ timezone }}
+              </option>
+            </select>
+            <span>
+              <label for="from">From</label>
+            </span>
+            <input
+              id="from"
+              v-model="from"
+              type="date"
+              name="from"
+            />
+            <span>
+              <label for="to">To</label>
+            </span>
+            <input
+              id="to"
+              v-model="end"
+              type="date"
+              name="to"
+            />
+          </div>
+        </form>
+
+        <section
+          id="forecast"
+          class="subsection"
+        >
+          <p>
+            Between
+            {{
+              localDateTime.begin.toLocaleString(
+                DateTime.DATETIME_MED_WITH_SECONDS,
+              )
+            }}
+            and
+            {{
+              localDateTime.end.toLocaleString(
+                DateTime.DATETIME_MED_WITH_SECONDS,
+              )
+            }}, the following breeds will be available.
+          </p>
+
+          <p class="italic">
+            (This period corresponds to
+            {{
+              dcDateTime.begin.toLocaleString(
+                DateTime.DATETIME_MED_WITH_SECONDS,
+              )
+            }}
+            to
+            {{
+              dcDateTime.end.toLocaleString(DateTime.DATETIME_MED_WITH_SECONDS)
+            }}
+            on Dragon Cave)
+          </p>
+
+          <ForecastTable
+            :from="from"
+            :to="end"
+            :timezone="localTimezone"
+          />
+        </section>
+      </div>
+    </ClientOnly>
   </main>
+
   <footer id="bottom">
     <p>
       &copy; eden chazard. Graphics courtesy of <b>Winya</b> with programming
@@ -366,6 +408,14 @@ import ActiveBadge from './components/ActiveBadge.vue';
 import ForecastTable from './components/ForecastTable.vue';
 import { useExtendedInfo } from '@/composables/useExtendedInfo';
 import HourlyTable from './components/HourlyTable.vue';
+
+useHead({
+  titleTemplate(titleChunk) {
+    return titleChunk
+      ? `${titleChunk} - Dragon Cave Calendar`
+      : `Dragon Cave Calendar`;
+  },
+});
 
 const timezones = Intl.supportedValuesOf('timeZone');
 let interval: ReturnType<typeof setInterval>;
@@ -466,18 +516,6 @@ onUnmounted(() => clearInterval(interval));
       height: 1.5rem;
     }
   }
-}
-
-#timezone-wrapper {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  grid-column: 1/-1;
-}
-
-#timezone {
-  max-width: 20rem;
-  width: 100%;
 }
 
 #info {
@@ -581,7 +619,7 @@ onUnmounted(() => clearInterval(interval));
   }
 }
 
-@media (min-width: 37rem) {
+@media (min-width: 40rem) {
   #top {
     grid-template-columns: auto 1fr;
     justify-items: unset;
