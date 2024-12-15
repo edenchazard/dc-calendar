@@ -34,7 +34,7 @@
                 />
                 <span
                   v-if="breed.probability"
-                  class="badge"
+                  class="probability"
                 >
                   {{
                     Intl.NumberFormat(language, { style: 'percent' }).format(
@@ -58,7 +58,10 @@
               :key="`${date.date.toSeconds()}-${breed.name}`"
             >
               <li>
-                <TooltipBreed :breed="breed">
+                <TooltipBreed
+                  :breed="breed"
+                  class="incoming"
+                >
                   <img
                     :alt="breed.name"
                     :src="breed.image"
@@ -83,7 +86,10 @@
               :key="`${date.date.toSeconds()}-${breed.name}`"
             >
               <li>
-                <TooltipBreed :breed="breed">
+                <TooltipBreed
+                  :breed="breed"
+                  class="outgoing"
+                >
                   <img
                     :alt="breed.name"
                     :src="breed.image"
@@ -238,7 +244,7 @@ const forecast = computed(() => {
   display: flex;
 }
 
-.badge {
+.probability {
   font-size: 0.7rem;
   width: 2rem;
   height: 1rem;
@@ -248,20 +254,19 @@ const forecast = computed(() => {
 }
 
 .incoming-outgoing {
-  position: relative;
-  margin-right: 1rem;
-}
+  & ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+  }
 
-.incoming-outgoing ul {
-  margin: 0;
-  padding: 0;
-}
-
-.incoming-outgoing li {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  justify-content: space-between;
-  font-size: 0.8rem;
+  & .incoming,
+  .outgoing {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: space-between;
+    font-size: 0.8rem;
+  }
 }
 </style>

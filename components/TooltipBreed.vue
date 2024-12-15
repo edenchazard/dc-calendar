@@ -3,9 +3,7 @@
     theme="breed"
     instant-move
   >
-    <div class="egg-container">
-      <slot />
-    </div>
+    <slot />
     <template #popper>
       <div
         class="tooltip-breed"
@@ -42,13 +40,6 @@ defineProps<{
   breed: Breed;
 }>();
 </script>
-
-<style scoped>
-.egg-container {
-  height: 3rem;
-  position: relative;
-}
-</style>
 
 <style lang="postcss">
 .v-popper--theme-breed .v-popper__inner {
