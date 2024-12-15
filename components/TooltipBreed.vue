@@ -1,9 +1,10 @@
 <template>
-  <TooltipBase theme="breed">
+  <TooltipBase
+    theme="breed"
+    instant-move
+  >
     <div class="egg-container">
-      <div class="egg-wrapper">
-        <slot />
-      </div>
+      <slot />
     </div>
     <template #popper>
       <div
