@@ -13,7 +13,7 @@ export function getBreedsLocal() {
       const season = determineSeason(d);
       return {
         name: 'Seasonal (Winter)',
-        biome: 'Alpine',
+        biome: ['Alpine'],
         image: new URL('/public/eggs/seasonal_winter.gif', import.meta.url)
           .pathname,
         backgroundColour: '#B0E0E6',
@@ -29,7 +29,7 @@ export function getBreedsLocal() {
       const season = determineSeason(d);
       return {
         name: 'Seasonal (Spring)',
-        biome: 'Forest',
+        biome: ['Forest'],
         image: new URL('/public/eggs/seasonal_spring.webp', import.meta.url)
           .pathname,
         backgroundColour: '#228B22',
@@ -45,7 +45,7 @@ export function getBreedsLocal() {
       const season = determineSeason(d);
       return {
         name: 'Seasonal (Summer)',
-        biome: 'Forest',
+        biome: ['Forest'],
         image: new URL('/public/eggs/seasonal_summer.webp', import.meta.url)
           .pathname,
         backgroundColour: '#217d00',
@@ -61,7 +61,7 @@ export function getBreedsLocal() {
       const season = determineSeason(d);
       return {
         name: 'Seasonal (Autumn)',
-        biome: 'Forest',
+        biome: ['Forest'],
         image: new URL('/public/eggs/seasonal_autumn.webp', import.meta.url)
           .pathname,
         backgroundColour: '#7a2d00',
@@ -85,7 +85,7 @@ export function getBreedsLocal() {
       });
       return {
         name: 'Previous Valentines',
-        biome: 'Holiday',
+        biome: ['Holiday'],
         image: new URL('/public/eggs/mint_valentines.png', import.meta.url)
           .pathname,
         backgroundColour: '#ffffff',
@@ -109,7 +109,7 @@ export function getBreedsLocal() {
       });
       return {
         name: 'Previous Halloweens',
-        biome: 'Holiday',
+        biome: ['Holiday'],
         image: new URL('/public/eggs/mint_halloween.png', import.meta.url)
           .pathname,
         backgroundColour: '#ffffff',
@@ -133,7 +133,7 @@ export function getBreedsLocal() {
       });
       return {
         name: `${d.year} Halloween`,
-        biome: 'All',
+        biome: ['All'],
         image: new URL('/public/eggs/mystery.gif', import.meta.url).pathname,
         backgroundColour: '#993300',
         accentColour: '#000',
@@ -156,7 +156,7 @@ export function getBreedsLocal() {
       });
       return {
         name: 'Previous Holidays',
-        biome: 'Holiday',
+        biome: ['Holiday'],
         image: new URL('/public/eggs/mint_christmas.png', import.meta.url)
           .pathname,
         backgroundColour: '#ffffff',
@@ -186,7 +186,7 @@ export function getBreedsLocal() {
 
       return {
         name: `${d.year} Holiday`,
-        biome: 'All',
+        biome: ['All'],
         image: new URL('/public/eggs/mystery.gif', import.meta.url).pathname,
         backgroundColour: '#FFC0CB',
         accentColour: '#000',
@@ -201,7 +201,7 @@ export function getBreedsLocal() {
       const begin = DateTime.fromObject({ day: 21, month: 5, year: d.year });
       return {
         name: 'Birthday Release',
-        biome: 'Holiday',
+        biome: ['Holiday'],
         image: new URL('/public/eggs/mint_birthday.png', import.meta.url)
           .pathname,
         backgroundColour: '#ecdfbf',
@@ -231,7 +231,7 @@ export function getBreedsLocal() {
 
       return {
         name: `${d.year} Valentine`,
-        biome: 'All',
+        biome: ['All'],
         image: new URL('/public/eggs/mystery.gif', import.meta.url).pathname,
         backgroundColour: '#FFC0CB',
         accentColour: '#000',
@@ -246,7 +246,7 @@ export function getBreedsLocal() {
       const availability = d.weekday === 1;
       return {
         name: `Gemshard (Jade)`,
-        biome: 'Jungle',
+        biome: ['Jungle'],
         image: new URL('/public/eggs/gemshard_jade.webp', import.meta.url)
           .pathname,
         backgroundColour: '#055e48',
@@ -262,7 +262,7 @@ export function getBreedsLocal() {
       const availability = d.weekday === 2;
       return {
         name: `Gemshard (Ruby)`,
-        biome: 'Jungle',
+        biome: ['Jungle'],
         image: new URL('/public/eggs/gemshard_ruby.webp', import.meta.url)
           .pathname,
         backgroundColour: '#B22222',
@@ -278,7 +278,7 @@ export function getBreedsLocal() {
       const availability = d.weekday === 3;
       return {
         name: `Gemshard (Sapphire)`,
-        biome: 'Jungle',
+        biome: ['Jungle'],
         image: new URL('/public/eggs/gemshard_sapphire.webp', import.meta.url)
           .pathname,
         backgroundColour: '#000587',
@@ -294,7 +294,7 @@ export function getBreedsLocal() {
       const availability = d.weekday === 4;
       return {
         name: `Gemshard (Amethyst)`,
-        biome: 'Jungle',
+        biome: ['Jungle'],
         image: new URL('/public/eggs/gemshard_amethyst.webp', import.meta.url)
           .pathname,
         backgroundColour: '#60007a',
@@ -310,7 +310,7 @@ export function getBreedsLocal() {
       const availability = d.weekday === 5;
       return {
         name: `Gemshard (Aqua)`,
-        biome: 'Jungle',
+        biome: ['Jungle'],
         image: new URL('/public/eggs/gemshard_aqua.webp', import.meta.url)
           .pathname,
         backgroundColour: '#007791',
@@ -326,7 +326,7 @@ export function getBreedsLocal() {
       const availability = d.weekday === 6;
       return {
         name: `Gemshard (Citrine)`,
-        biome: 'Jungle',
+        biome: ['Jungle'],
         image: new URL('/public/eggs/gemshard_citrine.webp', import.meta.url)
           .pathname,
         backgroundColour: '#a67400',
@@ -342,7 +342,7 @@ export function getBreedsLocal() {
       const probability = sonataProbability(d, 0);
       return {
         name: `Sonata (Gold)`,
-        biome: 'All',
+        biome: ['All'],
         image: new URL('/public/eggs/sonata_gold.webp', import.meta.url)
           .pathname,
         backgroundColour: '#9c5300',
@@ -358,7 +358,7 @@ export function getBreedsLocal() {
       const probability = sonataProbability(d, 1);
       return {
         name: `Sonata (Blue)`,
-        biome: 'All',
+        biome: ['All'],
         image: new URL('/public/eggs/sonata_blue.webp', import.meta.url)
           .pathname,
         backgroundColour: '#172f99',
@@ -374,7 +374,7 @@ export function getBreedsLocal() {
       const probability = sonataProbability(d, 2);
       return {
         name: `Sonata (Silver)`,
-        biome: 'All',
+        biome: ['All'],
         image: new URL('/public/eggs/sonata_silver.webp', import.meta.url)
           .pathname,
         backgroundColour: '#616161',

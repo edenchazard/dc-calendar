@@ -18,9 +18,7 @@
           class="biomes"
         >
           <b
-            v-for="biome in Array.isArray(breed.biome)
-              ? breed.biome
-              : [breed.biome]"
+            v-for="biome in breed.biome"
             :key="biome"
             class="biome"
             :class="biome.toLowerCase()"
