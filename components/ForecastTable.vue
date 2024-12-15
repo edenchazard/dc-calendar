@@ -58,11 +58,15 @@
               :key="`${date.date.toSeconds()}-${breed.name}`"
             >
               <li>
-                <img
-                  :alt="breed.name"
-                  :src="breed.image"
-                />
-                {{ breed.begin?.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+                <TooltipBreed :breed="breed">
+                  <img
+                    :alt="breed.name"
+                    :src="breed.image"
+                  />
+                  {{
+                    breed.begin?.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}
+                </TooltipBreed>
               </li>
             </ul>
           </div>
@@ -79,11 +83,13 @@
               :key="`${date.date.toSeconds()}-${breed.name}`"
             >
               <li>
-                <img
-                  :alt="breed.name"
-                  :src="breed.image"
-                />
-                {{ breed.end?.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+                <TooltipBreed :breed="breed">
+                  <img
+                    :alt="breed.name"
+                    :src="breed.image"
+                  />
+                  {{ breed.end?.toLocaleString(DateTime.TIME_24_WITH_SECONDS) }}
+                </TooltipBreed>
               </li>
             </ul>
           </div>
