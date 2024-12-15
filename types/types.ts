@@ -18,10 +18,9 @@ export type SeasonName = 'winter' | 'autumn' | 'summer' | 'spring';
 
 export type Breed = {
   name: string;
-  biome: string | string[];
+  canonical: string;
+  biome: string[] | null;
   image: string;
-  backgroundColour: string;
-  accentColour: string;
   availability: boolean;
   begin: DateTime | null;
   end: DateTime | null;
