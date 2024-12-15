@@ -15,21 +15,16 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon';
-import type { PropType } from 'vue';
 import type { Interval } from 'luxon';
-defineProps({
-  forecast: {
-    type: Array as PropType<
-      {
-        interval: Interval<true>;
-        colour: string;
-        image: string;
-        date: DateTime<boolean>;
-      }[]
-    >,
-    required: true,
-  },
-});
+
+defineProps<{
+  forecast: Array<{
+    interval: Interval<true>;
+    colour: string;
+    image: string;
+    date: DateTime<boolean>;
+  }>;
+}>();
 </script>
 
 <style scoped lang="postcss">

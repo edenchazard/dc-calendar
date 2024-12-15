@@ -7,12 +7,14 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
-  condition: {
-    type: Boolean,
-    default: false,
+withDefaults(
+  defineProps<{
+    condition: boolean;
+  }>(),
+  {
+    condition: false,
   },
-});
+);
 </script>
 
 <style scoped>

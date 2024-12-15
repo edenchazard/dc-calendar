@@ -111,20 +111,11 @@ import { getBreedsLocal } from '@/utils/breeds';
 import TooltipBreed from '@/components/TooltipBreed.vue';
 import type { Breed } from '~/types/types';
 
-const props = defineProps({
-  from: {
-    type: String,
-    required: true,
-  },
-  to: {
-    type: String,
-    required: true,
-  },
-  timezone: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{
+  from: string;
+  to: string;
+  timezone: string;
+}>();
 
 const language = navigator.language;
 
