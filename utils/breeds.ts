@@ -15,7 +15,7 @@ export function getBreedsLocal() {
         name: 'Seasonal (Winter)',
         canonical: 'seasonal-winter',
         biome: ['Alpine'],
-        image: new URL('/public/eggs/seasonal_winter.gif', import.meta.url)
+        image: new URL('/public/sprites/seasonal_winter.webp', import.meta.url)
           .pathname,
         availability: season.name === 'winter',
         begin: seasonsOfCurrentYear(d)['winter'].start,
@@ -30,7 +30,7 @@ export function getBreedsLocal() {
         name: 'Seasonal (Spring)',
         canonical: 'seasonal-spring',
         biome: ['Forest'],
-        image: new URL('/public/eggs/seasonal_spring.webp', import.meta.url)
+        image: new URL('/public/sprites/seasonal_spring.webp', import.meta.url)
           .pathname,
         availability: season.name === 'spring',
         begin: seasonsOfCurrentYear(d)['spring'].start,
@@ -45,7 +45,7 @@ export function getBreedsLocal() {
         name: 'Seasonal (Summer)',
         canonical: 'seasonal-summer',
         biome: ['Forest'],
-        image: new URL('/public/eggs/seasonal_summer.webp', import.meta.url)
+        image: new URL('/public/sprites/seasonal_summer.webp', import.meta.url)
           .pathname,
         availability: season.name === 'summer',
         begin: seasonsOfCurrentYear(d)['summer'].start,
@@ -60,7 +60,7 @@ export function getBreedsLocal() {
         name: 'Seasonal (Autumn)',
         canonical: 'seasonal-autumn',
         biome: ['Forest'],
-        image: new URL('/public/eggs/seasonal_autumn.webp', import.meta.url)
+        image: new URL('/public/sprites/seasonal_autumn.webp', import.meta.url)
           .pathname,
         availability: season.name === 'autumn',
         begin: seasonsOfCurrentYear(d)['autumn'].start,
@@ -83,7 +83,7 @@ export function getBreedsLocal() {
         name: 'Previous Valentines',
         canonical: 'valentines-previous',
         biome: ['Holiday'],
-        image: new URL('/public/eggs/mint_valentines.png', import.meta.url)
+        image: new URL('/public/sprites/mint_valentines.webp', import.meta.url)
           .pathname,
         availability: d >= begin && d <= end,
         begin,
@@ -106,7 +106,7 @@ export function getBreedsLocal() {
         name: 'Previous Halloweens',
         canonical: 'halloween-previous',
         biome: ['Holiday'],
-        image: new URL('/public/eggs/mint_halloween.png', import.meta.url)
+        image: new URL('/public/sprites/mint_halloween.webp', import.meta.url)
           .pathname,
         availability: d >= begin && d <= end,
         begin,
@@ -129,7 +129,8 @@ export function getBreedsLocal() {
         name: `${d.year} Halloween`,
         canonical: 'halloween-unknown',
         biome: ['All'],
-        image: new URL('/public/eggs/mystery.gif', import.meta.url).pathname,
+        image: new URL('/public/sprites/mystery.webp', import.meta.url)
+          .pathname,
 
         availability: d.toISODate() === begin.toISODate(),
         begin,
@@ -152,7 +153,7 @@ export function getBreedsLocal() {
         name: 'Previous Holidays',
         canonical: 'holidays-previous',
         biome: ['Holiday'],
-        image: new URL('/public/eggs/mint_christmas.png', import.meta.url)
+        image: new URL('/public/sprites/mint_christmas.webp', import.meta.url)
           .pathname,
         availability: d >= begin && d <= end,
         begin,
@@ -181,7 +182,8 @@ export function getBreedsLocal() {
         name: `${d.year} Holiday`,
         canonical: 'holidays-unknown',
         biome: ['All'],
-        image: new URL('/public/eggs/mystery.gif', import.meta.url).pathname,
+        image: new URL('/public/sprites/mystery.webp', import.meta.url)
+          .pathname,
 
         availability: d >= begin && d <= end,
         begin,
@@ -196,7 +198,7 @@ export function getBreedsLocal() {
         name: 'Birthday Release',
         canonical: 'birthday-release',
         biome: ['Holiday'],
-        image: new URL('/public/eggs/mint_birthday.png', import.meta.url)
+        image: new URL('/public/sprites/mint_birthday.webp', import.meta.url)
           .pathname,
         availability: d.toISODate() === begin.toISODate(),
         begin,
@@ -225,7 +227,8 @@ export function getBreedsLocal() {
         name: `${d.year} Valentine`,
         canonical: 'valentines-unknown',
         biome: ['All'],
-        image: new URL('/public/eggs/mystery.gif', import.meta.url).pathname,
+        image: new URL('/public/sprites/mystery.webp', import.meta.url)
+          .pathname,
 
         availability: d >= begin && d <= end,
         begin,
@@ -240,7 +243,7 @@ export function getBreedsLocal() {
         name: `Gemshard (Jade)`,
         canonical: 'gemshard-jade',
         biome: ['Jungle'],
-        image: new URL('/public/eggs/gemshard_jade.webp', import.meta.url)
+        image: new URL('/public/sprites/gemshard_jade.webp', import.meta.url)
           .pathname,
         availability,
         begin: null,
@@ -255,7 +258,7 @@ export function getBreedsLocal() {
         name: `Gemshard (Ruby)`,
         canonical: 'gemshard-ruby',
         biome: ['Jungle'],
-        image: new URL('/public/eggs/gemshard_ruby.webp', import.meta.url)
+        image: new URL('/public/sprites/gemshard_ruby.webp', import.meta.url)
           .pathname,
         availability,
         begin: null,
@@ -270,8 +273,10 @@ export function getBreedsLocal() {
         name: `Gemshard (Sapphire)`,
         canonical: 'gemshard-sapphire',
         biome: ['Jungle'],
-        image: new URL('/public/eggs/gemshard_sapphire.webp', import.meta.url)
-          .pathname,
+        image: new URL(
+          '/public/sprites/gemshard_sapphire.webp',
+          import.meta.url,
+        ).pathname,
         availability,
         begin: null,
         end: null,
@@ -285,8 +290,10 @@ export function getBreedsLocal() {
         name: `Gemshard (Amethyst)`,
         canonical: 'gemshard-amethyst',
         biome: ['Jungle'],
-        image: new URL('/public/eggs/gemshard_amethyst.webp', import.meta.url)
-          .pathname,
+        image: new URL(
+          '/public/sprites/gemshard_amethyst.webp',
+          import.meta.url,
+        ).pathname,
         availability,
         begin: null,
         end: null,
@@ -300,7 +307,7 @@ export function getBreedsLocal() {
         name: `Gemshard (Aqua)`,
         canonical: 'gemshard-aqua',
         biome: ['Jungle'],
-        image: new URL('/public/eggs/gemshard_aqua.webp', import.meta.url)
+        image: new URL('/public/sprites/gemshard_aqua.webp', import.meta.url)
           .pathname,
         availability,
         begin: null,
@@ -315,7 +322,7 @@ export function getBreedsLocal() {
         name: `Gemshard (Citrine)`,
         canonical: 'gemshard-citrine',
         biome: ['Jungle'],
-        image: new URL('/public/eggs/gemshard_citrine.webp', import.meta.url)
+        image: new URL('/public/sprites/gemshard_citrine.webp', import.meta.url)
           .pathname,
         availability,
         begin: null,
@@ -330,7 +337,7 @@ export function getBreedsLocal() {
         name: `Sonata (Gold)`,
         canonical: 'sonata-gold',
         biome: ['All'],
-        image: new URL('/public/eggs/sonata_gold.webp', import.meta.url)
+        image: new URL('/public/sprites/sonata_gold.webp', import.meta.url)
           .pathname,
         availability: probability > 0,
         probability,
@@ -345,7 +352,7 @@ export function getBreedsLocal() {
         name: `Sonata (Blue)`,
         canonical: 'sonata-blue',
         biome: ['All'],
-        image: new URL('/public/eggs/sonata_blue.webp', import.meta.url)
+        image: new URL('/public/sprites/sonata_blue.webp', import.meta.url)
           .pathname,
         availability: probability > 0,
         probability,
@@ -360,7 +367,7 @@ export function getBreedsLocal() {
         name: `Sonata (Silver)`,
         canonical: 'sonata-silver',
         biome: ['All'],
-        image: new URL('/public/eggs/sonata_silver.webp', import.meta.url)
+        image: new URL('/public/sprites/sonata_silver.webp', import.meta.url)
           .pathname,
         availability: probability > 0,
         probability,
@@ -375,8 +382,10 @@ export function getBreedsLocal() {
         name: `Lunar Herald (Indigo)`,
         canonical: 'lunar-herald-indigo',
         biome: ['Alpine', 'Desert', 'Volcano'],
-        image: new URL('/public/eggs/lunar_herald_indigo.webp', import.meta.url)
-          .pathname,
+        image: new URL(
+          '/public/sprites/lunar_herald_indigo.webp',
+          import.meta.url,
+        ).pathname,
         availability: colour === 3,
         begin: null,
         end: null,
@@ -390,8 +399,10 @@ export function getBreedsLocal() {
         name: `Lunar Herald (Bronze)`,
         canonical: 'lunar-herald-bronze',
         biome: ['Alpine', 'Desert', 'Volcano'],
-        image: new URL('/public/eggs/lunar_herald_bronze.webp', import.meta.url)
-          .pathname,
+        image: new URL(
+          '/public/sprites/lunar_herald_bronze.webp',
+          import.meta.url,
+        ).pathname,
         availability: colour === 2,
         begin: null,
         end: null,
@@ -405,8 +416,10 @@ export function getBreedsLocal() {
         name: `Lunar Herald (Gold)`,
         canonical: 'lunar-herald-gold',
         biome: ['Alpine', 'Desert', 'Volcano'],
-        image: new URL('/public/eggs/lunar_herald_gold.webp', import.meta.url)
-          .pathname,
+        image: new URL(
+          '/public/sprites/lunar_herald_gold.webp',
+          import.meta.url,
+        ).pathname,
         availability: colour === 1,
         begin: null,
         end: null,
@@ -420,8 +433,10 @@ export function getBreedsLocal() {
         name: `Lunar Herald (Silver)`,
         canonical: 'lunar-herald-silver',
         biome: ['Alpine', 'Desert', 'Volcano'],
-        image: new URL('/public/eggs/lunar_herald_silver.webp', import.meta.url)
-          .pathname,
+        image: new URL(
+          '/public/sprites/lunar_herald_silver.webp',
+          import.meta.url,
+        ).pathname,
         availability: colour === 0,
         begin: null,
         end: null,

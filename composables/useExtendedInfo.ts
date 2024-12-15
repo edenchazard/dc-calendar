@@ -139,46 +139,46 @@ export function useExtendedInfo(
 
   const harkfrostImage = computed<string>(() => {
     if (daytime.value.contains(localTime.value)) {
-      return new URL('/public/eggs/harkfrost_daytime.png', import.meta.url)
+      return new URL('/public/sprites/harkfrost_daytime.webp', import.meta.url)
         .pathname;
     }
-    return new URL('/public/eggs/harkfrost_nighttime.webp', import.meta.url)
+    return new URL('/public/sprites/harkfrost_nighttime.webp', import.meta.url)
       .pathname;
   });
 
   const sunbeamMoonglowImage = computed<string>(() => {
     if (daytime.value.contains(localTime.value)) {
-      return new URL('/public/eggs/sunbeam.webp', import.meta.url).pathname;
+      return new URL('/public/sprites/sunbeam.webp', import.meta.url).pathname;
     }
-    return new URL('/public/eggs/moonglow.webp', import.meta.url).pathname;
+    return new URL('/public/sprites/moonglow.webp', import.meta.url).pathname;
   });
 
   const sunriseSunsetImage = computed(() => {
     if (sunset.value.contains(dragCaveTime.value)) {
-      return new URL('/public/eggs/sunset.webp', import.meta.url).pathname;
+      return new URL('/public/sprites/sunset.webp', import.meta.url).pathname;
     } else if (sunrise.value.contains(dragCaveTime.value)) {
-      return new URL('/public/eggs/sunrise.webp', import.meta.url).pathname;
+      return new URL('/public/sprites/sunrise.webp', import.meta.url).pathname;
     }
 
-    return new URL('/public/eggs/sunrise_sunset.webp', import.meta.url)
+    return new URL('/public/sprites/sunrise_sunset.webp', import.meta.url)
       .pathname;
   });
 
   const nocturneImage = computed(() => {
     if (daytime.value.contains(dragCaveTime.value)) {
-      return new URL('/public/eggs/nocturne_daytime.gif', import.meta.url)
+      return new URL('/public/sprites/nocturne_daytime.webp', import.meta.url)
         .pathname;
     }
-    return new URL('/public/eggs/nocturne_nighttime.webp', import.meta.url)
+    return new URL('/public/sprites/nocturne_nighttime.webp', import.meta.url)
       .pathname;
   });
 
   const zombieImage = computed(() => {
     if (zombies.value.contains(dragCaveTime.value)) {
-      return new URL('/public/eggs/zombie_active.png', import.meta.url)
+      return new URL('/public/sprites/zombie_active.webp', import.meta.url)
         .pathname;
     }
-    return new URL('/public/eggs/zombie_inactive.gif', import.meta.url)
+    return new URL('/public/sprites/zombie_inactive.webp', import.meta.url)
       .pathname;
   });
 
