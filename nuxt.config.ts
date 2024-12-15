@@ -21,6 +21,22 @@ export default defineNuxtConfig({
           name: 'keywords',
           content: 'dragcave, breeds, dragons, variants, sprites',
         },
+        {
+          property: 'og:title',
+          content: 'Dragon Cave Calendar',
+        },
+        {
+          property: 'og:type',
+          content: 'website',
+        },
+        {
+          property: 'og:url',
+          content: `${process.env.ORIGIN}${process.env.BASE_URL}/`,
+        },
+        {
+          property: 'theme-color',
+          content: '#483d8b',
+        },
       ],
     },
   },
