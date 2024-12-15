@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  ssr: true,
+  ssr: false,
   compatibilityDate: '2024-11-01',
   devtools: { enabled: false },
   modules: ['@nuxt/test-utils/module', 'floating-vue/nuxt', '@nuxt/eslint'],
@@ -34,6 +34,11 @@ export default defineNuxtConfig({
           content: `${process.env.ORIGIN}${process.env.BASE_URL}/`,
         },
         {
+          property: 'og:description',
+          content:
+            'See future variants and sprite changes in a single place with times local to you.',
+        },
+        {
           property: 'theme-color',
           content: '#483d8b',
         },
@@ -45,6 +50,11 @@ export default defineNuxtConfig({
       '@fortawesome/vue-fontawesome',
       '@fortawesome/fontawesome-svg-core',
     ],
+  },
+  vite: {
+    build: {
+      assetsInlineLimit: 0,
+    },
   },
   nitro: {
     esbuild: {
