@@ -22,6 +22,7 @@
         <a href="https://chazza.me/dc/calendar">Find it here</a>.
       </p>
       <p>Remember to update your bookmarks!</p>
+      <p>Art by 04uni</p>
     </section>
   </main>
 </template>
@@ -43,6 +44,9 @@
     font-size: 3rem;
   }
 
+  & > p:nth-of-type(4) {
+    font-size: 0.8rem;
+  }
   & a {
     color: hsl(217, 67%, 60%);
     text-decoration: underline;
