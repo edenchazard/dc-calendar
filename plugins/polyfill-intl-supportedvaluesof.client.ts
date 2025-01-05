@@ -463,7 +463,9 @@ export default defineNuxtPlugin(() => {
           if (nf.resolvedOptions().timeZone === timeZone) {
             return true;
           }
-        } catch (_) {}
+        } catch (_) {
+          return false;
+        }
         return false;
       };
 
