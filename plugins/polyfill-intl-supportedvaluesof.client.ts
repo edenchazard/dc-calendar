@@ -459,9 +459,8 @@ export default defineNuxtPlugin(() => {
 
       const isSupported = function (timeZone: string) {
         try {
-          let nf = new Intl.DateTimeFormat('en', { timeZone });
-          let o = nf.resolvedOptions().timeZone;
-          if (o == timeZone) {
+          const nf = new Intl.DateTimeFormat('en', { timeZone });
+          if (nf.resolvedOptions().timeZone === timeZone) {
             return true;
           }
         } catch (e) {}
