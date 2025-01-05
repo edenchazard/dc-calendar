@@ -31,6 +31,7 @@ describe('Calculations', () => {
       expect(
         getDaytimeIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 1,
             hour: 8,
@@ -45,6 +46,7 @@ describe('Calculations', () => {
       expect(
         getDaytimeIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 1,
             hour: 3,
@@ -59,6 +61,7 @@ describe('Calculations', () => {
       expect(
         getDaytimeIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 1,
             hour: 18,
@@ -75,6 +78,7 @@ describe('Calculations', () => {
       expect(
         getNighttimeIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 2,
             hour: 5,
@@ -89,6 +93,7 @@ describe('Calculations', () => {
       expect(
         getNighttimeIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 1,
             hour: 17,
@@ -103,6 +108,7 @@ describe('Calculations', () => {
       expect(
         getNighttimeIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 2,
             hour: 23,
@@ -119,6 +125,7 @@ describe('Calculations', () => {
       expect(
         getSunriseIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 1,
             hour: 13,
@@ -133,6 +140,7 @@ describe('Calculations', () => {
       expect(
         getSunriseIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 1,
             hour: 5,
@@ -147,6 +155,7 @@ describe('Calculations', () => {
       expect(
         getSunriseIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 2,
             hour: 7,
@@ -163,6 +172,7 @@ describe('Calculations', () => {
       expect(
         getSunsetIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 1,
             hour: 11,
@@ -177,6 +187,7 @@ describe('Calculations', () => {
       expect(
         getSunsetIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 1,
             hour: 18,
@@ -193,6 +204,7 @@ describe('Calculations', () => {
       expect(
         getZombieIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 1,
             hour: 5,
@@ -207,6 +219,7 @@ describe('Calculations', () => {
       expect(
         getZombieIntervalForDateTime(
           DateTime.fromObject({
+            year: 2024,
             month: 1,
             day: 1,
             hour: 6,
@@ -223,6 +236,7 @@ describe('Calculations', () => {
       'returns blue fire gem for hour %i',
       (hour) => {
         const dt = DateTime.fromObject({
+          year: 2024,
           month: 1,
           day: 1,
           hour,
@@ -242,6 +256,7 @@ describe('Calculations', () => {
       'returns red fire gem for hour %i',
       (hour) => {
         const dt = DateTime.fromObject({
+          year: 2024,
           month: 1,
           day: 1,
           hour,
@@ -261,6 +276,7 @@ describe('Calculations', () => {
       'returns green fire gem for hour %i',
       (hour) => {
         const dt = DateTime.fromObject({
+          year: 2024,
           month: 1,
           day: 1,
           hour,
@@ -280,6 +296,7 @@ describe('Calculations', () => {
   describe('#getSpiritWardForDateTime', () => {
     it('returns day between 6am and 6pm', () => {
       const dt = DateTime.fromObject({
+        year: 2024,
         month: 1,
         day: 1,
         hour: 6,
@@ -296,6 +313,7 @@ describe('Calculations', () => {
 
     it('returns night 1 between 6pm and 8pm', () => {
       const dt = DateTime.fromObject({
+        year: 2024,
         month: 1,
         day: 1,
         hour: 19,
@@ -312,6 +330,7 @@ describe('Calculations', () => {
 
     it('returns night 1 between 4am and 6am', () => {
       const dt = DateTime.fromObject({
+        year: 2024,
         month: 1,
         day: 1,
         hour: 5,
@@ -328,6 +347,7 @@ describe('Calculations', () => {
 
     it('returns night 2 between 8pm and 10pm', () => {
       const dt = DateTime.fromObject({
+        year: 2024,
         month: 1,
         day: 1,
         hour: 20,
@@ -344,6 +364,7 @@ describe('Calculations', () => {
 
     it('returns night 2 between 2am and 4am', () => {
       const dt = DateTime.fromObject({
+        year: 2024,
         month: 1,
         day: 1,
         hour: 2,
@@ -360,6 +381,7 @@ describe('Calculations', () => {
 
     it('returns night 3 between 10pm and 11pm', () => {
       const dt = DateTime.fromObject({
+        year: 2024,
         month: 1,
         day: 1,
         hour: 22,
@@ -376,6 +398,7 @@ describe('Calculations', () => {
 
     it('returns night 3 between 1am and 2am', () => {
       const dt = DateTime.fromObject({
+        year: 2024,
         month: 1,
         day: 1,
         hour: 1,
@@ -392,6 +415,7 @@ describe('Calculations', () => {
 
     it('returns night 4 between 11pm and midnight', () => {
       const dt = DateTime.fromObject({
+        year: 2024,
         month: 1,
         day: 1,
         hour: 23,
@@ -408,6 +432,7 @@ describe('Calculations', () => {
 
     it('returns night 4 between midnight and 1am', () => {
       const dt = DateTime.fromObject({
+        year: 2024,
         month: 1,
         day: 1,
         hour: 0,
