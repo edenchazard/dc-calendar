@@ -65,5 +65,18 @@ defineProps<{
   > .glowmostest {
     background: hsl(35, 100%, 40%);
   }
+
+  > .stratos_dawn {
+    background: #c47160;
+  }
+  > .stratos_day {
+    background: #6ba2d9;
+  }
+  > .stratos_dusk {
+    background: #d6641f;
+  }
+  > .stratos_night {
+    background: #405675;
+  }
 }
 </style>
