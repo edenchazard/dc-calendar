@@ -40,29 +40,29 @@ defineProps<{
     word-spacing: 100rem;
     overflow: hidden;
   }
-  > .blue {
+  > .firegem_blue {
     background: #1d3f94;
   }
-  > .green {
+  > .firegem_green {
     background: #13623a;
   }
-  > .red {
+  > .firegem_red {
     background: #8e0d14;
   }
 
-  > .day {
+  > .spward_day {
     background: #302661;
   }
-  > .glowy {
+  > .spward_glowy {
     background: #66062a;
   }
-  > .glowier {
+  > .spward_glowier {
     background: #8d142c;
   }
-  > .glowiest {
+  > .spward_glowiest {
     background: hsl(20, 100%, 30%);
   }
-  > .glowmostest {
+  > .spward_glowmostest {
     background: hsl(35, 100%, 40%);
   }
 

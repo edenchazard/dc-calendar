@@ -103,6 +103,7 @@ export function useExtendedInfo(
         return {
           date: local(period.start as DateTime),
           ...gem,
+          colour: 'firegem_' + gem.colour,
           interval: local(gem.interval),
         };
       }),
@@ -154,6 +155,7 @@ export function useExtendedInfo(
         return {
           date: local(period.start as DateTime),
           ...spiritWard,
+          colour: 'spward_' + spiritWard.colour,
           interval: local(spiritWard.interval),
         };
       }),
