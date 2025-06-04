@@ -276,6 +276,52 @@ export function getFireGemForDateTime(dt: DateTime): {
   };
 }
 
+export function getStratosForDateTime(dt: DateTime): {
+  colour: string;
+  image: string;
+  interval: Interval<true>;
+} {
+  let colour: string;
+  let image: URL;
+  let interval: Interval;
+
+  if (dt.hour >= 3 && dt.hour < 9) {
+    colour = 'Dawn';
+    image = new URL('/public/sprites/stratos_dawn.webp', import.meta.url);
+    interval = Interval.fromDateTimes(
+      dt.set({ hour: 3 }).startOf('hour'),
+      dt.set({ hour: 8 }).endOf('hour'),
+    );
+  } else if (dt.hour >= 9 && dt.hour < 15) {
+    colour = 'Day';
+    image = new URL('/public/sprites/stratos_day.webp', import.meta.url);
+    interval = Interval.fromDateTimes(
+      dt.set({ hour: 9 }).startOf('hour'),
+      dt.set({ hour: 14 }).endOf('hour'),
+    );
+  } else if (dt.hour >= 15 && dt.hour < 21) {
+    colour = 'Dusk';
+    image = new URL('/public/sprites/stratos_dusk.webp', import.meta.url);
+    interval = Interval.fromDateTimes(
+      dt.set({ hour: 15 }).startOf('hour'),
+      dt.set({ hour: 20 }).endOf('hour'),
+    );
+  } else {
+    colour = 'Night';
+    image = new URL('/public/sprites/stratos_night.webp', import.meta.url);
+    interval = Interval.fromDateTimes(
+      dt.set({ hour: 21 }).startOf('hour'),
+      dt.set({ hour: 23 }).plus({ hours: 3 }).endOf('hour'),
+    );
+  }
+
+  return {
+    colour,
+    image: image.pathname,
+    interval: interval as Interval<true>,
+  };
+}
+
 export function getSpiritWardForDateTime(dt: DateTime): {
   colour: string;
   image: string;

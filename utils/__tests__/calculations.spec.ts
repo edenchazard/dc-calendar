@@ -4,6 +4,7 @@ import {
   getFireGemForDateTime,
   getNewYorkDSTPeriodForYear,
   getNighttimeIntervalForDateTime,
+  getStratosForDateTime,
   getSpiritWardForDateTime,
   getSunriseIntervalForDateTime,
   getSunsetIntervalForDateTime,
@@ -291,6 +292,76 @@ describe('Calculations', () => {
         );
       },
     );
+  });
+
+  describe.only('#getStratosForDateTime', () => {
+    it('returns dawn between 3am and 9am', () => {
+      const dt = DateTime.fromObject({
+        year: 2024,
+        month: 1,
+        day: 1,
+        hour: 3,
+        minute: 0,
+      });
+
+      const stratos = getStratosForDateTime(dt);
+
+      expect(stratos).to.have.property('colour', 'Dawn');
+      expect(stratos.interval.toString()).to.be.eql(
+        '[2024-01-01T03:00:00.000+00:00 – 2024-01-01T08:59:59.999+00:00)',
+      );
+    });
+
+    it('returns day between 9am and 3pm', () => {
+      const dt = DateTime.fromObject({
+        year: 2024,
+        month: 1,
+        day: 1,
+        hour: 9,
+        minute: 0,
+      });
+
+      const stratos = getStratosForDateTime(dt);
+
+      expect(stratos).to.have.property('colour', 'Day');
+      expect(stratos.interval.toString()).to.be.eql(
+        '[2024-01-01T09:00:00.000+00:00 – 2024-01-01T14:59:59.999+00:00)',
+      );
+    });
+
+    it('returns dusk between 3pm and 9pm', () => {
+      const dt = DateTime.fromObject({
+        year: 2024,
+        month: 1,
+        day: 1,
+        hour: 15,
+        minute: 0,
+      });
+
+      const stratos = getStratosForDateTime(dt);
+
+      expect(stratos).to.have.property('colour', 'Dusk');
+      expect(stratos.interval.toString()).to.be.eql(
+        '[2024-01-01T15:00:00.000+00:00 – 2024-01-01T20:59:59.999+00:00)',
+      );
+    });
+
+    it('returns night between 9pm and 3am', () => {
+      const dt = DateTime.fromObject({
+        year: 2024,
+        month: 1,
+        day: 1,
+        hour: 21,
+        minute: 0,
+      });
+
+      const stratos = getStratosForDateTime(dt);
+
+      expect(stratos).to.have.property('colour', 'Night');
+      expect(stratos.interval.toString()).to.be.eql(
+        '[2024-01-01T21:00:00.000+00:00 – 2024-01-02T02:59:59.999+00:00)',
+      );
+    });
   });
 
   describe('#getSpiritWardForDateTime', () => {
