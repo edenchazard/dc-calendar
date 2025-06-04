@@ -3,7 +3,7 @@
     <span
       v-for="(hourly, index) in forecast"
       :key="index"
-      :title="`${hourly.colour}: ${hourly.interval.start.toLocaleString(
+      :title="`${hourly.colour.split('_').at(-1)}: ${hourly.interval.start.toLocaleString(
         DateTime.TIME_24_WITH_SECONDS,
       )} – ${hourly.interval.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)}`"
       :class="hourly.colour.toLowerCase()"
@@ -67,16 +67,16 @@ defineProps<{
   }
 
   > .stratos_dawn {
-    background: #c47160;
+    background: #944697;
   }
   > .stratos_day {
-    background: #6ba2d9;
+    background: #4f85ac;
   }
   > .stratos_dusk {
-    background: #d6641f;
+    background: #574585;
   }
   > .stratos_night {
-    background: #405675;
+    background: #334155;
   }
 }
 </style>

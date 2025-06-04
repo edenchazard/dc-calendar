@@ -279,6 +279,32 @@
                   class="hourly-table"
                 />
               </div>
+
+              <img
+                :src="stratos.image"
+                alt=""
+              />
+              <div>
+                <p>
+                  <b>Stratos Dragons</b> are currently in their
+                  <b>{{ stratos.colour.toLowerCase() }}</b> form between
+                  {{
+                    stratos.interval.start.toLocaleString(
+                      DateTime.TIME_24_WITH_SECONDS,
+                    )
+                  }}
+                  and
+                  {{
+                    stratos.interval.end.toLocaleString(
+                      DateTime.TIME_24_WITH_SECONDS,
+                    )
+                  }}. Over the next {{ stratosForecast.length }} hours:
+                </p>
+                <HourlyTable
+                  :forecast="stratosForecast"
+                  class="hourly-table"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -419,6 +445,8 @@ const {
   gemshardSwitchOver,
   fireGem,
   fireGemForecast,
+  stratos,
+  stratosForecast,
   spiritWard,
   spiritWardForecast,
   offsetWording,
