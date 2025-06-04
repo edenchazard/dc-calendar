@@ -3,7 +3,7 @@
     <span
       v-for="(hourly, index) in forecast"
       :key="index"
-      :title="`${hourly.colour}: ${hourly.interval.start.toLocaleString(
+      :title="`${hourly.colour.split('_').at(-1)}: ${hourly.interval.start.toLocaleString(
         DateTime.TIME_24_WITH_SECONDS,
       )} – ${hourly.interval.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)}`"
       :class="hourly.colour.toLowerCase()"
@@ -40,30 +40,43 @@ defineProps<{
     word-spacing: 100rem;
     overflow: hidden;
   }
-  > .blue {
+  > .firegem_blue {
     background: #1d3f94;
   }
-  > .green {
+  > .firegem_green {
     background: #13623a;
   }
-  > .red {
+  > .firegem_red {
     background: #8e0d14;
   }
 
-  > .day {
+  > .spward_day {
     background: #302661;
   }
-  > .glowy {
+  > .spward_glowy {
     background: #66062a;
   }
-  > .glowier {
+  > .spward_glowier {
     background: #8d142c;
   }
-  > .glowiest {
+  > .spward_glowiest {
     background: hsl(20, 100%, 30%);
   }
-  > .glowmostest {
+  > .spward_glowmostest {
     background: hsl(35, 100%, 40%);
+  }
+
+  > .stratos_dawn {
+    background: #944697;
+  }
+  > .stratos_day {
+    background: #4f85ac;
+  }
+  > .stratos_dusk {
+    background: #574585;
+  }
+  > .stratos_night {
+    background: #334155;
   }
 }
 </style>

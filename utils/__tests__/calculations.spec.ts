@@ -4,6 +4,7 @@ import {
   getFireGemForDateTime,
   getNewYorkDSTPeriodForYear,
   getNighttimeIntervalForDateTime,
+  getStratosForDateTime,
   getSpiritWardForDateTime,
   getSunriseIntervalForDateTime,
   getSunsetIntervalForDateTime,
@@ -11,6 +12,18 @@ import {
   getZombieMonthForDateTime,
 } from '../calculations';
 import { DateTime } from 'luxon';
+
+const quickHour = (
+  hour: number,
+  extra?: { minute?: number; day?: number },
+): DateTime =>
+  DateTime.fromObject({
+    year: 2024,
+    month: 1,
+    day: extra?.day ?? 1,
+    hour,
+    minute: extra?.minute ?? 0,
+  });
 
 describe('Calculations', () => {
   describe('#getNewYorkDSTPeriodForYear', () => {
@@ -28,46 +41,19 @@ describe('Calculations', () => {
 
   describe('#getDaytimeIntervalForDateTime', () => {
     it('calculates beginning and ending when in range of current day', () => {
-      expect(
-        getDaytimeIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 1,
-            hour: 8,
-          }),
-        ).toString(),
-      ).to.be.eql(
+      expect(getDaytimeIntervalForDateTime(quickHour(8)).toString()).to.be.eql(
         '[2024-01-01T06:00:00.000+00:00 – 2024-01-01T17:59:59.000+00:00)',
       );
     });
 
     it("returns the current day's beginning and ending if before 6am and after midnight", () => {
-      expect(
-        getDaytimeIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 1,
-            hour: 3,
-          }),
-        ).toString(),
-      ).to.be.eql(
+      expect(getDaytimeIntervalForDateTime(quickHour(3)).toString()).to.be.eql(
         '[2024-01-01T06:00:00.000+00:00 – 2024-01-01T17:59:59.000+00:00)',
       );
     });
 
     it("returns the next day's beginning and ending if after 6pm and before midnight", () => {
-      expect(
-        getDaytimeIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 1,
-            hour: 18,
-          }),
-        ).toString(),
-      ).to.be.eql(
+      expect(getDaytimeIntervalForDateTime(quickHour(18)).toString()).to.be.eql(
         '[2024-01-02T06:00:00.000+00:00 – 2024-01-02T17:59:59.000+00:00)',
       );
     });
@@ -76,14 +62,7 @@ describe('Calculations', () => {
   describe('#getNighttimeIntervalForDateTime', () => {
     it('calculates beginning and ending after midnight but before 6am', () => {
       expect(
-        getNighttimeIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 2,
-            hour: 5,
-          }),
-        ).toString(),
+        getNighttimeIntervalForDateTime(quickHour(5, { day: 2 })).toString(),
       ).to.be.eql(
         '[2024-01-01T18:00:00.000+00:00 – 2024-01-02T05:59:59.000+00:00)',
       );
@@ -91,14 +70,7 @@ describe('Calculations', () => {
 
     it("returns the current day's beginning and ending if before 6pm", () => {
       expect(
-        getNighttimeIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 1,
-            hour: 17,
-          }),
-        ).toString(),
+        getNighttimeIntervalForDateTime(quickHour(17)).toString(),
       ).to.be.eql(
         '[2024-01-01T18:00:00.000+00:00 – 2024-01-02T05:59:59.000+00:00)',
       );
@@ -106,14 +78,7 @@ describe('Calculations', () => {
 
     it("returns the current day's beginning and ending if after 6pm but before midnight", () => {
       expect(
-        getNighttimeIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 2,
-            hour: 23,
-          }),
-        ).toString(),
+        getNighttimeIntervalForDateTime(quickHour(23, { day: 2 })).toString(),
       ).to.be.eql(
         '[2024-01-02T18:00:00.000+00:00 – 2024-01-03T05:59:59.000+00:00)',
       );
@@ -122,45 +87,20 @@ describe('Calculations', () => {
 
   describe('#getSunriseIntervalForDateTime', () => {
     it("returns the next day's beginning and ending if after 12pm", () => {
-      expect(
-        getSunriseIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 1,
-            hour: 13,
-          }),
-        ).toString(),
-      ).to.be.eql(
+      expect(getSunriseIntervalForDateTime(quickHour(13)).toString()).to.be.eql(
         '[2024-01-02T06:00:00.000+00:00 – 2024-01-02T12:00:00.000+00:00)',
       );
     });
 
     it("returns the current day's beginning and ending if before 6am", () => {
-      expect(
-        getSunriseIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 1,
-            hour: 5,
-          }),
-        ).toString(),
-      ).to.be.eql(
+      expect(getSunriseIntervalForDateTime(quickHour(5)).toString()).to.be.eql(
         '[2024-01-01T06:00:00.000+00:00 – 2024-01-01T12:00:00.000+00:00)',
       );
     });
 
     it("returns the current day's beginning and ending if after 6am but before 12pm", () => {
       expect(
-        getSunriseIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 2,
-            hour: 7,
-          }),
-        ).toString(),
+        getSunriseIntervalForDateTime(quickHour(7, { day: 2 })).toString(),
       ).to.be.eql(
         '[2024-01-02T06:00:00.000+00:00 – 2024-01-02T12:00:00.000+00:00)',
       );
@@ -169,31 +109,13 @@ describe('Calculations', () => {
 
   describe('#getSunsetIntervalForDateTime', () => {
     it("returns the current day's beginning and ending if before 12pm ", () => {
-      expect(
-        getSunsetIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 1,
-            hour: 11,
-          }),
-        ).toString(),
-      ).to.be.eql(
+      expect(getSunsetIntervalForDateTime(quickHour(11)).toString()).to.be.eql(
         '[2024-01-01T18:00:00.000+00:00 – 2024-01-02T00:00:00.000+00:00)',
       );
     });
 
     it("returns the current day's beginning and ending if after 6pm and before 12am", () => {
-      expect(
-        getSunsetIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 1,
-            hour: 18,
-          }),
-        ).toString(),
-      ).to.be.eql(
+      expect(getSunsetIntervalForDateTime(quickHour(18)).toString()).to.be.eql(
         '[2024-01-01T18:00:00.000+00:00 – 2024-01-02T00:00:00.000+00:00)',
       );
     });
@@ -201,31 +123,13 @@ describe('Calculations', () => {
 
   describe('#getZombieIntervalForDateTime', () => {
     it("returns the current day's beginning and ending if after 12am and before 6am ", () => {
-      expect(
-        getZombieIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 1,
-            hour: 5,
-          }),
-        ).toString(),
-      ).to.be.eql(
+      expect(getZombieIntervalForDateTime(quickHour(5)).toString()).to.be.eql(
         '[2024-01-01T00:00:00.000+00:00 – 2024-01-01T06:00:00.000+00:00)',
       );
     });
 
     it("returns the next day's beginning and ending if after 6am", () => {
-      expect(
-        getZombieIntervalForDateTime(
-          DateTime.fromObject({
-            year: 2024,
-            month: 1,
-            day: 1,
-            hour: 6,
-          }),
-        ).toString(),
-      ).to.be.eql(
+      expect(getZombieIntervalForDateTime(quickHour(6)).toString()).to.be.eql(
         '[2024-01-02T00:00:00.000+00:00 – 2024-01-02T06:00:00.000+00:00)',
       );
     });
@@ -235,14 +139,7 @@ describe('Calculations', () => {
     it.each([0, 3, 6, 9, 12, 15, 18, 21])(
       'returns blue fire gem for hour %i',
       (hour) => {
-        const dt = DateTime.fromObject({
-          year: 2024,
-          month: 1,
-          day: 1,
-          hour,
-          minute: 23,
-        });
-
+        const dt = quickHour(hour, { minute: 23 });
         const blue = getFireGemForDateTime(dt);
 
         expect(blue).to.have.property('colour', 'Blue');
@@ -255,14 +152,7 @@ describe('Calculations', () => {
     it.each([1, 4, 7, 10, 13, 16, 19, 22])(
       'returns red fire gem for hour %i',
       (hour) => {
-        const dt = DateTime.fromObject({
-          year: 2024,
-          month: 1,
-          day: 1,
-          hour,
-          minute: 23,
-        });
-
+        const dt = quickHour(hour, { minute: 23 });
         const red = getFireGemForDateTime(dt);
 
         expect(red).to.have.property('colour', 'Red');
@@ -275,14 +165,7 @@ describe('Calculations', () => {
     it.each([2, 5, 8, 11, 14, 17, 20, 23])(
       'returns green fire gem for hour %i',
       (hour) => {
-        const dt = DateTime.fromObject({
-          year: 2024,
-          month: 1,
-          day: 1,
-          hour,
-          minute: 23,
-        });
-
+        const dt = quickHour(hour, { minute: 23 });
         const green = getFireGemForDateTime(dt);
 
         expect(green).to.have.property('colour', 'Green');
@@ -293,16 +176,51 @@ describe('Calculations', () => {
     );
   });
 
+  describe('#getStratosForDateTime', () => {
+    it('returns dawn between 3am and 9am', () => {
+      const dt = quickHour(3);
+      const stratos = getStratosForDateTime(dt);
+
+      expect(stratos).to.have.property('colour', 'Dawn');
+      expect(stratos.interval.toString()).to.be.eql(
+        '[2024-01-01T03:00:00.000+00:00 – 2024-01-01T08:59:59.999+00:00)',
+      );
+    });
+
+    it('returns day between 9am and 3pm', () => {
+      const dt = quickHour(9);
+      const stratos = getStratosForDateTime(dt);
+
+      expect(stratos).to.have.property('colour', 'Day');
+      expect(stratos.interval.toString()).to.be.eql(
+        '[2024-01-01T09:00:00.000+00:00 – 2024-01-01T14:59:59.999+00:00)',
+      );
+    });
+
+    it('returns dusk between 3pm and 9pm', () => {
+      const dt = quickHour(15);
+      const stratos = getStratosForDateTime(dt);
+
+      expect(stratos).to.have.property('colour', 'Dusk');
+      expect(stratos.interval.toString()).to.be.eql(
+        '[2024-01-01T15:00:00.000+00:00 – 2024-01-01T20:59:59.999+00:00)',
+      );
+    });
+
+    it('returns night between 9pm and 3am', () => {
+      const dt = quickHour(21);
+      const stratos = getStratosForDateTime(dt);
+
+      expect(stratos).to.have.property('colour', 'Night');
+      expect(stratos.interval.toString()).to.be.eql(
+        '[2024-01-01T21:00:00.000+00:00 – 2024-01-02T02:59:59.999+00:00)',
+      );
+    });
+  });
+
   describe('#getSpiritWardForDateTime', () => {
     it('returns day between 6am and 6pm', () => {
-      const dt = DateTime.fromObject({
-        year: 2024,
-        month: 1,
-        day: 1,
-        hour: 6,
-        minute: 0,
-      });
-
+      const dt = quickHour(6);
       const spiritWard = getSpiritWardForDateTime(dt);
 
       expect(spiritWard).to.have.property('colour', 'Day');
@@ -312,14 +230,7 @@ describe('Calculations', () => {
     });
 
     it('returns night 1 between 6pm and 8pm', () => {
-      const dt = DateTime.fromObject({
-        year: 2024,
-        month: 1,
-        day: 1,
-        hour: 19,
-        minute: 0,
-      });
-
+      const dt = quickHour(19);
       const spiritWard = getSpiritWardForDateTime(dt);
 
       expect(spiritWard).to.have.property('colour', 'Glowy');
@@ -329,14 +240,7 @@ describe('Calculations', () => {
     });
 
     it('returns night 1 between 4am and 6am', () => {
-      const dt = DateTime.fromObject({
-        year: 2024,
-        month: 1,
-        day: 1,
-        hour: 5,
-        minute: 0,
-      });
-
+      const dt = quickHour(5);
       const spiritWard = getSpiritWardForDateTime(dt);
 
       expect(spiritWard).to.have.property('colour', 'Glowy');
@@ -346,14 +250,7 @@ describe('Calculations', () => {
     });
 
     it('returns night 2 between 8pm and 10pm', () => {
-      const dt = DateTime.fromObject({
-        year: 2024,
-        month: 1,
-        day: 1,
-        hour: 20,
-        minute: 0,
-      });
-
+      const dt = quickHour(20);
       const spiritWard = getSpiritWardForDateTime(dt);
 
       expect(spiritWard).to.have.property('colour', 'Glowier');
@@ -363,14 +260,7 @@ describe('Calculations', () => {
     });
 
     it('returns night 2 between 2am and 4am', () => {
-      const dt = DateTime.fromObject({
-        year: 2024,
-        month: 1,
-        day: 1,
-        hour: 2,
-        minute: 0,
-      });
-
+      const dt = quickHour(2);
       const spiritWard = getSpiritWardForDateTime(dt);
 
       expect(spiritWard).to.have.property('colour', 'Glowier');
@@ -380,14 +270,7 @@ describe('Calculations', () => {
     });
 
     it('returns night 3 between 10pm and 11pm', () => {
-      const dt = DateTime.fromObject({
-        year: 2024,
-        month: 1,
-        day: 1,
-        hour: 22,
-        minute: 30,
-      });
-
+      const dt = quickHour(22, { minute: 30 });
       const spiritWard = getSpiritWardForDateTime(dt);
 
       expect(spiritWard).to.have.property('colour', 'Glowiest');
@@ -397,14 +280,7 @@ describe('Calculations', () => {
     });
 
     it('returns night 3 between 1am and 2am', () => {
-      const dt = DateTime.fromObject({
-        year: 2024,
-        month: 1,
-        day: 1,
-        hour: 1,
-        minute: 30,
-      });
-
+      const dt = quickHour(1, { minute: 30 });
       const spiritWard = getSpiritWardForDateTime(dt);
 
       expect(spiritWard).to.have.property('colour', 'Glowiest');
@@ -414,14 +290,7 @@ describe('Calculations', () => {
     });
 
     it('returns night 4 between 11pm and midnight', () => {
-      const dt = DateTime.fromObject({
-        year: 2024,
-        month: 1,
-        day: 1,
-        hour: 23,
-        minute: 30,
-      });
-
+      const dt = quickHour(23, { minute: 30 });
       const spiritWard = getSpiritWardForDateTime(dt);
 
       expect(spiritWard).to.have.property('colour', 'Glowmostest');
@@ -431,14 +300,7 @@ describe('Calculations', () => {
     });
 
     it('returns night 4 between midnight and 1am', () => {
-      const dt = DateTime.fromObject({
-        year: 2024,
-        month: 1,
-        day: 1,
-        hour: 0,
-        minute: 30,
-      });
-
+      const dt = quickHour(0, { minute: 30 });
       const spiritWard = getSpiritWardForDateTime(dt);
 
       expect(spiritWard).to.have.property('colour', 'Glowmostest');

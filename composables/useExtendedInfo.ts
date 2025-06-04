@@ -103,7 +103,34 @@ export function useExtendedInfo(
         return {
           date: local(period.start as DateTime),
           ...gem,
+          colour: 'firegem_' + gem.colour,
           interval: local(gem.interval),
+        };
+      }),
+  );
+
+  const stratos = computed(() => {
+    const strat = getStratosForDateTime(dragCaveTime.value);
+    return {
+      ...strat,
+      interval: local(strat.interval),
+    };
+  });
+
+  const stratosForecast = computed(() =>
+    Interval.fromDateTimes(
+      dragCaveTime.value.startOf('hour').plus({ hours: 1 }),
+      dragCaveTime.value.startOf('hour').plus({ hours: 25 }),
+    )
+      .splitBy({ hours: 1 })
+      .map((period) => {
+        const stratos = getStratosForDateTime(period.start as DateTime);
+
+        return {
+          date: local(period.start as DateTime),
+          ...stratos,
+          colour: 'stratos_' + stratos.colour,
+          interval: local(stratos.interval),
         };
       }),
   );
@@ -128,6 +155,7 @@ export function useExtendedInfo(
         return {
           date: local(period.start as DateTime),
           ...spiritWard,
+          colour: 'spward_' + spiritWard.colour,
           interval: local(spiritWard.interval),
         };
       }),
@@ -197,6 +225,8 @@ export function useExtendedInfo(
     zombieMonth,
     gemshardSwitchOver,
     moonSwitchOver,
+    stratos,
+    stratosForecast,
     spiritWard,
     spiritWardForecast,
     fireGem,
