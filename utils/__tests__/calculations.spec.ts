@@ -294,7 +294,7 @@ describe('Calculations', () => {
     );
   });
 
-  describe.only('#getStratosForDateTime', () => {
+  describe('#getStratosForDateTime', () => {
     it('returns dawn between 3am and 9am', () => {
       const dt = DateTime.fromObject({
         year: 2024,
