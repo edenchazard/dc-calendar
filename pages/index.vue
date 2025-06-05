@@ -185,6 +185,26 @@
               </div>
 
               <img
+                :src="impishImage"
+                alt=""
+              />
+              <div>
+                <p>
+                  <b>Impish Pygmies</b> will transform when fed between
+                  {{
+                    nighttime.start.toLocaleString(
+                      DateTime.TIME_24_WITH_SECONDS,
+                    )
+                  }}
+                  and
+                  {{
+                    nighttime.end.toLocaleString(DateTime.TIME_24_WITH_SECONDS)
+                  }}.
+                  <ActiveBadge :condition="nighttime.contains(dcIntlTime)" />
+                </p>
+              </div>
+
+              <img
                 :src="harkfrostImage"
                 alt=""
               />
@@ -455,6 +475,7 @@ const {
   sunset,
   sunriseSunsetImage,
   harkfrostImage,
+  impishImage,
   nocturneImage,
   zombieImage,
   zombies,
