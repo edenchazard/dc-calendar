@@ -201,6 +201,15 @@ export function useExtendedInfo(
       .pathname;
   });
 
+  const impishImage = computed(() => {
+    if (daytime.value.contains(dragCaveTime.value)) {
+      return new URL('/public/sprites/impish_mogwai.webp', import.meta.url)
+        .pathname;
+    }
+    return new URL('/public/sprites/impish_gremlin.webp', import.meta.url)
+      .pathname;
+  });
+
   const zombieImage = computed(() => {
     if (zombies.value.contains(dragCaveTime.value)) {
       return new URL('/public/sprites/zombie_active.webp', import.meta.url)
@@ -236,6 +245,7 @@ export function useExtendedInfo(
     sunbeamMoonglowImage,
     sunriseSunsetImage,
     harkfrostImage,
+    impishImage,
     nocturneImage,
     zombieImage,
   };
