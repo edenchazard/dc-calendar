@@ -126,7 +126,7 @@
                   <ActiveBadge :condition="zombies.contains(dcIntlTime)" />
                 </p>
                 <p>
-                  On the
+                  On
                   {{ zombieMonth.toLocaleString(DateTime.DATETIME_MED) }},
                   dragons will have an increased chance of zombifying
                   successfully.
