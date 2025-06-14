@@ -420,8 +420,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue';
-import { useLocalStorage } from '@vueuse/core';
+import { computed, ref } from 'vue';
+import { useIntervalFn, useLocalStorage } from '@vueuse/core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { DateTime } from 'luxon';
 import ActiveBadge from '@/components/ActiveBadge.vue';
@@ -430,7 +430,6 @@ import { useExtendedInfo } from '@/composables/useExtendedInfo';
 import HourlyTable from '@/components/HourlyTable.vue';
 
 const timezones = Intl.supportedValuesOf('timeZone');
-let interval: ReturnType<typeof setInterval>;
 const intervalKey = ref(DateTime.local().toSeconds());
 
 const from = ref(DateTime.now().toISODate());
@@ -439,6 +438,14 @@ const end = ref(DateTime.now().plus({ days: 7 }).toISODate());
 const localTimezone = useLocalStorage(
   'localTimezone',
   Intl.DateTimeFormat().resolvedOptions().timeZone,
+);
+
+useIntervalFn(
+  () => {
+    intervalKey.value = DateTime.local().toSeconds();
+  },
+  1000,
+  { immediate: true },
 );
 
 const localIntlTime = computed(() =>
@@ -483,16 +490,6 @@ const {
   dst,
   moonSwitchOver,
 } = useExtendedInfo(dcIntlTime, localIntlTime);
-
-onMounted(
-  () =>
-    (interval = setInterval(
-      () => (intervalKey.value = DateTime.local().toSeconds()),
-      1000,
-    )),
-);
-
-onUnmounted(() => clearInterval(interval));
 </script>
 
 <style scoped lang="postcss">
