@@ -1,15 +1,11 @@
-# syntax = docker/dockerfile:1
-
-ARG NODE_VERSION=20.16.0
-
-FROM node:${NODE_VERSION}-slim as base
+FROM node:24.0-bookworm-slim AS base
 
 ENV NODE_ENV=development
 
 WORKDIR /src
 
 # Build
-FROM base as build
+FROM base AS build
 
 COPY --link package.json package-lock.json ./
 RUN npm install
