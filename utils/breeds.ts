@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import {
   determineSeason,
   heraldColour,
+  moonblightTransforming,
   seasonsOfCurrentYear,
   sonataProbability,
 } from './calculations';
@@ -438,6 +439,21 @@ export function getBreedsLocal() {
           import.meta.url,
         ).pathname,
         availability: colour === 0,
+        begin: null,
+        end: null,
+        probability: null,
+      };
+    },
+
+    (d) => {
+      const transforming = moonblightTransforming(d);
+      return {
+        name: `Moonblight Transformation`,
+        canonical: 'moonblight',
+        biome: ['Curse BSA'],
+        image: new URL('/public/sprites/moonblight.webp', import.meta.url)
+          .pathname,
+        availability: transforming,
         begin: null,
         end: null,
         probability: null,

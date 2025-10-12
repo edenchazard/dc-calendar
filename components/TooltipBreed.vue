@@ -101,6 +101,9 @@ defineProps<{
   &.all {
     background: #fff;
   }
+  &.curse {
+    background: #a8a8a8;
+  }
 }
 
 .seasonal-winter {
@@ -198,5 +201,9 @@ defineProps<{
 .lunar-herald-silver {
   --background: #c0c0c0;
   --accent: #000;
+}
+.moonblight {
+  --background: #474747;
+  --accent: #ffed9c;
 }
 </style>
