@@ -29,6 +29,11 @@ export function heraldColour(d: DateTime): number {
   return moon.herald[ts];
 }
 
+export function moonblightTransforming(d: DateTime): boolean {
+  const colour = heraldColour(d);
+  return colour === 3;
+}
+
 export function getJDSolsticesAndEquinoxes(year: number): JDSeasonalCycle {
   return {
     marchEquinox: solstice.march(year),
