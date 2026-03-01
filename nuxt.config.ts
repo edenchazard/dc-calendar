@@ -62,4 +62,11 @@ export default defineNuxtConfig({
       publicDir: `.output/public/${process.env.BASE_URL}`,
     },
   },
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        noUncheckedIndexedAccess: false,
+      },
+    },
+  },
 });
