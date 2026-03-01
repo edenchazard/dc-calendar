@@ -9,8 +9,8 @@ import {
   getSunsetIntervalForDateTime,
   getZombieIntervalForDateTime,
   getZombieMonthForDateTime,
-} from '@/utils/calculations';
-import { localiseInterval } from '@/utils/utils';
+} from '~/utils/calculations';
+import { localiseInterval } from '~/utils/utils';
 import { Interval, DateTime } from 'luxon';
 import type { Ref } from 'vue';
 

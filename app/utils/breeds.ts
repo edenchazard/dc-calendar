@@ -5,8 +5,8 @@ import {
   moonblightTransforming,
   seasonsOfCurrentYear,
   sonataProbability,
-} from './calculations';
-import type { BreedCallback } from '@/types/types';
+} from '~/utils/calculations';
+import type { BreedCallback } from '#shared/types';
 
 export function getBreedsLocal() {
   const breeds: Array<BreedCallback> = [
