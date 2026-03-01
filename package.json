@@ -33,6 +33,7 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.15.2",
     "@nuxt/test-utils": "^4.0.0",
+    "@playwright/test": "^1.58.2",
     "@vue/test-utils": "^2.4.6",
     "happy-dom": "^20.7.0",
     "prettier": "^3.4.2",

@@ -55,6 +55,9 @@ export default defineNuxtConfig({
     build: {
       assetsInlineLimit: 0,
     },
+    server: {
+      allowedHosts: ['app', 'testapp', 'localhost', '127.0.0.1'],
+    },
   },
   nitro: {
     preset: 'static',
