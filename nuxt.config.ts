@@ -58,5 +58,8 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'static',
+    output: {
+      publicDir: `.output/public/${process.env.BASE_URL}`,
+    },
   },
 });
