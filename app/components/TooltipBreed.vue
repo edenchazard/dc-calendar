@@ -22,7 +22,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { Breed } from '@/types/types';
+import type { Breed } from '#shared/types';
 
 defineProps<{
   breed: Breed;

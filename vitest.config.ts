@@ -1,22 +1,30 @@
-import { defineVitestConfig } from '@nuxt/test-utils/config';
-import { fileURLToPath } from 'node:url';
-import { configDefaults } from 'vitest/config';
+import { defineConfig } from 'vitest/config';
+import { defineVitestProject } from '@nuxt/test-utils/config';
 
-export default defineVitestConfig({
+export default defineConfig({
   test: {
-    environment: 'happy-dom',
-    exclude: [...configDefaults.exclude, 'e2e/*'],
-    root: fileURLToPath(new URL('./', import.meta.url)),
-    coverage: {
-      exclude: [
-        ...configDefaults.exclude,
-        'docs/*',
-        'playwright.config.ts',
-        'index.html',
-        '.eslintrc.cjs',
-        'env.d.ts',
-        'src/main.ts',
-      ],
-    },
+    projects: [
+      {
+        test: {
+          name: 'unit',
+          include: ['test/unit/**/*.{test,spec}.ts'],
+          environment: 'node',
+        },
+      },
+      {
+        test: {
+          name: 'e2e',
+          include: ['test/e2e/**/*.{test,spec}.ts'],
+          environment: 'node',
+        },
+      },
+      await defineVitestProject({
+        test: {
+          name: 'nuxt',
+          include: ['test/nuxt/**/*.{test,spec}.ts'],
+          environment: 'nuxt',
+        },
+      }),
+    ],
   },
 });

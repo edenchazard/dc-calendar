@@ -2,7 +2,7 @@
 import { julian } from 'astronomia';
 import { DateTime, Interval } from 'luxon';
 import type { Zone } from 'luxon';
-import type { JDSeasonalCycle, Seasons } from '../types/types';
+import type { JDSeasonalCycle, Seasons } from '../../shared/types';
 
 export function jdToDateTime(jD: number) {
   return DateTime.fromJSDate(julian.JDToDate(jD));

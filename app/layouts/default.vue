@@ -7,13 +7,25 @@
       <h1 id="site-title">Dragon Cave Calendar</h1>
       <nav id="menu">
         <a href="https://github.com/edenchazard/dc-calendar"
-          ><FontAwesomeIcon icon="fa-brands fa-github" /> Github
+          ><FontAwesomeIcon
+            icon="fa-brands fa-github"
+            size="2x"
+          />
+          Github
         </a>
         <a href="https://ko-fi.com/dctools"
-          ><FontAwesomeIcon icon="fa-solid fa-coffee" /> Donation link
+          ><FontAwesomeIcon
+            icon="fa-solid fa-coffee"
+            size="2x"
+          />
+          Donation link
         </a>
         <a href="https://chazza.me/dc/tools"
-          ><FontAwesomeIcon icon="fa-solid fa-toolbox" /> More tools
+          ><FontAwesomeIcon
+            icon="fa-solid fa-toolbox"
+            size="2x"
+          />
+          More tools
         </a>
       </nav>
     </header>
@@ -73,10 +85,7 @@ useHead({
     gap: 0.25rem;
     text-underline-offset: 0.3rem;
     text-decoration-style: dotted;
-
-    > svg {
-      height: 1.5rem;
-    }
+    align-items: center;
   }
 }
 

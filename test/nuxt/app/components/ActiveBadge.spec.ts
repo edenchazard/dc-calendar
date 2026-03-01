@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { mount } from '@vue/test-utils';
-import ActiveBadgeVue from '../ActiveBadge.vue';
+import ActiveBadgeVue from '~/components/ActiveBadge.vue';
 
 describe('ActiveBadge', () => {
   it('renders active when condition is true', async () => {

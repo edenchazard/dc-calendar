@@ -109,7 +109,7 @@
 import { DateTime } from 'luxon';
 import { getBreedsLocal } from '@/utils/breeds';
 import TooltipBreed from '@/components/TooltipBreed.vue';
-import type { Breed } from '~/types/types';
+import type { Breed } from '#shared/types';
 
 const props = defineProps<{
   from: string;

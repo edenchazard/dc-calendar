@@ -1,10 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  ssr: false,
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2026-03-01',
   devtools: { enabled: false },
+  ssr: true,
   modules: ['@nuxt/test-utils/module', 'floating-vue/nuxt', '@nuxt/eslint'],
-  css: ['~/assets/main.css', '@fortawesome/fontawesome-svg-core/styles.css'],
   app: {
     baseURL: process.env.BASE_URL,
     head: {
@@ -45,6 +44,7 @@ export default defineNuxtConfig({
       ],
     },
   },
+  css: ['~/assets/main.css', '@fortawesome/fontawesome-svg-core/styles.css'],
   build: {
     transpile: [
       '@fortawesome/vue-fontawesome',
@@ -58,10 +58,14 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'static',
-    esbuild: {
-      options: {
-        target: 'esnext',
-        drop: process.env.NODE_ENV === 'production' ? ['console'] : [],
+    output: {
+      publicDir: `.output/public/${process.env.BASE_URL}`,
+    },
+  },
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        noUncheckedIndexedAccess: false,
       },
     },
   },
