@@ -12,8 +12,9 @@
     "lint:fix": "npm run lint -- --fix",
     "fmt": "prettier --write .",
     "fmt:check": "prettier . --check",
-    "test:unit": "vitest",
-    "ts:check": "nuxi typecheck"
+    "ts:check": "nuxi typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.1",

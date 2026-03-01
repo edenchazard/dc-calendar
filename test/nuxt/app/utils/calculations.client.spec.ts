@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import {
   getDaytimeIntervalForDateTime,
   getFireGemForDateTime,
@@ -10,8 +10,8 @@ import {
   getSunsetIntervalForDateTime,
   getZombieIntervalForDateTime,
   getZombieMonthForDateTime,
-} from '../calculations';
-import { DateTime } from 'luxon';
+} from '~/utils/calculations';
+import { DateTime, Settings } from 'luxon';
 
 const quickHour = (
   hour: number,
@@ -26,6 +26,18 @@ const quickHour = (
   });
 
 describe('Calculations', () => {
+  beforeAll(() => {
+    // Ensure that the default zone and locale are set for each test
+    Settings.defaultZone = 'Europe/London';
+    Settings.defaultLocale = 'en-US';
+  });
+
+  afterAll(() => {
+    // Reset to defaults after tests
+    Settings.defaultZone = 'America/New_York';
+    Settings.defaultLocale = navigator.language;
+  });
+
   describe('#getNewYorkDSTPeriodForYear', () => {
     it.each([
       [2023, 1678586399, 1699149599],
