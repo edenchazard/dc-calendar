@@ -23,6 +23,5 @@ jobs:
             -i ~/.ssh/id_ed25519 \
             -o IdentitiesOnly=yes \
             -o StrictHostKeyChecking=yes \
-            -p '${{ secrets.DEPLOY_SSH_PORT }}' \
             '${{ secrets.DEPLOY_SSH_USER }}@${{ secrets.DEPLOY_SSH_HOST }}' \
             "bash ~/deployment-scripts/dc/calendar.sh"
