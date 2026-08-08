@@ -12,7 +12,7 @@ jobs:
       - name: try to build the project
         run: npm i && npm run generate
 
-      - name: run prettier checks
+      - name: run formatting checks
         run: npm run fmt:check
 
       - name: run linting
