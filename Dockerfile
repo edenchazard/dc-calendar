@@ -1,4 +1,4 @@
-FROM node:26.3-bookworm-slim AS base
+FROM node:26.6-bookworm-slim AS base
 
 ENV NODE_ENV=development
 
