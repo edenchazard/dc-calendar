@@ -27,16 +27,16 @@
     "astronomia": "^4.1.1",
     "floating-vue": "^5.2.2",
     "luxon": "^3.5.0",
-    "nuxt": "^4.2.2",
+    "nuxt": "^4.5.2",
     "vue": "latest"
   },
   "devDependencies": {
-    "@nuxt/eslint": "^1.15.2",
-    "@nuxt/test-utils": "^4.0.0",
-    "@vue/test-utils": "^2.4.6",
-    "happy-dom": "^20.8.9",
+    "@nuxt/eslint": "^1.17.0",
+    "@nuxt/test-utils": "^4.1.0",
+    "@vue/test-utils": "^2.4.11",
+    "happy-dom": "^20.11.2",
     "oxfmt": "^0.62.0",
-    "vitest": "^4.1.2",
-    "vue-tsc": "^3.3.8"
+    "vitest": "^4.1.10",
+    "vue-tsc": "^3.3.9"
   }
 }

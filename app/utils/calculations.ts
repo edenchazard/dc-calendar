@@ -2,7 +2,7 @@
 import { solstice } from 'astronomia';
 import { DateTime, Interval } from 'luxon';
 import { getOverlappingRangeOrNearest, mapJDSeasonsToDateTime } from './utils';
-import moon from './moon.json' assert { type: 'json' };
+import moon from './moon.json' with { type: 'json' };
 import type { JDSeasonalCycle, SeasonName } from '../../shared/types';
 import { cache } from './cache';
 

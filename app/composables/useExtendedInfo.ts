@@ -21,7 +21,7 @@ export function useExtendedInfo(
   /**
    * Helper to adjust an interval to the zone from the user
    */
-  function local<T extends DateTime | Interval>(obj: T): T {
+  function local<T extends DateTime | Interval<true>>(obj: T): T {
     if (DateTime.isDateTime(obj)) {
       return obj.setZone(localTime.value.zone) as T;
     }
