@@ -23,7 +23,7 @@ export function mapJDSeasonsToDateTime(jDSeasons: JDSeasonalCycle): Seasons {
 export function getOverlappingRangeOrNearest(
   date: DateTime,
   interval: Interval,
-): Interval {
+): Interval<true> {
   const possibleRanges = [
     interval.mapEndpoints((d) => d.minus({ days: 1 })),
     interval,
@@ -32,7 +32,7 @@ export function getOverlappingRangeOrNearest(
 
   return possibleRanges.find(
     (d) => date < (d.start as DateTime) || date < (d.end as DateTime),
-  ) as Interval;
+  ) as Interval<true>;
 }
 
 export function localiseInterval(
