@@ -38,5 +38,9 @@
     "oxfmt": "^0.62.0",
     "vitest": "^4.1.10",
     "vue-tsc": "^3.3.9"
+  },
+  "allowScripts": {
+    "esbuild": true,
+    "unrs-resolver": true
   }
 }
