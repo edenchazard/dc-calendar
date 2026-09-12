@@ -34,7 +34,7 @@
     "@nuxt/eslint": "^1.17.0",
     "@nuxt/test-utils": "^4.1.0",
     "@vue/test-utils": "^2.4.11",
-    "happy-dom": "^20.13.0",
+    "happy-dom": "^20.14.0",
     "oxfmt": "^0.66.0",
     "vitest": "^4.1.11",
     "vue-tsc": "^3.3.11"
