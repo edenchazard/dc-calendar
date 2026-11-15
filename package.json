@@ -23,7 +23,7 @@
     "@fortawesome/free-solid-svg-icons": "^7.2.0",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "@types/luxon": "^3.7.6",
-    "@vueuse/core": "^14.2.1",
+    "@vueuse/core": "^15.0.0",
     "astronomia": "^4.3.0",
     "floating-vue": "^5.2.2",
     "luxon": "^3.5.0",
