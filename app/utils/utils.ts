@@ -1,4 +1,3 @@
-// @ts-expect-error - No types available for 'astronomia'
 import { julian } from 'astronomia';
 import { DateTime, Interval } from 'luxon';
 import type { Zone } from 'luxon';

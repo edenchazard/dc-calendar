@@ -1,4 +1,3 @@
-// @ts-expect-error - No types available for 'astronomia'
 import { solstice } from 'astronomia';
 import { DateTime, Interval } from 'luxon';
 import { getOverlappingRangeOrNearest, mapJDSeasonsToDateTime } from './utils';
