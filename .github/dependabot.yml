@@ -32,6 +32,24 @@ updates:
     labels:
       - dependencies
       - npm
+    groups:
+      fontawesome:
+        patterns:
+          - '@fortawesome/*'
+      testing:
+        patterns:
+          - 'vitest'
+          - '@vue/test-utils'
+          - '@nuxt/test-utils'
+          - 'happy-dom'
+      luxon:
+        patterns:
+          - 'luxon'
+          - '@types/luxon'
+      lint-and-format:
+        patterns:
+          - '@nuxt/eslint'
+          - 'oxfmt'
 
   - package-ecosystem: github-actions
     directory: '/'
