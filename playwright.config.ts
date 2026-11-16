@@ -3,6 +3,8 @@ import type { ConfigOptions } from '@nuxt/test-utils/playwright';
 
 export default defineConfig<ConfigOptions>({
   testDir: './test/e2e',
+  retries: process.env.CI ? 2 : 0,
+  reporter: 'list',
   webServer: {
     command:
       'npx nuxt build --target=node-server && node .output/server/index.mjs',
