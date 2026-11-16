@@ -2,11 +2,26 @@ services:
   app:
     build:
       context: .
+      dockerfile: ./Dockerfile.dev
+    command: npm run dev
     volumes:
       - .:/src
       - node_modules:/src/node_modules
     ports:
       - 3000:3000
+    env_file:
+      - .env
+
+  testapp:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+      args:
+        TESTING: 'true'
+    command: sh -c "tail -f /dev/null"
+    volumes:
+      - .:/src
+      - node_modules:/src/node_modules
     env_file:
       - .env
 

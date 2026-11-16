@@ -1,0 +1,14 @@
+FROM node:26.13.1-trixie-slim
+
+ENV NODE_ENV=development
+
+ARG TESTING=false
+ENV TESTING=$TESTING
+
+WORKDIR /src
+
+COPY --link package.json package-lock.json ./
+RUN npm ci
+RUN if [ "$TESTING" = "true" ]; then npx playwright install --with-deps; fi
+
+CMD ["npm", "run", "dev"]
