@@ -1,21 +1,22 @@
 import { defineConfig } from 'vitest/config';
 import { defineVitestProject } from '@nuxt/test-utils/config';
+import { fileURLToPath } from 'node:url';
 
 export default defineConfig({
   test: {
+    maxWorkers: 1,
+    coverage: {
+      provider: 'v8',
+    },
     projects: [
       {
         test: {
           name: 'unit',
           include: ['test/unit/**/*.{test,spec}.ts'],
           environment: 'node',
-        },
-      },
-      {
-        test: {
-          name: 'e2e',
-          include: ['test/e2e/**/*.{test,spec}.ts'],
-          environment: 'node',
+          alias: {
+            '~': fileURLToPath(new URL('./app', import.meta.url)),
+          },
         },
       },
       await defineVitestProject({

@@ -13,8 +13,10 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "ts:check": "nuxi typecheck",
-    "test": "vitest run",
-    "test:watch": "vitest"
+    "test:vitest": "vitest run",
+    "test:vitest:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:vitest:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
@@ -33,6 +35,8 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.17.0",
     "@nuxt/test-utils": "^4.4.0",
+    "@playwright/test": "^1.65.1",
+    "@vitest/coverage-v8": "^5.1.0",
     "@vue/test-utils": "^2.5.1",
     "happy-dom": "^21.0.4",
     "oxfmt": "^0.78.0",

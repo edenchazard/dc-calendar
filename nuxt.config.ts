@@ -64,6 +64,7 @@ export default defineNuxtConfig({
   },
   typescript: {
     tsConfig: {
+      include: ['../test/unit/**/*'],
       compilerOptions: {
         noUncheckedIndexedAccess: false,
       },
