@@ -27,7 +27,7 @@
     "@types/luxon": "^3.7.6",
     "@vueuse/core": "^15.0.0",
     "astronomia": "^4.3.0",
-    "floating-vue": "^5.2.2",
+    "floating-vue": "^5.4.0",
     "luxon": "^3.5.0",
     "nuxt": "^4.6.4",
     "vue": "latest"
