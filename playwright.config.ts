@@ -8,18 +8,18 @@ export default defineConfig<ConfigOptions>({
   webServer: {
     command:
       'npx nuxt build --target=node-server && node .output/server/index.mjs',
-    url: 'http://127.0.0.1/dc/calendar/',
+    url: 'http://127.0.0.1:3001/dc/calendar/',
     timeout: 120_000,
     reuseExistingServer: !process.env.CI,
     env: {
       HOST: '127.0.0.1',
-      PORT: '80',
+      PORT: '3001',
     },
   },
   use: {
     locale: 'en-US',
     nuxt: {
-      host: 'http://127.0.0.1/',
+      host: 'http://127.0.0.1:3001/',
     },
   },
   projects: [

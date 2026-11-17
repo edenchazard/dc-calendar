@@ -13,8 +13,8 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
     "ts:check": "nuxi typecheck",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "test:vitest": "vitest run",
+    "test:vitest:watch": "vitest",
     "test:e2e": "playwright test"
   },
   "dependencies": {
