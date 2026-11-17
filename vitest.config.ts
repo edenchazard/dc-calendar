@@ -6,7 +6,7 @@ export default defineConfig({
   test: {
     maxWorkers: 1,
     coverage: {
-      provider: 'v8',
+      enabled: true,
     },
     projects: [
       {

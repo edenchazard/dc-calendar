@@ -15,7 +15,8 @@
     "ts:check": "nuxi typecheck",
     "test:vitest": "vitest run",
     "test:vitest:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
