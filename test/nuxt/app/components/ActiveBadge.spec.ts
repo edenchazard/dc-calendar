@@ -1,10 +1,10 @@
+import { mountSuspended } from '@nuxt/test-utils/runtime';
 import { describe, expect, it } from 'vitest';
-import { mount } from '@vue/test-utils';
 import ActiveBadgeVue from '~/components/ActiveBadge.vue';
 
 describe('ActiveBadge', () => {
   it('renders active when condition is true', async () => {
-    const wrapper = mount(ActiveBadgeVue, {
+    const wrapper = await mountSuspended(ActiveBadgeVue, {
       props: { condition: true },
     });
 
@@ -12,7 +12,7 @@ describe('ActiveBadge', () => {
   });
 
   it('renders empty when condition is false', async () => {
-    const wrapper = mount(ActiveBadgeVue, {
+    const wrapper = await mountSuspended(ActiveBadgeVue, {
       props: { condition: false },
     });
 
