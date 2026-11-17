@@ -5,6 +5,9 @@ import { fileURLToPath } from 'node:url';
 export default defineConfig({
   test: {
     maxWorkers: 1,
+    coverage: {
+      provider: 'v8',
+    },
     projects: [
       {
         test: {
