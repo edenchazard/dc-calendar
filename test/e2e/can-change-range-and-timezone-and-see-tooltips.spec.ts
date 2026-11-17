@@ -6,7 +6,10 @@ test.describe('Calendar range and timezone changes', () => {
     timezoneId: 'America/New_York',
   });
 
-  test('can change the range and timezone', async ({ page, goto }) => {
+  test('can change the range and timezone, then hover for each tooltip', async ({
+    page,
+    goto,
+  }) => {
     const breedBiomes: Record<string, string[]> = {
       'Seasonal (Autumn)': ['Forest'],
       'Seasonal (Winter)': ['Alpine'],
