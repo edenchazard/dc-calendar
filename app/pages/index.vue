@@ -6,7 +6,6 @@
         <strong class="bold">local to your selected timezone</strong> and shown
         in 24 hour format, unless otherwise stated.
       </p>
-      <p><strong class="bold">This tool is experimental.</strong></p>
     </section>
 
     <ClientOnly>
