@@ -1,18 +1,11 @@
-FROM node:26-bookworm-slim AS base
+FROM node:26.13.1-trixie-slim
 
 ENV NODE_ENV=development
 
 WORKDIR /src
 
-# Build
-FROM base AS build
-
 COPY --link package.json package-lock.json ./
-RUN npm install
+RUN npm ci && \
+    npx playwright install --with-deps
 
-# Run
-FROM base
-
-COPY --from=build /src/node_modules /src/node_modules
-
-CMD [ "npm", "run", "dev" ]
+CMD ["npm", "run", "dev"]
