@@ -29,7 +29,7 @@
     "astronomia": "^4.3.0",
     "floating-vue": "^5.4.0",
     "luxon": "^3.5.0",
-    "nuxt": "^4.6.4",
+    "nuxt": "^4.7.0",
     "vue": "latest"
   },
   "devDependencies": {
